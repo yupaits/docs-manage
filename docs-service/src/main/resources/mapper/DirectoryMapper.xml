@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yupaits.docsservice.mapper.DirectoryMapper">
+  <resultMap id="BaseResultMap" type="com.yupaits.docsservice.model.Directory">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="project_id" jdbcType="INTEGER" property="projectId" />
+    <result column="parent_id" jdbcType="INTEGER" property="parentId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="sort_code" jdbcType="INTEGER" property="sortCode" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, project_id, parent_id, name, sort_code
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from directory
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from directory
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yupaits.docsservice.model.Directory">
+    insert into directory (id, project_id, parent_id, 
+      name, sort_code)
+    values (#{id,jdbcType=INTEGER}, #{projectId,jdbcType=INTEGER}, #{parentId,jdbcType=INTEGER}, 
+      #{name,jdbcType=VARCHAR}, #{sortCode,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yupaits.docsservice.model.Directory">
+    insert into directory
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="projectId != null">
+        project_id,
+      </if>
+      <if test="parentId != null">
+        parent_id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="sortCode != null">
+        sort_code,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="projectId != null">
+        #{projectId,jdbcType=INTEGER},
+      </if>
+      <if test="parentId != null">
+        #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sortCode != null">
+        #{sortCode,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yupaits.docsservice.model.Directory">
+    update directory
+    <set>
+      <if test="projectId != null">
+        project_id = #{projectId,jdbcType=INTEGER},
+      </if>
+      <if test="parentId != null">
+        parent_id = #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sortCode != null">
+        sort_code = #{sortCode,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yupaits.docsservice.model.Directory">
+    update directory
+    set project_id = #{projectId,jdbcType=INTEGER},
+      parent_id = #{parentId,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR},
+      sort_code = #{sortCode,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectBySelective" parameterType="com.yupaits.docsservice.model.Directory" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from directory
+    <where>
+      <if test="projectId != null">
+        project_id = #{projectId,jdbcType=INTEGER}
+      </if>
+      <if test="parentId != null">
+        and parent_id = #{parentId,jdbcType=INTEGER}
+      </if>
+      <if test="name != null">
+        and name = #{name,jdbcType=VARCHAR}
+      </if>
+      <if test="sortCode != null">
+        and sort_code = #{sortCode,jdbcType=INTEGER}
+      </if>
+    </where>
+    order by sort_code
+  </select>
+</mapper>

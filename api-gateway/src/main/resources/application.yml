@@ -1,0 +1,29 @@
+server:
+  port: 9100
+
+spring:
+  application:
+    name: api-gateway
+  aop:
+    proxy-target-class: true
+
+security:
+  oauth2:
+    resource:
+      user-info-uri: https://localhost:9001/auth/user
+
+eureka:
+  instance:
+    lease-renewal-interval-in-seconds: 3
+  client:
+    service-url:
+      defaultZone: http://localhost:9000/eureka/
+    fetch-registry: false
+
+zuul:
+  ignored-services: "*"
+  routes:
+    docsapi:
+      path: /docsapi/**
+      serviceId: docs-service
+      stripPrefix: true
