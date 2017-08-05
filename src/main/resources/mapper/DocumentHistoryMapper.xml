@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.yupaits.docsservice.mapper.DocumentHistoryMapper">
-  <resultMap id="BaseResultMap" type="com.yupaits.docsservice.model.DocumentHistory">
+<mapper namespace="com.yupaits.manage.mapper.DocumentHistoryMapper">
+  <resultMap id="BaseResultMap" type="com.yupaits.manage.model.DocumentHistory">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="document_id" jdbcType="INTEGER" property="documentId" />
     <result column="saved_time" jdbcType="TIMESTAMP" property="savedTime" />
   </resultMap>
-  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.yupaits.docsservice.model.DocumentHistory">
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.yupaits.manage.model.DocumentHistory">
     <result column="content" jdbcType="LONGVARCHAR" property="content" />
   </resultMap>
   <sql id="Base_Column_List">
@@ -27,13 +27,13 @@
     delete from document_history
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.yupaits.docsservice.model.DocumentHistory">
+  <insert id="insert" parameterType="com.yupaits.manage.model.DocumentHistory">
     insert into document_history (id, document_id, saved_time, 
       content)
     values (#{id,jdbcType=INTEGER}, #{documentId,jdbcType=INTEGER}, #{savedTime,jdbcType=TIMESTAMP}, 
       #{content,jdbcType=LONGVARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.yupaits.docsservice.model.DocumentHistory">
+  <insert id="insertSelective" parameterType="com.yupaits.manage.model.DocumentHistory">
     insert into document_history
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -64,7 +64,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.yupaits.docsservice.model.DocumentHistory">
+  <update id="updateByPrimaryKeySelective" parameterType="com.yupaits.manage.model.DocumentHistory">
     update document_history
     <set>
       <if test="documentId != null">
@@ -79,21 +79,21 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.yupaits.docsservice.model.DocumentHistory">
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.yupaits.manage.model.DocumentHistory">
     update document_history
     set document_id = #{documentId,jdbcType=INTEGER},
       saved_time = #{savedTime,jdbcType=TIMESTAMP},
       content = #{content,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.yupaits.docsservice.model.DocumentHistory">
+  <update id="updateByPrimaryKey" parameterType="com.yupaits.manage.model.DocumentHistory">
     update document_history
     set document_id = #{documentId,jdbcType=INTEGER},
       saved_time = #{savedTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
 
-  <select id="selectBySelective" parameterType="com.yupaits.docsservice.model.DocumentHistory" resultMap="BaseResultMap">
+  <select id="selectBySelective" parameterType="com.yupaits.manage.model.DocumentHistory" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
     ,
