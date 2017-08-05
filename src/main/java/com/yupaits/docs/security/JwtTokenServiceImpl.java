@@ -1,4 +1,4 @@
-package com.yupaits.manage.security;
+package com.yupaits.docs.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

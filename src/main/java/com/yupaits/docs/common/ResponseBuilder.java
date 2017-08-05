@@ -1,4 +1,4 @@
-package com.yupaits.manage.common;
+package com.yupaits.docs.common;
 
 /**
  * Created by yupaits on 2017/8/4.

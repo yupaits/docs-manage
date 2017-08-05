@@ -1,4 +1,4 @@
-package com.yupaits.manage.security;
+package com.yupaits.docs.security;
 
 
 import org.springframework.security.core.Authentication;

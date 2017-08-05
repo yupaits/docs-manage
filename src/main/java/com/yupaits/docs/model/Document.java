@@ -1,15 +1,15 @@
-package com.yupaits.manage.model;
+package com.yupaits.docs.model;
 
-public class Directory {
+public class Document {
     private Integer id;
 
-    private Integer projectId;
-
-    private Integer parentId;
+    private Integer directoryId;
 
     private String name;
 
     private Integer sortCode;
+
+    private String content;
 
     public Integer getId() {
         return id;
@@ -19,20 +19,12 @@ public class Directory {
         this.id = id;
     }
 
-    public Integer getProjectId() {
-        return projectId;
+    public Integer getDirectoryId() {
+        return directoryId;
     }
 
-    public void setProjectId(Integer projectId) {
-        this.projectId = projectId;
-    }
-
-    public Integer getParentId() {
-        return parentId;
-    }
-
-    public void setParentId(Integer parentId) {
-        this.parentId = parentId;
+    public void setDirectoryId(Integer directoryId) {
+        this.directoryId = directoryId;
     }
 
     public String getName() {
@@ -49,5 +41,13 @@ public class Directory {
 
     public void setSortCode(Integer sortCode) {
         this.sortCode = sortCode;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 }

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.yupaits.manage.mapper.DocumentMapper">
-  <resultMap id="BaseResultMap" type="com.yupaits.manage.model.Document">
+<mapper namespace="com.yupaits.docs.mapper.DocumentMapper">
+  <resultMap id="BaseResultMap" type="com.yupaits.docs.model.Document">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="directory_id" jdbcType="INTEGER" property="directoryId" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="sort_code" jdbcType="INTEGER" property="sortCode" />
   </resultMap>
-  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.yupaits.manage.model.Document">
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.yupaits.docs.model.Document">
     <result column="content" jdbcType="LONGVARCHAR" property="content" />
   </resultMap>
   <sql id="Base_Column_List">
@@ -28,13 +28,13 @@
     delete from document
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.yupaits.manage.model.Document">
+  <insert id="insert" parameterType="com.yupaits.docs.model.Document">
     insert into document (id, directory_id, name, 
       sort_code, content)
     values (#{id,jdbcType=INTEGER}, #{directoryId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
       #{sortCode,jdbcType=INTEGER}, #{content,jdbcType=LONGVARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.yupaits.manage.model.Document">
+  <insert id="insertSelective" parameterType="com.yupaits.docs.model.Document">
     insert into document
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -71,7 +71,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.yupaits.manage.model.Document">
+  <update id="updateByPrimaryKeySelective" parameterType="com.yupaits.docs.model.Document">
     update document
     <set>
       <if test="directoryId != null">
@@ -89,7 +89,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.yupaits.manage.model.Document">
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.yupaits.docs.model.Document">
     update document
     set directory_id = #{directoryId,jdbcType=INTEGER},
       name = #{name,jdbcType=VARCHAR},
@@ -97,7 +97,7 @@
       content = #{content,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.yupaits.manage.model.Document">
+  <update id="updateByPrimaryKey" parameterType="com.yupaits.docs.model.Document">
     update document
     set directory_id = #{directoryId,jdbcType=INTEGER},
       name = #{name,jdbcType=VARCHAR},
@@ -105,7 +105,7 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
 
-  <select id="selectBySelective" parameterType="com.yupaits.manage.model.Document" resultMap="BaseResultMap">
+  <select id="selectBySelective" parameterType="com.yupaits.docs.model.Document" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
     ,

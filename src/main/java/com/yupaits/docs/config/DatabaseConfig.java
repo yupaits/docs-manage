@@ -1,4 +1,4 @@
-package com.yupaits.manage.config;
+package com.yupaits.docs.config;
 
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
@@ -13,7 +13,7 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
  * Created by yupaits on 2017/8/5.
  */
 @Configuration
-@MapperScan("com.yupaits.docsservice.mapper")
+@MapperScan("com.yupaits.docs.mapper")
 public class DatabaseConfig {
 
     @Autowired

@@ -1,4 +1,4 @@
-package com.yupaits.manage.model;
+package com.yupaits.docs.model;
 
 import java.util.Date;
 

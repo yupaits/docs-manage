@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.yupaits.manage.mapper.ProjectMapper">
-  <resultMap id="BaseResultMap" type="com.yupaits.manage.model.Project">
+<mapper namespace="com.yupaits.docs.mapper.ProjectMapper">
+  <resultMap id="BaseResultMap" type="com.yupaits.docs.model.Project">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="owner_id" jdbcType="INTEGER" property="ownerId" />
     <result column="name" jdbcType="VARCHAR" property="name" />
@@ -23,7 +23,7 @@
     delete from project
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.yupaits.manage.model.Project">
+  <insert id="insert" parameterType="com.yupaits.docs.model.Project">
     insert into project (id, owner_id, name, 
       description, visit_code, created_at, 
       updated_at)
@@ -31,7 +31,7 @@
       #{description,jdbcType=VARCHAR}, #{visitCode,jdbcType=VARCHAR}, #{createdAt,jdbcType=TIMESTAMP}, 
       #{updatedAt,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.yupaits.manage.model.Project">
+  <insert id="insertSelective" parameterType="com.yupaits.docs.model.Project">
     insert into project
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -80,7 +80,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.yupaits.manage.model.Project">
+  <update id="updateByPrimaryKeySelective" parameterType="com.yupaits.docs.model.Project">
     update project
     <set>
       <if test="ownerId != null">
@@ -104,7 +104,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.yupaits.manage.model.Project">
+  <update id="updateByPrimaryKey" parameterType="com.yupaits.docs.model.Project">
     update project
     set owner_id = #{ownerId,jdbcType=INTEGER},
       name = #{name,jdbcType=VARCHAR},
@@ -115,7 +115,7 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
 
-  <select id="selectBySelective" parameterType="com.yupaits.manage.model.Project" resultMap="BaseResultMap">
+  <select id="selectBySelective" parameterType="com.yupaits.docs.model.Project" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
     from project

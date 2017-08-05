@@ -1,6 +1,6 @@
-package com.yupaits.manage.mapper;
+package com.yupaits.docs.mapper;
 
-import com.yupaits.manage.model.Document;
+import com.yupaits.docs.model.Document;
 
 import java.util.List;
 

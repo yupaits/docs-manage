@@ -1,4 +1,4 @@
-package com.yupaits.manage.config;
+package com.yupaits.docs.config;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import org.springframework.boot.context.properties.ConfigurationProperties;

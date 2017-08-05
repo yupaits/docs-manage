@@ -1,9 +1,9 @@
-package com.yupaits.manage.api;
+package com.yupaits.docs.api;
 
-import com.yupaits.manage.common.Response;
-import com.yupaits.manage.common.ResponseBuilder;
-import com.yupaits.manage.mapper.DirectoryMapper;
-import com.yupaits.manage.model.Directory;
+import com.yupaits.docs.common.Response;
+import com.yupaits.docs.common.ResponseBuilder;
+import com.yupaits.docs.mapper.DirectoryMapper;
+import com.yupaits.docs.model.Directory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

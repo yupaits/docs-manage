@@ -1,4 +1,4 @@
-package com.yupaits.manage.common;
+package com.yupaits.docs.common;
 
 /**
  * 接口返回体封装

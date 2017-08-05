@@ -1,11 +1,11 @@
-package com.yupaits.manage.api;
+package com.yupaits.docs.api;
 
-import com.yupaits.manage.common.Response;
-import com.yupaits.manage.common.ResponseBuilder;
-import com.yupaits.manage.model.Document;
-import com.yupaits.manage.model.DocumentHistory;
-import com.yupaits.manage.mapper.DocumentHistoryMapper;
-import com.yupaits.manage.mapper.DocumentMapper;
+import com.yupaits.docs.common.Response;
+import com.yupaits.docs.common.ResponseBuilder;
+import com.yupaits.docs.model.Document;
+import com.yupaits.docs.model.DocumentHistory;
+import com.yupaits.docs.mapper.DocumentHistoryMapper;
+import com.yupaits.docs.mapper.DocumentMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
