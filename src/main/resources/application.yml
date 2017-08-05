@@ -1,11 +1,5 @@
 server:
-  port: 9010
-
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:9000/eureka/
-
+  port: 9000
 
 spring:
   datasource:
@@ -26,5 +20,3 @@ spring:
     poolPreparedStatements: true
     maxPoolPreparedStatementPerConnectionSize: 20
     filters: stat
-  application:
-    name: docs-service
