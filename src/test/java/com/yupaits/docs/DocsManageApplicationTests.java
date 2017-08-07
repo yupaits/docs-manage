@@ -1,4 +1,4 @@
-package com.yupaits.docsservice;
+package com.yupaits.docs;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

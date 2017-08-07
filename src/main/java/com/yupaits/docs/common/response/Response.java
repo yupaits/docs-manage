@@ -1,4 +1,6 @@
-package com.yupaits.docs.common;
+package com.yupaits.docs.common.response;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  * 接口返回体封装
@@ -19,6 +21,7 @@ public class Response<T> {
     /**
      * 返回数据
      */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private T data;
 
     public int getCode() {

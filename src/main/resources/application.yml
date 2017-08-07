@@ -1,6 +1,7 @@
 server:
   port: 9000
 
+
 spring:
   datasource:
     url: jdbc:mysql://127.0.0.1:3306/docs_manage?autoReconnect=true&useCompression=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&useSSL=false
@@ -20,3 +21,21 @@ spring:
     poolPreparedStatements: true
     maxPoolPreparedStatementPerConnectionSize: 20
     filters: stat
+  mvc:
+    view:
+      prefix: /views/
+      suffix: .html
+
+logging:
+  level:
+    com.yupaits.docs.mapper: debug
+
+app:
+  name: docs-manage
+  userCookie: user
+
+jwt:
+  header: auth
+  expiredIn: 600
+  secret: yupaits
+  cookie: auth-token

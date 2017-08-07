@@ -1,13 +1,14 @@
 package com.yupaits.docs.api;
 
-import com.yupaits.docs.common.Response;
-import com.yupaits.docs.common.ResponseBuilder;
-import com.yupaits.docs.model.Document;
-import com.yupaits.docs.model.DocumentHistory;
+import com.yupaits.docs.common.response.Response;
+import com.yupaits.docs.common.response.ResponseBuilder;
 import com.yupaits.docs.mapper.DocumentHistoryMapper;
 import com.yupaits.docs.mapper.DocumentMapper;
+import com.yupaits.docs.model.Document;
+import com.yupaits.docs.model.DocumentHistory;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
@@ -17,6 +18,7 @@ import java.util.List;
  * Created by yupaits on 2017/8/5.
  */
 @RestController
+@RequestMapping("/api")
 public class DocumentController {
 
     @Autowired
@@ -27,26 +29,26 @@ public class DocumentController {
 
     @GetMapping("/documents/{documentId}")
     public Response<Document> getDocumentById(@PathVariable Integer documentId) {
-        return ResponseBuilder.success(documentMapper.selectByPrimaryKey(documentId));
+        return ResponseBuilder.build(HttpStatus.OK, documentMapper.selectByPrimaryKey(documentId));
     }
 
     @GetMapping("/directories/{directoryId}/documents")
     public Response<List<Document>> getDirectoryDocuments(@PathVariable Integer directoryId) {
         Document document = new Document();
         document.setDirectoryId(directoryId);
-        return ResponseBuilder.success(documentMapper.selectBySelective(document));
+        return ResponseBuilder.build(HttpStatus.OK, documentMapper.selectBySelective(document));
     }
 
     @PostMapping("/documents")
     public Response createDocument(@RequestBody Document document) {
         documentMapper.insertSelective(document);
-        return ResponseBuilder.success();
+        return ResponseBuilder.buildWithNoData(HttpStatus.OK);
     }
 
     @DeleteMapping("/documents/{documentId}")
     public Response deleteDocument(@PathVariable Integer documentId) {
         documentMapper.deleteByPrimaryKey(documentId);
-        return ResponseBuilder.success();
+        return ResponseBuilder.buildWithNoData(HttpStatus.OK);
     }
 
     @PutMapping("/documents/{documentId}")
@@ -60,6 +62,6 @@ public class DocumentController {
             documentHistoryMapper.insertSelective(documentHistory);
         }
         documentMapper.updateByPrimaryKeySelective(document);
-        return ResponseBuilder.success();
+        return ResponseBuilder.buildWithNoData(HttpStatus.OK);
     }
 }
