@@ -7,6 +7,13 @@ import org.springframework.security.crypto.codec.Base64;
  */
 public class ApplicationConstant {
 
-    public static String APPLICATION_JSON_VALUE = "application/json;charset=utf-8";
     public static final String ENCRYPT_EXTRA_SALT = new String(Base64.decode("eXVwYWl0cw==".getBytes()));
+
+    public static final String TOKEN_PAYLOAD_KEY = "payload";
+
+    // Redis Cache key
+    public static final String DOCS_DATA = "docs_data";
+
+    public static final String USER_INFO_PREFIX = "user_info_";
+    public static final String USER_AUTHORITIES_PREFIX = "user_authorities_";
 }

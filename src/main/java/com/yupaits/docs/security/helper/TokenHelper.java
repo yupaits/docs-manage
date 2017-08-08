@@ -35,6 +35,7 @@ public class TokenHelper {
     private String authCookieName;
 
     private SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS512;
+    private final String authorities = "authorities";
 
     @Autowired
     private DefaultUserDetailsService defaultUserDetailsService;
@@ -50,7 +51,7 @@ public class TokenHelper {
         return username;
     }
 
-    private Claims getClaimsFromToken(String token) {
+    public Claims getClaimsFromToken(String token) {
         Claims claims;
         try {
             claims = Jwts.parser()
@@ -102,8 +103,12 @@ public class TokenHelper {
         return refreshedToken;
     }
 
+    public Long generateExpirationTimeMillis(int expiredIn) {
+        return System.currentTimeMillis() + expiredIn * 1000;
+    }
+
     private Date generateExpirationDate() {
-        return new Date(System.currentTimeMillis() + expiredIn * 1000);
+        return new Date(generateExpirationTimeMillis(expiredIn));
     }
 
     public String getToken(HttpServletRequest request) {

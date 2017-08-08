@@ -22,6 +22,7 @@ public class PasswordEncoderTest {
     @Test
     public void testPasswordEncoder() {
         Assert.assertEquals(shaPasswordEncoder.encodePassword("123456", "admin" + ApplicationConstant.ENCRYPT_EXTRA_SALT), "f71de501f0ff4ad3b7a8584a846cd911085424c6ecd09b588164c35152b4e264");
+        Assert.assertEquals(shaPasswordEncoder.encodePassword("123456", "user" + ApplicationConstant.ENCRYPT_EXTRA_SALT), "c0f257a0c2de33679581ce2561dfbae58d791949bc710a1b585e1c86fb23e1cc");
 
     }
 }

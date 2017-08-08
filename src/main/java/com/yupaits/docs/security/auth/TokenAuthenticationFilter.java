@@ -1,10 +1,16 @@
 package com.yupaits.docs.security.auth;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.yupaits.docs.common.response.ResponseBuilder;
+import com.yupaits.docs.common.response.ResponseCode;
 import com.yupaits.docs.security.helper.TokenHelper;
 import com.yupaits.docs.security.model.User;
 import com.yupaits.docs.security.service.DefaultUserDetailsService;
 import io.jsonwebtoken.lang.Assert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -25,6 +31,11 @@ import java.util.List;
  * Created by yupaits on 2017/8/7.
  */
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
+    private final Logger logger = LoggerFactory.getLogger(TokenAuthenticationFilter.class);
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
     @Autowired
     private TokenHelper tokenHelper;
 
@@ -55,18 +66,24 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
         String authToken = tokenHelper.getToken(httpServletRequest);
         if (authToken != null && !skipPathRequest(httpServletRequest, pathsToSkip)) {
+            //解析token获取用户username
+            String username = tokenHelper.getUsernameFromToken(authToken);
             try {
-                String username = tokenHelper.getUsernameFromToken(authToken);
                 User user = (User) defaultUserDetailsService.loadUserByUsername(username);
+                //设置授权信息
                 TokenBasedAuthentication authentication = new TokenBasedAuthentication(user);
                 authentication.setToken(authToken);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
+                filterChain.doFilter(httpServletRequest, httpServletResponse);
             } catch (UsernameNotFoundException e) {
-                SecurityContextHolder.getContext().setAuthentication(new AnonymousAuthentication());
+                logger.warn(e.getMessage());
+                httpServletResponse.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
+                objectMapper.writeValue(httpServletResponse.getWriter(), ResponseBuilder.fail(ResponseCode.UNAUTHORIZED));
             }
+        } else {
+            httpServletResponse.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
+            objectMapper.writeValue(httpServletResponse.getWriter(), ResponseBuilder.fail(ResponseCode.NotLoggedIN));
         }
-        SecurityContextHolder.getContext().setAuthentication(new AnonymousAuthentication());
-        filterChain.doFilter(httpServletRequest, httpServletResponse);
     }
 
     private boolean skipPathRequest(HttpServletRequest request, List<String> pathsToSkip) {

@@ -1,12 +1,14 @@
-package com.yupaits.docs.common;
+package com.yupaits.docs.common.response;
 
 /**
- * Created by yupaits on 2017/8/4.
+ * Created by yupaits on 2017/8/8.
  */
 public enum ResponseCode {
-
-    SUCCESS(200, "操作成功"),
-    FAIL(500, "操作失败");
+    OK(200, "成功"),
+    FAIL(201, "失败"),
+    NotLoggedIN(202, "未登录或登录失效"),
+    UNAUTHORIZED(401, "无效的授权信息"),
+    FORBIDDEN(403, "不允许访问");
 
     private int code;
     private String msg;

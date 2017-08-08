@@ -1,9 +1,11 @@
 package com.yupaits.docs.security.service;
 
+import com.yupaits.docs.common.constant.ApplicationConstant;
 import com.yupaits.docs.mapper.RoleMapper;
 import com.yupaits.docs.mapper.UserMapper;
 import com.yupaits.docs.model.Role;
 import com.yupaits.docs.security.model.User;
+import com.yupaits.docs.utils.redis.RedisSupport;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -22,6 +24,8 @@ import java.util.Set;
  */
 @Service
 public class DefaultUserDetailsService implements UserDetailsService {
+    @Autowired
+    private RedisSupport redisSupport;
 
     @Autowired
     private UserMapper userMapper;
@@ -31,17 +35,27 @@ public class DefaultUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userMapper.selectByUsername(username);
+        User user = (User) redisSupport.get(ApplicationConstant.USER_INFO_PREFIX + username);
         if (user == null) {
-            throw new UsernameNotFoundException(String.format("User not found with username '%s'.", username));
+            user = userMapper.selectByUsername(username);
         }
-        Set<GrantedAuthority> authorities = new HashSet<>();
-        List<Role> roles = roleMapper.selectByUsername(username);
-        if (CollectionUtils.isNotEmpty(roles)) {
-            SimpleGrantedAuthority authority = null;
-            for (Role role : roles) {
-                authority = new SimpleGrantedAuthority(role.getRoleName());
-                authorities.add(authority);
+        if (user == null) {
+            throw new UsernameNotFoundException(String.format("User %s not found!", username));
+        } else {
+            redisSupport.put(ApplicationConstant.USER_INFO_PREFIX + username, user);
+            @SuppressWarnings("unchecked") Set<GrantedAuthority> authorities =
+                    (Set<GrantedAuthority>) redisSupport.get(ApplicationConstant.USER_AUTHORITIES_PREFIX + username);
+            if (authorities == null) {
+                List<Role> roles = roleMapper.selectByUsername(username);
+                if (CollectionUtils.isNotEmpty(roles)) {
+                    authorities = new HashSet<>();
+                    SimpleGrantedAuthority authority = null;
+                    for (Role role : roles) {
+                        authority = new SimpleGrantedAuthority(role.getRoleName());
+                        authorities.add(authority);
+                    }
+                    redisSupport.put(ApplicationConstant.USER_AUTHORITIES_PREFIX + username, authorities);
+                }
             }
             user.setAuthorities(authorities);
         }

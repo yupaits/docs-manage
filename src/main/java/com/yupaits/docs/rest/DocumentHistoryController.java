@@ -1,11 +1,11 @@
-package com.yupaits.docs.api;
+package com.yupaits.docs.rest;
 
 import com.yupaits.docs.common.response.Response;
 import com.yupaits.docs.common.response.ResponseBuilder;
 import com.yupaits.docs.mapper.DocumentHistoryMapper;
 import com.yupaits.docs.model.DocumentHistory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +16,7 @@ import java.util.List;
 /**
  * Created by yupaits on 2017/8/5.
  */
+@PreAuthorize("hasRole('USER')")
 @RestController
 @RequestMapping("/api")
 public class DocumentHistoryController {
@@ -27,6 +28,6 @@ public class DocumentHistoryController {
     public Response<List<DocumentHistory>> getDocumentHistories(@PathVariable Integer documentId) {
         DocumentHistory documentHistory = new DocumentHistory();
         documentHistory.setDocumentId(documentId);
-        return ResponseBuilder.build(HttpStatus.OK, documentHistoryMapper.selectBySelective(documentHistory));
+        return ResponseBuilder.ok(documentHistoryMapper.selectBySelective(documentHistory));
     }
 }

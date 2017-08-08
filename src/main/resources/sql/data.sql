@@ -1,5 +1,14 @@
-INSERT INTO `user`(`username`, `password`) VALUES ('admin', 'f143549d86bc57c801586a3c27bc65394809b68430ac387de5a79619bc5a6085');
+INSERT INTO `user`(`username`, `password`) VALUES
+('admin', 'f71de501f0ff4ad3b7a8584a846cd911085424c6ecd09b588164c35152b4e264'),
+('user', 'c0f257a0c2de33679581ce2561dfbae58d791949bc710a1b585e1c86fb23e1cc')
+;
 
-INSERT INTO `role`(`role_name`) VALUES ('ROLE_ADMIN');
+INSERT INTO `role`(`role_name`) VALUES
+('ROLE_ADMIN'),
+('ROLE_USER')
+;
 
-INSERT INTO `user_role`(`user_id`, `role_id`) VALUES (1, 1);
+INSERT INTO `user_role`(`user_id`, `role_id`) VALUES
+(1, 1),(1, 2),
+(2, 2)
+;

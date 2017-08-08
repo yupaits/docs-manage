@@ -3,26 +3,20 @@ package com.yupaits.docs.common.response;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
- * 接口返回体封装
- * Created by yupaits on 2017/8/4.
+ * Created by yupaits on 2017/8/8.
  */
 public class Response<T> {
-
-    /**
-     * 返回码
-     */
     private int code;
-
-    /**
-     * 返回描述
-     */
     private String msg;
 
-    /**
-     * 返回数据
-     */
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private T data;
+
+    public Response(int code, String msg, T data) {
+        this.code = code;
+        this.msg = msg;
+        this.data = data;
+    }
 
     public int getCode() {
         return code;

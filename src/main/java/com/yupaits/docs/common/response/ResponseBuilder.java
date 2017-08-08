@@ -1,29 +1,27 @@
 package com.yupaits.docs.common.response;
 
-import org.springframework.http.HttpStatus;
-
 /**
- * Created by yupaits on 2017/8/4.
+ * Created by yupaits on 2017/8/8.
  */
 public class ResponseBuilder {
 
-    public static <T> Response buildWithNoData(HttpStatus httpStatus) {
-        return build(httpStatus, null);
+    public static Response ok() {
+        return ok(null);
     }
 
-    public static <T> Response<T> build(HttpStatus httpStatus, T data) {
-        return build(httpStatus, httpStatus.getReasonPhrase(), data);
+    public static  <T> Response<T> ok(T data) {
+        return build(ResponseCode.OK.getCode(), ResponseCode.OK.getMsg(), data);
     }
 
-    public static <T> Response<T> build(HttpStatus httpStatus, String msg, T data){
-        Response<T> response = new Response<>();
-        response.setCode(httpStatus.value());
-        response.setMsg(msg);
-        response.setData(data);
-        return response;
+    public static Response fail(String msg) {
+        return build(ResponseCode.FAIL.getCode(), msg, null);
     }
 
-    public static Response buildWithNoData(HttpStatus httpStatus, String msg) {
-        return build(httpStatus, msg, null);
+    public static Response fail(ResponseCode responseCode) {
+        return build(responseCode.getCode(), responseCode.getMsg(), null);
+    }
+
+    private static  <T> Response<T> build(int code, String msg, T data) {
+        return new Response<T>(code, msg, data);
     }
 }
