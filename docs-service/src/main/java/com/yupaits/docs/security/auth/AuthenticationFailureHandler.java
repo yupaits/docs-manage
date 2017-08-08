@@ -2,7 +2,6 @@ package com.yupaits.docs.security.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yupaits.docs.common.response.ResponseBuilder;
-import com.yupaits.docs.common.response.ResponseCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;

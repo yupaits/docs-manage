@@ -2,9 +2,6 @@ package com.yupaits.docs.security.auth;
 
 import com.yupaits.docs.security.model.User;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
-
-import java.util.Collection;
 
 /**
  * Created by yupaits on 2017/8/7.
