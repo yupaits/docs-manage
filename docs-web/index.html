@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+</head>
+<body>
+
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="index.html">
+                <img src="#">Brand
+            </a>
+        </div>
+        <button type="button" class="btn btn-default navbar-btn">Sign in</button>
+    </div>
+</nav>
+
+<div id="main">
+    <input type="text" v-model="name">
+    {{name}}
+</div>
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/vue.min.js"></script>
+<script>
+    new Vue({
+        el: '#main',
+        data: {
+            name: 'yupaits',
+
+        }
+    });
+</script>
+</body>
+</html>
