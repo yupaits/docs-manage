@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 
 /**
+ * Redis工具类
  * Created by yupaits on 2017/8/8.
  */
 @SuppressWarnings("unchecked")

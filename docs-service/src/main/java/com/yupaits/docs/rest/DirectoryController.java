@@ -26,8 +26,15 @@ public class DirectoryController {
         Directory directory = new Directory();
         directory.setProjectId(projectId);
         directory.setParentId(0);
-        List<Directory> directories = directoryMapper.selectBySelective(directory);
-        return ResponseBuilder.ok(directories);
+        return ResponseBuilder.ok(directoryMapper.selectBySelective(directory));
+    }
+
+    @GetMapping("/parentId/{parentId}")
+    public Response getDirectoriesByParentId(@PathVariable Integer projectId, @PathVariable Integer parentId) {
+        Directory directory = new Directory();
+        directory.setProjectId(projectId);
+        directory.setParentId(parentId);
+        return ResponseBuilder.ok(directoryMapper.selectBySelective(directory));
     }
 
     @PostMapping("")

@@ -1,6 +1,9 @@
 server:
   port: 9000
-
+  ssl:
+    key-store: classpath:keystore.jks
+    key-store-password: password
+    key-password: password
 
 spring:
   datasource:

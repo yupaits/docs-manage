@@ -58,7 +58,7 @@ public class AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccess
         //添加Cookie到response
 //        response.addCookie(authCookie);
 //        response.addCookie(userCookie);
-        UserTokenState userTokenState = new UserTokenState(jws, tokenHelper.generateExpirationTimeMillis(expiredIn));
+        UserTokenState userTokenState = new UserTokenState(jws, user.getUsername(), tokenHelper.generateExpirationTimeMillis(expiredIn));
         response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
         objectMapper.writeValue(response.getWriter(), userTokenState);
     }

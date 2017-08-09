@@ -41,7 +41,7 @@ public class AuthController {
         if (authToken != null && tokenHelper.canRefreshToken(authToken)) {
             //刷新token
             String refreshedToken = tokenHelper.refreshToken(authToken);
-            userTokenState = new UserTokenState(refreshedToken, tokenHelper.generateExpirationTimeMillis(expiredIn));
+            userTokenState = new UserTokenState(refreshedToken, tokenHelper.getUsernameFromToken(authToken), tokenHelper.generateExpirationTimeMillis(expiredIn));
             logger.info("refresh auth-token, username: {}", tokenHelper.getUsernameFromToken(authToken));
         }
         return ResponseBuilder.ok(userTokenState);
