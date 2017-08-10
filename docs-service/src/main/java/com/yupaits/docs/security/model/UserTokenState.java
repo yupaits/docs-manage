@@ -5,15 +5,15 @@ package com.yupaits.docs.security.model;
  */
 public class UserTokenState {
     private String accessToken;
-    private String username;
+    private UserDto user;
     private Long expiredAt;
 
     public UserTokenState() {
     }
 
-    public UserTokenState(String accessToken, String username, Long expiredAt) {
+    public UserTokenState(String accessToken, UserDto user, Long expiredAt) {
         this.accessToken = accessToken;
-        this.username = username;
+        this.user = user;
         this.expiredAt = expiredAt;
     }
 
@@ -25,12 +25,12 @@ public class UserTokenState {
         this.accessToken = accessToken;
     }
 
-    public String getUsername() {
-        return username;
+    public UserDto getUser() {
+        return user;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUser(UserDto user) {
+        this.user = user;
     }
 
     public Long getExpiredAt() {
@@ -39,5 +39,14 @@ public class UserTokenState {
 
     public void setExpiredAt(Long expiredAt) {
         this.expiredAt = expiredAt;
+    }
+
+    @Override
+    public String toString() {
+        return "UserTokenState{" +
+                "accessToken='" + accessToken + '\'' +
+                ", user=" + user +
+                ", expiredAt=" + expiredAt +
+                '}';
     }
 }

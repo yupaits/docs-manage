@@ -11,34 +11,33 @@ function ajax(options) {
     options.async = options.async || true;
     options.dataType = options.dataType || 'json';
     options.success = options.success || function (result) {
+            layer.closeAll();
             setTimeout(function () {
                 layer.msg(result.msg);
             }, 300);
         };
     options.error = options.error || function (error) {
-            layer.closeAll('loading');
-            error = JSON.parse(error.responseText);
+            layer.closeAll();
             setTimeout(function () {
-                layer.msg(error.error);
+                layer.msg('请求出错，请稍后再试');
             }, 300);
         };
     options.beforeSend = function () {
         layer.msg('加载中', {icon: 16, shade: 0.01});
     };
     $.ajax(options);
-    const now = new Date();
-    if (!pathname.startsWith('/auth/login') && accessToken.expires - now < 120000) {
+    if (!pathname.startsWith('/auth') && accessToken !== undefined) {
         refreshAuthToken();
     }
 }
 
 function setLoginCookie(result) {
     $.cookie('accessToken', result.accessToken, {expires: new Date(result.expiredAt), path: '/'});
-    $.cookie('username', result.username, {expires: new Date(result.expiredAt), path: '/'});
+    $.cookie('user', JSON.stringify(result.user), {expires: new Date(result.expiredAt), path: '/'})
 }
 
 function deleteLoginCookie() {
-    $.removeCookie('username', {path: '/'});
+    $.removeCookie('user', {path: '/'});
     $.removeCookie('accessToken', {path: '/'});
 }
 

@@ -31,7 +31,7 @@ spring:
 
 logging:
   level:
-    com.yupaits.docs.mapper: debug
+    com.yupaits.docs: debug
 
 app:
   name: docs-manage

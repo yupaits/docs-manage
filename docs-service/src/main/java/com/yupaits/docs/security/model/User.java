@@ -1,5 +1,6 @@
 package com.yupaits.docs.security.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -13,7 +14,11 @@ public class User implements UserDetails {
     private Integer id;
     private String username;
     private String email;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String password;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Collection<GrantedAuthority> authorities;
 
     public Integer getId() {

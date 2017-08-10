@@ -3,9 +3,11 @@ package com.yupaits.docs.security.auth;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yupaits.docs.security.helper.TokenHelper;
 import com.yupaits.docs.security.model.User;
+import com.yupaits.docs.security.model.UserDto;
 import com.yupaits.docs.security.model.UserTokenState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
@@ -44,7 +46,9 @@ public class AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccess
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         clearAuthenticationAttributes(request);
         User user = (User) authentication.getPrincipal();
-        logger.debug("login success user: {}", user.toString());
+        UserDto userDto = new UserDto();
+        BeanUtils.copyProperties(user, userDto);
+        logger.debug("login success userDto: {}", userDto.toString());
         String jws = tokenHelper.generateToken(user.getUsername());
         //创建Token鉴权Cookie
 //        Cookie authCookie = new Cookie(tokenCookie, jws);
@@ -58,7 +62,7 @@ public class AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccess
         //添加Cookie到response
 //        response.addCookie(authCookie);
 //        response.addCookie(userCookie);
-        UserTokenState userTokenState = new UserTokenState(jws, user.getUsername(), tokenHelper.generateExpirationTimeMillis(expiredIn));
+        UserTokenState userTokenState = new UserTokenState(jws, userDto, tokenHelper.generateExpirationTimeMillis(expiredIn));
         response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
         objectMapper.writeValue(response.getWriter(), userTokenState);
     }

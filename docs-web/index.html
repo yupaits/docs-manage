@@ -30,7 +30,7 @@
                         <a href="/register.html">注册账号</a>
                     </li>
                     <li class="dropdown" v-show="hasLogin">
-                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">{{username}} <span class="caret"></span></a>
+                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">{{user.username}} <span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <li><a href="javascript:void(0);" @click="logout">退出登录</a></li>
                         </ul>
@@ -42,17 +42,19 @@
 
     <div class="container" v-show="hasLogin">
         <div class="row">
-            <div class="col-md-8 col-md-offset-2">
-                <button class="btn btn-success">创建项目</button>
-                <div>
+
+            <div class="col-md-8 col-md-offset-2" v-show="showPart == 'projectList'">
+                <button type="button" class="btn btn-success" @click="jump('createProject')">创建项目</button>
+                <div v-for="project in projects">
                     <hr>
-                    <h3><a href="javascript:void(0);">项目名</a></h3>
-                    <p>项目描述</p>
-                    <p><span class="glyphicon glyphicon-time"></span> 创建时间</p>
+                    <h3><a href="javascript:void(0);">{{project.name}}</a></h3>
+                    <p>{{project.description}}</p>
+                    <p><span class="glyphicon glyphicon-time"></span> {{project.createAt}}</p>
                 </div>
                 <hr>
             </div>
-            <div>
+
+            <div v-show="showPart == 'documents'">
                 <div class="col-md-3">
                     <button class="btn btn-default btn-sm"><span class="glyphicon glyphicon-plus"></span> 新建文档</button>
                     <button class="btn btn-default btn-sm"><span class="glyphicon glyphicon-folder-open"></span> 新建目录</button>
@@ -64,6 +66,23 @@
                     <div id="documentDetails"></div>
                     <div id="newDocument"></div>
                     <div id="newDirectory"></div>
+                </div>
+            </div>
+
+            <div class="col-md-4 col-md-offset-4" v-show="showPart == 'createProject'">
+                <button type="button" class="btn btn-default btn-sm" @click="cancelProject"><span class="glyphicon glyphicon-chevron-left"></span> 返回</button>
+                <div class="panel panel-default" style="margin-top: 1rem;">
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label>项目名称</label>
+                            <input type="text" class="form-control" placeholder="用户名">
+                        </div>
+                        <div class="form-group">
+                            <label>项目描述</label>
+                            <input type="email" class="form-control" placeholder="邮箱">
+                        </div>
+                        <button class="btn btn-success btn-block">创建项目</button>
+                    </div>
                 </div>
             </div>
         </div>
