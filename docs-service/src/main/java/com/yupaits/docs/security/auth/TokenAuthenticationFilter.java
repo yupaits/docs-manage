@@ -81,8 +81,8 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
                 objectMapper.writeValue(httpServletResponse.getWriter(), ResponseBuilder.fail(ResponseCode.UNAUTHORIZED));
             }
         } else {
-            httpServletResponse.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
-            objectMapper.writeValue(httpServletResponse.getWriter(), ResponseBuilder.fail(ResponseCode.NotLoggedIN));
+            SecurityContextHolder.getContext().setAuthentication(new AnonymousAuthentication());
+            filterChain.doFilter(httpServletRequest, httpServletResponse);
         }
     }
 

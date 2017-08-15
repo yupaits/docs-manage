@@ -4,7 +4,7 @@ import com.yupaits.docs.common.response.Response;
 import com.yupaits.docs.common.response.ResponseBuilder;
 import com.yupaits.docs.security.helper.TokenHelper;
 import com.yupaits.docs.security.model.User;
-import com.yupaits.docs.security.model.UserDto;
+import com.yupaits.docs.security.model.UserDTO;
 import com.yupaits.docs.security.model.UserTokenState;
 import com.yupaits.docs.security.service.DefaultUserDetailsService;
 import org.slf4j.Logger;
@@ -41,13 +41,13 @@ public class AuthController {
     private DefaultUserDetailsService defaultUserDetailsService;
 
     @GetMapping("/currentUser")
-    public Response<UserDto> getCurrentUser(HttpServletRequest request) {
-        UserDto currentUser = null;
+    public Response<UserDTO> getCurrentUser(HttpServletRequest request) {
+        UserDTO currentUser = null;
         String authToken = tokenHelper.getToken(request);
         if (authToken != null) {
             User user = (User) defaultUserDetailsService.loadUserByUsername(tokenHelper.getUsernameFromToken(authToken));
             if (user != null) {
-                currentUser = new UserDto();
+                currentUser = new UserDTO();
                 BeanUtils.copyProperties(user, currentUser);
             }
         }
@@ -62,12 +62,12 @@ public class AuthController {
             //刷新token
             String refreshedToken = tokenHelper.refreshToken(authToken);
             User user = (User) defaultUserDetailsService.loadUserByUsername(tokenHelper.getUsernameFromToken(authToken));
-            UserDto userDto = null;
+            UserDTO userDTO = null;
             if (user != null) {
-                userDto = new UserDto();
-                BeanUtils.copyProperties(user, userDto);
+                userDTO = new UserDTO();
+                BeanUtils.copyProperties(user, userDTO);
             }
-            userTokenState = new UserTokenState(refreshedToken, userDto, tokenHelper.generateExpirationTimeMillis(expiredIn));
+            userTokenState = new UserTokenState(refreshedToken, userDTO, tokenHelper.generateExpirationTimeMillis(expiredIn));
             logger.debug("refresh auth-token, username: {}", tokenHelper.getUsernameFromToken(authToken));
         }
         return ResponseBuilder.ok(userTokenState);

@@ -3,7 +3,7 @@ package com.yupaits.docs.security.model;
 /**
  * Created by yupaits on 2017/8/10.
  */
-public class UserDto {
+public class UserDTO {
 
     private Integer id;
     private String username;
@@ -35,7 +35,7 @@ public class UserDto {
 
     @Override
     public String toString() {
-        return "UserDto{" +
+        return "UserDTO{" +
                 "id=" + id +
                 ", username='" + username + '\'' +
                 ", email='" + email + '\'' +
