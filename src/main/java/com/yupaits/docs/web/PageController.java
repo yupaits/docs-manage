@@ -4,6 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 /**
+ * html页面路由
  * Created by ts495 on 2017/9/9.
  */
 @Controller

@@ -4,8 +4,8 @@ INSERT INTO `user`(`username`, `password`) VALUES
 ;
 
 INSERT INTO `role`(`role_name`) VALUES
-('ROLE_ADMIN'),
-('ROLE_USER')
+('ADMIN'),
+('USER')
 ;
 
 INSERT INTO `user_role`(`user_id`, `role_id`) VALUES

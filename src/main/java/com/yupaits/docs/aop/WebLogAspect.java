@@ -1,7 +1,6 @@
 package com.yupaits.docs.aop;
 
 import com.yupaits.docs.common.response.Result;
-import org.aopalliance.intercept.Joinpoint;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
@@ -40,7 +39,7 @@ public class WebLogAspect {
 
         logger.info("HTTP_METHOD: {}, URL: {}, IP: {}, CLASS_METHOD: {}, ARGS: {}", request.getMethod(),
                 request.getRequestURL().toString(), request.getRemoteAddr(),
-                joinPoint.getClass().getName() + "." + joinPoint.getSignature().getName(),
+                joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName(),
                 Arrays.toString(joinPoint.getArgs()));
     }
 
