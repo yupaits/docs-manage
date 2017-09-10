@@ -12,6 +12,11 @@ public class User implements Serializable {
     private Integer id;
     private String username;
     private String email;
+    private String salt;
     private String password;
     private List<Role> roles;
+
+    public String getCredential() {
+        return username + salt;
+    }
 }

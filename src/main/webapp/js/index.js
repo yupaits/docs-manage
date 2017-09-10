@@ -25,14 +25,13 @@ $(function () {
                     async: false,
                     success: function (result) {
                         if (result.code === 200) {
-                            layer.closeAll('dialog');
                             if (result.data.length === 0) {
-                                layer.msg('项目清单为空', {time: 1000});
+                                showDialog('项目清单为空');
                             } else {
                                 data.projects = result.data;
                             }
                         } else {
-                            layer.msg('获取项目清单失败');
+                            showDialog('获取项目清单失败');
                         }
                     }
                 });

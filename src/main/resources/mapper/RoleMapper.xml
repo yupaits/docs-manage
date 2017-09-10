@@ -56,6 +56,15 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
 
+  <select id="selectByRoleName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from role
+    <where>
+      role_name = #{roleName, jdbcType=VARCHAR}
+    </where>
+  </select>
+
   <select id="selectByUsername" parameterType="java.lang.String" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />

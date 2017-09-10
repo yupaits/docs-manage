@@ -17,7 +17,9 @@ function ajax(options) {
             showMsg('请求出错，请稍后再试');
         };
     options.beforeSend = function () {
-        layer.msg('加载中', {icon: 16, shade: 0.01});
+        setTimeout(function () {
+            layer.msg('加载中', {icon: 16, shade: 0.01});
+        });
     };
     $.ajax(options);
     if (!pathname.startsWith('/auth') && accessToken !== undefined) {
@@ -55,8 +57,21 @@ function refreshAuthToken() {
 }
 
 function showMsg(msg) {
+    showMsg(msg, 300, null);
+}
+
+function showMsg(msg, delay) {
     layer.closeAll();
     setTimeout(function () {
         layer.msg(msg);
-    }, 300);
+    }, delay);
+}
+
+function showDialog(msg) {
+    showDialog(msg, 500);
+}
+
+function showDialog(msg, delay) {
+    layer.closeAll('dialog');
+    layer.msg(msg, {time: delay});
 }

@@ -85,6 +85,7 @@ public class ShiroConfig {
         filterChains.put("/images/*", "anon");
         filterChains.put("/auth/login", "anon");
         filterChains.put("/auth/logout", "anon");
+        filterChains.put("/auth/register", "anon");
 //        filterChains.put("/api/projects/**", "roles[ADMIN]");
         filterChains.put("/**", "jwtAuthc");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChains);

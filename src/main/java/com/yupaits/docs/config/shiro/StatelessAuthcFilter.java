@@ -37,7 +37,6 @@ public class StatelessAuthcFilter extends AccessControlFilter {
         try {
             getSubject(servletRequest, servletResponse).login(accessToken);
         } catch (AuthenticationException e) {
-            e.printStackTrace();
             HttpServletResponse response = (HttpServletResponse) servletResponse;
             response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
             objectMapper.writeValue(response.getWriter(), Result.fail(ResultCode.UNAUTHORIZED));

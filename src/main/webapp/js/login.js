@@ -14,7 +14,6 @@ new Vue({
                 type: 'post',
                 url: '/auth/login',
                 data: loginForm,
-                async: false,
                 success: function (result) {
                     if (result.code !== 200) {
                         showMsg(result.msg);

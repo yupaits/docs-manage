@@ -13,28 +13,28 @@
             <h1 class="text-center" style="margin-top: 3rem;"><span class="glyphicon glyphicon-book"></span></h1>
             <p class="lead text-center" style="margin-top: 2rem;">注册账号</p>
             <div class="panel panel-default" style="margin-top: 1rem;">
-                <div class="panel-body">
+                <div class="panel-body" id="registerForm">
                     <div class="form-group">
                         <label>用户名</label>
-                        <input type="text" class="form-control" placeholder="用户名">
+                        <input type="text" class="form-control" v-model="username" placeholder="用户名">
                         <small>用户名是唯一不可修改的，请仔细填写。</small>
                     </div>
                     <div class="form-group">
                         <label>邮箱</label>
-                        <input type="email" class="form-control" placeholder="邮箱">
+                        <input type="email" class="form-control" v-model="email" placeholder="邮箱">
                         <small>您将偶尔收到与帐户相关的电子邮件。我们保证不公开您的邮箱。</small>
                     </div>
                     <div class="form-group">
                         <label>密码</label>
-                        <input type="password" class="form-control" placeholder="密码">
+                        <input type="password" class="form-control" v-model="password" placeholder="密码">
                         <small>密码必须包含至少一个小写字母、一个数字，长度不少于7位。</small>
                     </div>
                     <div class="form-group">
                         <label>确认密码</label>
-                        <input type="password" class="form-control" placeholder="确认密码">
+                        <input type="password" class="form-control" v-model="confirmPassword" placeholder="确认密码" @keyup.enter="submitRegister">
                         <small>两次输入的密码需要保持一致。</small>
                     </div>
-                    <button class="btn btn-success btn-block">注册账号</button>
+                    <button class="btn btn-success btn-block" @click="submitRegister">注册账号</button>
                 </div>
             </div>
             <p class="text-center">
@@ -47,14 +47,9 @@
 <script src="/js/libs/jquery.min.js"></script>
 <script src="/js/libs/bootstrap.min.js"></script>
 <script src="/js/libs/vue.min.js"></script>
-<script>
-    new Vue({
-        el: '#main',
-        data: {
-            name: 'yupaits',
-
-        }
-    });
-</script>
+<script src="/js/libs/layer/layer.js"></script>
+<script src="/js/libs/jquery.cookie.js"></script>
+<script src="/js/app.js"></script>
+<script src="/js/register.js"></script>
 </body>
 </html>

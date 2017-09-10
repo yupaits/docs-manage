@@ -37,4 +37,9 @@ public class Result<T> {
     public static Result fail(ResultCode resultCode) {
         return build(resultCode, null);
     }
+
+    public static Result fail(String msg) {
+        //noinspection unchecked
+        return new Result(ResultCode.FAIL.getCode(), msg, null);
+    }
 }

@@ -5,10 +5,11 @@
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="username" jdbcType="VARCHAR" property="username" />
     <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="salt" jdbcType="VARCHAR" property="salt" />
     <result column="password" jdbcType="VARCHAR" property="password" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, username, email, password
+    id, username, email, salt, password
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -21,9 +22,9 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.yupaits.docs.model.User">
-    insert into user (id, username, email, 
+    insert into user (id, username, email, salt,
       password)
-    values (#{id,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{salt, jdbcType=VARCHAR},
       #{password,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.yupaits.docs.model.User">
@@ -38,6 +39,9 @@
       <if test="email != null">
         email,
       </if>
+      <if test="salt != null">
+        salt,
+      </if>
       <if test="password != null">
         password,
       </if>
@@ -51,6 +55,9 @@
       </if>
       <if test="email != null">
         #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="salt != null">
+        #{salt,jdbcType=VARCHAR},
       </if>
       <if test="password != null">
         #{password,jdbcType=VARCHAR},
