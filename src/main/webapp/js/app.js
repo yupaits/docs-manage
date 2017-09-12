@@ -1,6 +1,8 @@
 const accessToken = window.$cookies.get('accessToken');
-var baseUrl = 'https://localhost:9000';
-var refreshAuthTokenUrl = baseUrl + '/auth/refresh';
+const baseUrl = 'https://localhost:9000';
+const refreshAuthTokenUrl = baseUrl + '/auth/refresh';
+
+var defaultAlert = {type: 'secondary', secs: 6, countDown: 0};
 
 var Api = axios.create({
     baseURL: baseUrl,
@@ -17,9 +19,9 @@ Api.interceptors.request.use(function (config) {
 // response拦截器
 Api.interceptors.response.use(function (response) {
     // 刷新token
-    if (response.config.url !== refreshAuthTokenUrl) {
-        refreshAuthToken();
-    }
+    // if (response.config.url !== refreshAuthTokenUrl) {
+    //     refreshAuthToken();
+    // }
     // 返回调用接口的Result
     return response.data;
 }, function (error) {

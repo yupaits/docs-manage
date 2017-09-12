@@ -58,6 +58,7 @@ public class ShiroConfig {
         securityManager.setRealm(statelessRealm());
         securityManager.setSubjectFactory(subjectFactory());
         securityManager.setSessionManager(sessionManager());
+        securityManager.setRememberMeManager(null); // 不使用rememberMe功能
         SecurityUtils.setSecurityManager(securityManager);
         return securityManager;
     }
@@ -85,7 +86,6 @@ public class ShiroConfig {
         filterChains.put("/**/*.woff*", "anon");
         filterChains.put("/images/*", "anon");
         filterChains.put("/auth/login", "anon");
-        filterChains.put("/auth/logout", "anon");
         filterChains.put("/auth/register", "anon");
 //        filterChains.put("/api/projects/**", "roles[ADMIN]");
         filterChains.put("/**", "jwtAuthc");

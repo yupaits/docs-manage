@@ -1,5 +1,4 @@
 var defaultProject = {ownerId: null, name: '', description: '', sortCode: null};
-var defaultAlert = {type: 'secondary', secs: 6, countDown: 0};
 
 var docs = new Vue({
     el: '#main',
@@ -69,7 +68,7 @@ var docs = new Vue({
                 if (result.code !== 200) {
                     docs.showAlert('warning', result.msg);
                 } else {
-                    docs.project = {};
+                    docs.project = defaultProject;
                     docs.showAlert('success', '创建项目成功');
                     this.cancelProject();
                 }
@@ -81,7 +80,7 @@ var docs = new Vue({
             this.jump('projectList');
         },
         selectProject: function () {
-            jump('documents');
+            this.jump('documents');
         },
         addChild: function () {
             alert('add root');

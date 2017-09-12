@@ -9,7 +9,7 @@
 </head>
 <body>
 
-<div id="main">
+<div id="main" v-cloak>
 
     <b-navbar toggleable="lg" type="dark" variant="dark" :sticky="true">
         <b-nav-toggle target="nav-collapse"></b-nav-toggle>
@@ -71,7 +71,7 @@
                 <b-button variant="success" @click="showProject">创建项目</b-button>
                 <div v-for="project in projects">
                     <hr>
-                    <h4><b-link active @click="selectProject">{{project.name}}</b-link></h4>
+                    <h4><b-link active @click="selectProject" class="card-link">{{project.name}}</b-link></h4>
                     <p>{{project.description}}</p>
                     <p><span class="fa fa-clock-o"> {{project.createAt}}</span></p>
                 </div>
@@ -146,6 +146,7 @@
 </script>
 
 <script src="/js/libs/vue.min.js"></script>
+<script src="/js/libs/polyfill.min.js"></script>
 <script src="/js/libs/bootstrap-vue.js"></script>
 <script src="/js/libs/axios.min.js"></script>
 <script src="/js/libs/vue-cookies.js"></script>
