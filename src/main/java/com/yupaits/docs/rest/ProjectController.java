@@ -9,6 +9,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
+
 /**
  * 项目REST接口
  * Created by yupaits on 2017/8/4.
@@ -35,6 +37,7 @@ public class ProjectController {
         if (project == null || ValidateUtils.idInvalid(project.getOwnerId()) || StringUtils.isBlank(project.getName())) {
             return Result.fail(ResultCode.PARAMS_ERROR);
         }
+        project.setCreatedAt(new Timestamp(System.currentTimeMillis()));
         projectMapper.insertSelective(project);
         return Result.ok();
     }
@@ -54,6 +57,7 @@ public class ProjectController {
                 || StringUtils.isBlank(project.getName())) {
             return Result.fail(ResultCode.PARAMS_ERROR);
         }
+        project.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
         projectMapper.updateByPrimaryKeySelective(project);
         return Result.ok();
     }

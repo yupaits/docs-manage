@@ -13,5 +13,5 @@ import lombok.Data;
 public class TokenUserInfo {
     private String accessToken;
     private UserDTO user;
-    private Long expiredAt;
+    private Integer expiredIn;
 }

@@ -59,7 +59,7 @@ public class AuthController {
         String accessToken = jwtHelper.generateToken(loginForm.getUsername());
         UserDTO userDTO = new UserDTO();
         BeanUtils.copyProperties(user, userDTO);
-        TokenUserInfo tokenUserInfo = new TokenUserInfo(accessToken, userDTO, jwtHelper.generateExpirationTimeMillis(jwtProperties.getExpiredIn()));
+        TokenUserInfo tokenUserInfo = new TokenUserInfo(accessToken, userDTO, jwtProperties.getExpiredIn());
         return Result.ok(tokenUserInfo);
     }
 
@@ -122,7 +122,7 @@ public class AuthController {
                 userDTO = new UserDTO();
                 BeanUtils.copyProperties(user, userDTO);
             }
-            tokenUserInfo = new TokenUserInfo(refreshedToken, userDTO, jwtHelper.generateExpirationTimeMillis(jwtProperties.getExpiredIn()));
+            tokenUserInfo = new TokenUserInfo(refreshedToken, userDTO, jwtProperties.getExpiredIn() );
         }
         return Result.ok(tokenUserInfo);
     }

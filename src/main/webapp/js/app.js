@@ -1,77 +1,86 @@
-const baseUrl = 'https://localhost:9000';
+const accessToken = window.$cookies.get('accessToken');
+var baseUrl = 'https://localhost:9000';
+var refreshAuthTokenUrl = baseUrl + '/auth/refresh';
 
-function ajax(options) {
-    const accessToken = $.cookie('accessToken');
-    const pathname = options.url;
-    options.type = options.type || 'post';
-    options.url = baseUrl + pathname;
-    options.headers = {'authority': 'bearer ' + accessToken};
-    options.contentType = options.contentType || 'application/json';
-    options.data = options.contentType === 'application/json' ? JSON.stringify(options.data) : options.data;
-    options.async = options.async || true;
-    options.dataType = options.dataType || 'json';
-    options.success = options.success || function (result) {
-            showMsg(result.msg);
-        };
-    options.error = options.error || function (error) {
-            showMsg('请求出错，请稍后再试');
-        };
-    options.beforeSend = function () {
-        setTimeout(function () {
-            layer.msg('加载中', {icon: 16, shade: 0.01});
-        });
-    };
-    $.ajax(options);
-    if (!pathname.startsWith('/auth') && accessToken !== undefined) {
+var Api = axios.create({
+    baseURL: baseUrl,
+    headers: {'authority': 'bearer ' + accessToken}
+});
+
+// request拦截器
+Api.interceptors.request.use(function (config) {
+    return config;
+}, function (error) {
+    return Promise.rejecte(error);
+});
+
+// response拦截器
+Api.interceptors.response.use(function (response) {
+    // 刷新token
+    if (response.config.url !== refreshAuthTokenUrl) {
         refreshAuthToken();
     }
-}
+    // 返回调用接口的Result
+    return response.data;
+}, function (error) {
+    return Promise.reject(error);
+});
 
+// 设置登录相关Cookie
 function setLoginCookie(result) {
-    $.cookie('accessToken', result.accessToken, {expires: new Date(result.expiredAt), path: '/'});
-    $.cookie('user', JSON.stringify(result.user), {expires: new Date(result.expiredAt), path: '/'})
+    window.$cookies.set('accessToken', result.accessToken, result.expiredIn);
+    window.$cookies.set('user', JSON.stringify(result.user), result.expiredIn);
 }
 
+// 删除登录相关Cookie
 function deleteLoginCookie() {
-    $.removeCookie('user', {path: '/'});
-    $.removeCookie('accessToken', {path: '/'});
+    window.$cookies.remove('user');
+    window.$cookies.remove('accessToken');
 }
 
+// 刷新token
 function refreshAuthToken() {
-    const accessToken = $.cookie('accessToken');
-    $.ajax({
-        type: 'get',
-        url: baseUrl + '/auth/refresh',
-        headers: {'authority': 'bearer ' + accessToken},
-        success: function (result) {
+    Api.get(refreshAuthTokenUrl)
+        .then(function (result) {
             if (result.code === 200) {
                 setLoginCookie(result.data);
             } else {
-                showMsg('更新授权信息失败');
+                console.warn('更新授权信息失败');
+            }
+        })
+        .catch(function (error) {
+            console.error('更新授权信息出错');
+        });
+}
+
+// tree元素组件
+Vue.component('tree-item', {
+    template: '#tree-template',
+    props: {
+        model: Object,
+        id: String
+    },
+    data: function () {
+        return {
+            open: false
+        }
+    },
+    computed: {
+        isFolder() {
+            return this.model.children &&
+                this.model.children.length;
+        }
+    },
+    methods: {
+        toggle: function () {
+            if (this.isFolder) {
+                this.open = !this.open;
+            } else {
+                alert('show document');
             }
         },
-        error: function () {
-            showMsg('更新授权信息出错');
+        addChild: function () {
+            alert('add');
         }
-    });
-}
-
-function showMsg(msg) {
-    showMsg(msg, 300, null);
-}
-
-function showMsg(msg, delay) {
-    layer.closeAll();
-    setTimeout(function () {
-        layer.msg(msg);
-    }, delay);
-}
-
-function showDialog(msg) {
-    showDialog(msg, 500);
-}
-
-function showDialog(msg, delay) {
-    layer.closeAll('dialog');
-    layer.msg(msg, {time: delay});
-}
+    }
+});

@@ -78,6 +78,7 @@ public class ShiroConfig {
         filterChains.put("/**/*.html", "anon");
         filterChains.put("/**/*.css", "anon");
         filterChains.put("/**/*.js", "anon");
+        filterChains.put("/**/*.map", "anon");
         filterChains.put("/**/*.eot", "anon");
         filterChains.put("/**/*.svg", "anon");
         filterChains.put("/**/*.ttf", "anon");

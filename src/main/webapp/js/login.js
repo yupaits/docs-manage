@@ -10,18 +10,15 @@ new Vue({
                 username: this.username,
                 password: this.password
             };
-            ajax({
-                type: 'post',
-                url: '/auth/login',
-                data: loginForm,
-                success: function (result) {
-                    if (result.code !== 200) {
-                        showMsg(result.msg);
-                    } else {
-                        setLoginCookie(result.data);
-                        window.location.href = '/';
-                    }
+            Api.post('/auth/login', loginForm).then(function (result) {
+                if (result.code !== 200) {
+                    showMsg(result.msg);
+                } else {
+                    setLoginCookie(result.data);
+                    window.location.href = '/';
                 }
+            }).catch(function (error) {
+
             });
         }
     }
