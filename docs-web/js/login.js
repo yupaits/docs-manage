@@ -27,13 +27,15 @@ var login = new Vue({
             };
             Auth.post('/login', loginForm).then(function (result) {
                 if (result.code !== 200) {
-                    login.showAlert('danger', result.msg);
+                    login.showAlert('warning', result.msg);
+                    login.password = '';
                 } else {
                     setLoginCookie(result.data);
                     window.location.href = '/';
                 }
             }).catch(function (error) {
                 login.showAlert('danger', '登录出错');
+                login.password = '';
             });
         }
     }

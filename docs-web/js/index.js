@@ -30,7 +30,7 @@ var docs = new Vue({
     methods: {
         logout: function () {
             deleteLoginCookie();
-            window.location.href = '/';
+            window.location.href = '/login.html';
         },
         getProjectList: function () {
             Api.get('/projects/owner/' + this.user.id).then(function (result) {
