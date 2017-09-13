@@ -15,13 +15,13 @@ import org.springframework.web.bind.annotation.*;
  * Created by yupaits on 2017/8/5.
  */
 @RestController
-@RequestMapping("/api/projects/{projectId}/directories")
+@RequestMapping("/api/directories")
 public class DirectoryController {
 
     @Autowired
     private DirectoryRepository directoryRepository;
 
-    @GetMapping("")
+    @GetMapping("/projects/{projectId}")
     public Result projectDirectories(@PathVariable Integer projectId) {
         if (ValidateUtils.idInvalid(projectId)) {
             return Result.fail(ResultCode.PARAMS_ERROR);
@@ -39,7 +39,7 @@ public class DirectoryController {
 
     @PostMapping("")
     public Result createDirectory(@RequestBody Directory directory) {
-        if (directory == null || ValidateUtils.idInvalid(directory.getOwnerId()) || ValidateUtils.idInvalid(directory.getParentId())
+        if (directory == null || ValidateUtils.idInvalid(directory.getOwnerId()) || !ValidateUtils.isUnsignedInteger(directory.getParentId())
                 || ValidateUtils.idInvalid(directory.getProjectId()) || StringUtils.isBlank(directory.getName())) {
             return Result.fail(ResultCode.PARAMS_ERROR);
         }
@@ -59,7 +59,7 @@ public class DirectoryController {
     @PutMapping("/{directoryId}")
     public Result updateDirectory(@RequestBody Directory directory) {
         if (directory == null || ValidateUtils.idInvalid(directory.getId()) || ValidateUtils.idInvalid(directory.getOwnerId())
-                || ValidateUtils.idInvalid(directory.getParentId()) || ValidateUtils.idInvalid(directory.getProjectId())
+                || !ValidateUtils.isUnsignedInteger(directory.getParentId()) || ValidateUtils.idInvalid(directory.getProjectId())
                 || StringUtils.isBlank(directory.getName())) {
             return Result.fail(ResultCode.PARAMS_ERROR);
         }

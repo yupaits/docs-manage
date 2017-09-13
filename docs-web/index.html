@@ -11,13 +11,13 @@
 
 <div id="main" v-cloak>
 
-    <b-navbar toggleable="lg" type="dark" variant="dark" :sticky="true">
+    <b-navbar toggleable="lg" type="dark" variant="dark" sticky>
         <b-nav-toggle target="nav-collapse"></b-nav-toggle>
         <b-navbar-brand href="/">文档管理</b-navbar-brand>
         <b-collapse is-nav id="nav-collapse">
             <b-nav is-nav-bar>
-                <b-nav-item href="/login.html" v-if="hasLogin"><span class="fa fa-file-code-o"> 文档</span></b-nav-item>
-                <b-nav-item href="/login.html" v-if="hasLogin"><span class="fa fa-file-word-o"> 文件</span></b-nav-item>
+                <b-nav-item href="/" v-if="hasLogin"><span class="fa fa-file-text-o"> 文档</span></b-nav-item>
+                <b-nav-item href="/file.html" v-if="hasLogin"><span class="fa fa-file-word-o"> 文件</span></b-nav-item>
             </b-nav>
             <b-nav is-nav-bar class="ml-auto">
                 <b-nav-item right href="/login.html" v-show="!hasLogin">登录</b-nav-item>
@@ -45,33 +45,12 @@
             </b-col>
         </b-row>
 
-        <b-row v-if="showPart == 'documents'">
-            <b-col>
-                <b-card nobody>
-                    <ul>
-                        <tree-item v-for="(data, index) in directoryTree" :model="data" :id="'cate-' + index"></tree-item>
-                        <span class="fa fa-plus" @click="addChild"> 新建</span>
-                    </ul>
-                </b-card>
-            </b-col>
-
-            <b-col>
-                <b-card>
-                    <h4>Contextual variations</h4>
-                    <p>Add any of the following variants via the variant prop to change the appearance of a &lt;b-badge&gt;: default, primary, success, warning, info, and danger. If no variant is specified default will be used.</p>
-
-                    <h4>Conveying meaning to assistive technologies:</h4>
-                    <p>Using color to add meaning only provides a visual indication, which will not be conveyed to users of assistive technologies – such as screen readers. Ensure that information denoted by the color is either obvious from the content itself (e.g. the visible text), or is included through alternative means, such as additional text hidden with the .sr-only class.</p>
-                </b-card>
-            </b-col>
-        </b-row>
-
         <b-row v-if="showPart == 'projectList'">
             <b-col>
                 <b-button variant="success" @click="showProject">创建项目</b-button>
                 <div v-for="project in projects">
                     <hr>
-                    <h4><b-link active @click="selectProject" class="card-link">{{project.name}}</b-link></h4>
+                    <h4><b-link active @click="selectProject(project)" class="card-link">{{project.name}}</b-link></h4>
                     <p>{{project.description}}</p>
                     <p><span class="fa fa-clock-o"> {{project.createAt}}</span></p>
                 </div>
@@ -79,9 +58,44 @@
             </b-col>
         </b-row>
 
+        <b-row v-if="showPart == 'documents'">
+            <b-col cols="4">
+                <b-button-toolbar justify>
+                    <b-button size="sm" variant="light" @click="cancelProject"><span class="fa fa-arrow-left"> 返回</span></b-button>
+                    <b-input-group size="sm">
+                        <b-form-input
+                                type="text"
+                                v-model="search.projectSearch"></b-form-input>
+                        <b-input-group-button>
+                            <b-button variant="outline-primary" @click=""><span class="fa fa-search"> 搜索</span></b-button>
+                        </b-input-group-button>
+                    </b-input-group>
+                </b-button-toolbar>
+                <b-card nobody class="mt-3">
+                    <ul>
+                        <tree-item v-for="(data, index) in directoryTree" :model="data" :id="'directory-' + index"></tree-item>
+                        <span class="fa fa-plus" @click="addChild"> 新建</span>
+                    </ul>
+                </b-card>
+            </b-col>
+
+            <b-col cols="8">
+                <b-breadcrumb>
+                    <b-breadcrumb-item :text="'<b>' + selectedProject.name + '</b>'" active/>
+                </b-breadcrumb>
+                <div>
+                    <h4>Contextual variations</h4>
+                    <p>Add any of the following variants via the variant prop to change the appearance of a &lt;b-badge&gt;: default, primary, success, warning, info, and danger. If no variant is specified default will be used.</p>
+
+                    <h4>Conveying meaning to assistive technologies:</h4>
+                    <p>Using color to add meaning only provides a visual indication, which will not be conveyed to users of assistive technologies – such as screen readers. Ensure that information denoted by the color is either obvious from the content itself (e.g. the visible text), or is included through alternative means, such as additional text hidden with the .sr-only class.</p>
+                </div>
+            </b-col>
+        </b-row>
+
         <b-row align-h="center" v-if="showPart == 'showProject'">
             <b-col cols="6">
-                <b-button variant="default" @click="cancelProject"><span class="fa fa-arrow-left"> 返回</span></b-button>
+                <b-button size="sm" variant="light" @click="cancelProject"><span class="fa fa-arrow-left"> 返回</span></b-button>
                 <b-card nobody class="mt-3">
                     <b-form @submit="submitProject">
                         <b-form-group id="project-name"
@@ -125,6 +139,50 @@
     </b-container>
 </div>
 
+<b-modal id="add-modal"
+         ref="add_modal"
+         title="新建目录"
+         button-size="sm"
+         no-close-on-backdrop
+         on-close-on-esc
+         hide-header
+         close-title="取消"
+         ok-title="提交"
+         @ok="submitAdd"
+         @cancel="cancelAdd"
+         v-cloak>
+    <b-alert :variant="alert.type"
+             :show="alert.countDown"
+             dismissible
+             @dismissed="alert.countDown=0"
+             @dismiss-count-down="countDownChanged">
+        <h6>{{alert.msg}} <br><small>消息将在 {{alert.countDown}} 秒后消失</small></h6>
+    </b-alert>
+    <b-form>
+        <b-form-group id="add-modal-name"
+                      label="名称"
+                      lable-for="add-modal-name-input">
+            <b-form-input id="add-modal-name-input"
+                          type="text"
+                          v-model="name"
+                          required
+                          placeholder="输入名称"></b-form-input>
+        </b-form-group>
+        <b-form-group id="add-modal-sort-code"
+                      label="排序码"
+                      lable-for="add-modal-sort-code-input"
+                      description="越小越靠前">
+            <b-form-input id="add-modal-sort-code-input"
+                          type="number"
+                          v-model="sortCode"
+                          required
+                          :state="sortCodeState"
+                          placeholder="输入排序码"></b-form-input>
+            <b-form-feedback>排序吗必须大于0</b-form-feedback>
+        </b-form-group>
+    </b-form>
+</b-modal>
+
 <script type="text/x-template" id="tree-template">
     <div>
         <div :id="id" :class="{bold: isFolder}">
@@ -134,8 +192,8 @@
             {{model.name}}
         </span>
             <span v-if='isFolder' class="float-right">
-            <b-badge size='sm' @click="alert('edit')"><span class="fa fa-edit"></span></b-badge>
-            <b-badge size='sm' @click="alert('delete')"><span class="fa fa-remove"></span></b-badge>
+            <b-badge size='sm' variant="flight" @click="alert('edit')"><span class="fa fa-edit"></span></b-badge>
+            <b-badge size='sm' variant="flight" @click="alert('delete')"><span class="fa fa-remove"></span></b-badge>
         </span>
         </div>
         <ul v-show="open" v-if="isFolder">
@@ -143,6 +201,57 @@
             <span class="fa fa-plus" @click="addChild"> 新建</span>
         </ul>
     </div>
+
+    <b-modal ref="tree_add_modal"
+             title="新建目录或文档"
+             button-size="sm"
+             no-close-on-backdrop
+             on-close-on-esc
+             hide-header
+             close-title="取消"
+             ok-title="提交"
+             @ok="submitAdd"
+             @cancel="cancelAdd"
+             v-cloak>
+        <b-alert :variant="alert.type"
+                 :show="alert.countDown"
+                 dismissible
+                 @dismissed="alert.countDown=0"
+                 @dismiss-count-down="countDownChanged">
+            <h6>{{alert.msg}} <br><small>消息将在 {{alert.countDown}} 秒后消失</small></h6>
+        </b-alert>
+
+        <b-form>
+            <b-form-group id="add-modal-type"
+                          label="类型"
+                          label-for="add-modal-type-radio">
+                <b-form-radio id="add-modal-type-radio"
+                              v-model="type"
+                              :options="typeOptions"></b-form-radio>
+            </b-form-group>
+            <b-form-group id="add-modal-name"
+                          label="名称"
+                          lable-for="add-modal-name-input">
+                <b-form-input id="add-modal-name-input"
+                              type="text"
+                              v-model="name"
+                              required
+                              placeholder="输入名称"></b-form-input>
+            </b-form-group>
+            <b-form-group id="add-modal-sort-code"
+                          label="排序码"
+                          lable-for="add-modal-sort-code-input"
+                          description="越小越靠前">
+                <b-form-input id="add-modal-sort-code-input"
+                              type="number"
+                              v-model="sortCode"
+                              required
+                              :state="sortCodeState"
+                              placeholder="输入排序码"></b-form-input>
+                <b-form-feedback>排序吗必须大于0</b-form-feedback>
+            </b-form-group>
+        </b-form>
+    </b-modal>
 </script>
 
 <script src="js/libs/vue.min.js"></script>

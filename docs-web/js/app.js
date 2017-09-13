@@ -4,6 +4,7 @@ const authBaseUrl = 'http://localhost:9100/auth';
 const refreshAuthTokenUrl = authBaseUrl + '/refresh';
 
 var defaultAlert = {type: 'secondary', secs: 6, countDown: 0};
+var defaultSearch = {projectSearch: '', fileSearch: ''};
 
 var Api = axios.create({
     baseURL: apiBaseUrl,
@@ -71,13 +72,19 @@ Vue.component('tree-item', {
     },
     data: function () {
         return {
-            open: false
+            open: false,
+            alert: JSON.parse(JSON.stringify(defaultAlert)),
+            typeOptions: typeOptions,
+            directory: null,
+            id: null,
+            type: null,
+            name: '',
+            sortCode: null
         }
     },
     computed: {
         isFolder() {
-            return this.model.children &&
-                this.model.children.length;
+            return this.model.children && this.model.children.length;
         }
     },
     methods: {
@@ -89,7 +96,38 @@ Vue.component('tree-item', {
             }
         },
         addChild: function () {
-            alert('add');
+            this.$refs.tree_add_modal.show();
+        },
+        submitAdd: function (event) {
+            console.log(event);
+            if (this.type === 0) {
+                var directory = {
+                    ownerId: docs.user.id,
+                    projectId: docs.selectedProject.id,
+                    parentId: 0,
+                    name: this.name,
+                    sortCode: this.sortCode
+                };
+                Api.post('/directories', directory).then(function (result) {
+                    if (result.code !== 200) {
+                        addModal.showAlert('warning', result.msg);
+                    } else {
+                        docs.directoryTree.push(directory);
+                        addModal.hide();
+                    }
+                }).catch(function (error) {
+                    addModal.showAlert('error', '新建目录出错');
+                });
+            } else if (this.type === 1) {
+                var document = {
+                    ownerId: docs.user.id,
+                    directoryId: 0,
+
+                }
+            }
+        },
+        cancelAdd: function () {
+            this.hide();
         }
     }
 });

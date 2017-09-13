@@ -3,14 +3,16 @@ var defaultProject = {ownerId: null, name: '', description: '', sortCode: null};
 var docs = new Vue({
     el: '#main',
     data: {
-        alert: defaultAlert,
+        alert: JSON.parse(JSON.stringify(defaultAlert)),
+        search: defaultSearch,
         hasLogin: false,
         user: null,
         showPart: 'projectList',
         projects: [],
         project: defaultProject,
         selectedProject: null,
-        directoryTree: null
+        directoryTree: [],
+        selectedDocument: null,
     },
     created: function () {
         const user = window.$cookies.get('user');
@@ -79,11 +81,68 @@ var docs = new Vue({
         cancelProject: function () {
             this.jump('projectList');
         },
-        selectProject: function () {
+        selectProject: function (project) {
+            this.selectedProject = project;
             this.jump('documents');
         },
         addChild: function () {
-            alert('add root');
+            addModal.show();
+        }
+    }
+});
+
+var typeOptions = [{text: '目录', value: 0}, {text: '文档', value: 1}];
+
+var addModal = new Vue({
+    el: '#add-modal',
+    data: {
+        alert: JSON.parse(JSON.stringify(defaultAlert)),
+        name: '',
+        sortCode: null
+    },
+    computed: {
+        sortCodeState() {
+            return this.sortCode > 0 ? null : 'invalid';
+        }
+    },
+    methods: {
+        countDownChanged: function (dismissCountDown) {
+            this.alert.countDown = dismissCountDown;
+        },
+        showAlert: function (type, msg, secs) {
+            this.alert.type = type;
+            this.alert.msg = msg;
+            this.alert.countDown = secs ? secs : this.alert.secs;
+        },
+        show: function (directory) {
+            this.$refs.add_modal.show();
+        },
+        hide: function () {
+            this.$refs.add_modal.hide();
+        },
+        submitAdd: function (event) {
+            event.cancel();
+            var directory = {
+                ownerId: docs.user.id,
+                projectId: docs.selectedProject.id,
+                parentId: 0,
+                name: this.name,
+                sortCode: this.sortCode
+            };
+            Api.post('/directories', directory).then(function (result) {
+                if (result.code !== 200) {
+                    addModal.showAlert('warning', result.msg);
+                } else {
+                    docs.directoryTree.push(directory);
+                    addModal.hide();
+                }
+            }).catch(function (error) {
+                addModal.showAlert('error', '新建目录出错');
+            });
+
+        },
+        cancelAdd: function () {
+            this.hide();
         }
     }
 });

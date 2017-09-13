@@ -15,13 +15,13 @@ import org.springframework.web.bind.annotation.RestController;
  * Created by yupaits on 2017/8/5.
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/documentHistories")
 public class DocumentHistoryController {
 
     @Autowired
     private DocumentHistoryRepository documentHistoryRepository;
 
-    @GetMapping("/documents/{documentId}/documentHistories")
+    @GetMapping("/documents/{documentId}")
     public Result getDocumentHistories(@PathVariable Integer documentId) {
         if (ValidateUtils.idInvalid(documentId)) {
             return Result.fail(ResultCode.PARAMS_ERROR);

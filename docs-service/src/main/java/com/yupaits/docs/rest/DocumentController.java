@@ -18,7 +18,7 @@ import java.sql.Date;
  * Created by yupaits on 2017/8/5.
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/documents")
 public class DocumentController {
 
     @Autowired
@@ -27,7 +27,7 @@ public class DocumentController {
     @Autowired
     private DocumentHistoryRepository documentHistoryRepository;
 
-    @GetMapping("/documents/{documentId}")
+    @GetMapping("/{documentId}")
     public Result getDocumentById(@PathVariable Integer documentId) {
         if (ValidateUtils.idInvalid(documentId)) {
             return Result.fail(ResultCode.PARAMS_ERROR);
@@ -35,7 +35,7 @@ public class DocumentController {
         return Result.ok(documentRepository.findOne(documentId));
     }
 
-    @GetMapping("/directories/{directoryId}/documents")
+    @GetMapping("/directories/{directoryId}")
     public Result getDirectoryDocuments(@PathVariable Integer directoryId) {
         if (ValidateUtils.idInvalid(directoryId)) {
             return Result.fail(ResultCode.PARAMS_ERROR);
@@ -43,7 +43,7 @@ public class DocumentController {
         return Result.ok(documentRepository.findByDirectoryId(directoryId));
     }
 
-    @PostMapping("/documents")
+    @PostMapping("")
     public Result createDocument(@RequestBody Document document) {
         if (document == null || ValidateUtils.idInvalid(document.getDirectoryId()) || StringUtils.isBlank(document.getContent())) {
             return Result.fail(ResultCode.PARAMS_ERROR);
@@ -52,7 +52,7 @@ public class DocumentController {
         return Result.ok();
     }
 
-    @DeleteMapping("/documents/{documentId}")
+    @DeleteMapping("/{documentId}")
     public Result deleteDocument(@PathVariable Integer documentId) {
         if (ValidateUtils.idInvalid(documentId)) {
             return Result.fail(ResultCode.PARAMS_ERROR);
@@ -66,7 +66,7 @@ public class DocumentController {
         return Result.ok();
     }
 
-    @PutMapping("/documents/{documentId}")
+    @PutMapping("/{documentId}")
     public Result updateDocument(@RequestBody Document document) {
         if (document == null || ValidateUtils.idInvalid(document.getId()) || ValidateUtils.idInvalid(document.getDirectoryId())
                 || StringUtils.isBlank(document.getContent())) {

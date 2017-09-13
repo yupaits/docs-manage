@@ -34,7 +34,7 @@ public class RedisCacheAspect {
     public Object aroundSetCache(ProceedingJoinPoint joinPoint) throws Throwable {
         Long startTime = System.currentTimeMillis();
 
-        String className = joinPoint.getTarget().getClass().getName();
+        String className = joinPoint.getSignature().getDeclaringTypeName();
         String methodName = joinPoint.getSignature().getName();
         Object[] args = joinPoint.getArgs();
 
@@ -44,10 +44,10 @@ public class RedisCacheAspect {
         if (null == value) {
             result = joinPoint.proceed();
             redisTemplate.opsForHash().put(className, key, result);
-            logger.debug("SPEND TIME: {}ms, FROM DB, CACHE_KEY: {}", (System.currentTimeMillis() - startTime), key);
+            logger.info("SPEND TIME: {}ms, FROM DB, CACHE_KEY: {}", (System.currentTimeMillis() - startTime), key);
         } else {
             result = value;
-            logger.debug("SPEND TIME: {}ms, FROM CACHE_NAME: {}, CACHE_KEY: {}", (System.currentTimeMillis() - startTime), className, key);
+            logger.info("SPEND TIME: {}ms, FROM CACHE_NAME: {}, CACHE_KEY: {}", (System.currentTimeMillis() - startTime), className, key);
         }
         return result;
     }
@@ -57,7 +57,7 @@ public class RedisCacheAspect {
         Long startTime = System.currentTimeMillis();
 
         Object result = joinPoint.proceed();
-        String className = joinPoint.getTarget().getClass().getName();
+        String className = joinPoint.getSignature().getDeclaringTypeName();
         redisTemplate.delete(className);
         logger.info("SPEND TIME: {}ms, DELETE CACHE_NAME: {}", (System.currentTimeMillis() - startTime), className);
         return result;

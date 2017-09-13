@@ -14,4 +14,8 @@ public class ValidateUtils {
     public static boolean idInvalid(Integer id) {
         return id == null || id.compareTo(0) <= 0;
     }
+
+    public static boolean isUnsignedInteger(Integer integer) {
+        return integer != null && integer.compareTo(0) >= 0;
+    }
 }
