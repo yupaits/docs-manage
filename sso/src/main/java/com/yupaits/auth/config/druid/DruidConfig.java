@@ -1,34 +1,29 @@
 package com.yupaits.auth.config.druid;
 
 import com.alibaba.druid.support.http.StatViewServlet;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.mybatis.spring.SqlSessionFactoryBean;
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+
+import javax.sql.DataSource;
 
 /**
  * 数据库配置类
  * Created by yupaits on 2017/8/5.
  */
-@MapperScan(basePackages = "com.yupaits.docs.mapper")
 @Configuration
+@EnableJpaRepositories(basePackages = "com.yupaits.auth.repository")
 public class DruidConfig {
 
     @Autowired
-    private DruidProperties druidConfig;
+    private DruidProperties druidProperties;
 
     @Bean
-    public SqlSessionFactory sqlSessionFactoryBean() throws Exception {
-        SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
-        sqlSessionFactoryBean.setDataSource(druidConfig.mysqlDataSource());
-        PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
-        sqlSessionFactoryBean.setMapperLocations(resolver.getResources("classpath:mapper/**.xml"));
-        return sqlSessionFactoryBean.getObject();
+    public DataSource dataSource() throws Exception {
+        return druidProperties.mysqlDataSource();
     }
 
     @Bean
@@ -43,6 +38,6 @@ public class DruidConfig {
 
     @Bean
     public DataSourceTransactionManager transactionManager() throws Exception {
-        return new DataSourceTransactionManager(druidConfig.mysqlDataSource());
+        return new DataSourceTransactionManager(dataSource());
     }
 }

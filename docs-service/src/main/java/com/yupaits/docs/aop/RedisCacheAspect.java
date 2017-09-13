@@ -22,12 +22,12 @@ public class RedisCacheAspect {
     @Autowired
     private RedisTemplate redisTemplate;
 
-    @Pointcut("execution(* com.yupaits.docs.mapper..*.select*(..))")
+    @Pointcut("execution(* com.yupaits.docs.repository..*.find*(..))")
     public void setCache() {}
 
-    @Pointcut("execution(* com.yupaits.docs.mapper..*.delete*(..)) " +
-            "|| execution(* com.yupaits.docs.mapper..*.insert*(..))" +
-            "|| execution(* com.yupaits.docs.mapper..*.update*(..))")
+    @Pointcut("execution(* com.yupaits.docs.repository..*.save(..)) " +
+            "|| execution(* com.yupaits.docs.repository..*.delete(..))" +
+            "|| execution(* com.yupaits.docs.repository..*.update*(..))")
     public void evictCache() {}
 
     @Around(value = "setCache()")

@@ -1,6 +1,6 @@
 package com.yupaits.auth.config.jwt;
 
-import com.yupaits.docs.bean.UserDTO;
+import com.yupaits.auth.bean.UserDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

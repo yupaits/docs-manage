@@ -2,8 +2,7 @@ package com.yupaits.docs.rest;
 
 import com.yupaits.docs.common.response.Result;
 import com.yupaits.docs.common.response.ResultCode;
-import com.yupaits.docs.mapper.DocumentHistoryMapper;
-import com.yupaits.docs.model.DocumentHistory;
+import com.yupaits.docs.repository.DocumentHistoryRepository;
 import com.yupaits.docs.util.validate.ValidateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,15 +19,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class DocumentHistoryController {
 
     @Autowired
-    private DocumentHistoryMapper documentHistoryMapper;
+    private DocumentHistoryRepository documentHistoryRepository;
 
     @GetMapping("/documents/{documentId}/documentHistories")
     public Result getDocumentHistories(@PathVariable Integer documentId) {
         if (ValidateUtils.idInvalid(documentId)) {
             return Result.fail(ResultCode.PARAMS_ERROR);
         }
-        DocumentHistory documentHistory = new DocumentHistory();
-        documentHistory.setDocumentId(documentId);
-        return Result.ok(documentHistoryMapper.selectBySelective(documentHistory));
+        return Result.ok(documentHistoryRepository.findByDocumentId(documentId));
     }
 }

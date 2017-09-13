@@ -6,7 +6,6 @@ import com.yupaits.docs.common.response.ResultCode;
 import com.yupaits.docs.config.jwt.JwtHelper;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.web.filter.AccessControlFilter;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
 

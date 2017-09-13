@@ -2,19 +2,17 @@ package com.yupaits.auth.web;
 
 import com.yupaits.auth.bean.LoginForm;
 import com.yupaits.auth.bean.RegisterForm;
+import com.yupaits.auth.bean.UserDTO;
 import com.yupaits.auth.config.jwt.JwtHelper;
 import com.yupaits.auth.config.jwt.JwtProperties;
 import com.yupaits.auth.config.jwt.TokenUserInfo;
-import com.yupaits.docs.mapper.RoleMapper;
-import com.yupaits.docs.mapper.UserMapper;
-import com.yupaits.docs.mapper.UserRoleMapper;
-import com.yupaits.docs.model.Role;
-import com.yupaits.docs.model.User;
-import com.yupaits.docs.model.UserRole;
-import com.yupaits.auth.util.encrypt.EncryptUtils;
-import com.yupaits.docs.bean.UserDTO;
+import com.yupaits.auth.entity.Role;
+import com.yupaits.auth.entity.User;
+import com.yupaits.auth.repository.RoleRepository;
+import com.yupaits.auth.repository.UserRepository;
 import com.yupaits.docs.common.response.Result;
 import com.yupaits.docs.common.response.ResultCode;
+import com.yupaits.docs.util.encrypt.EncryptUtils;
 import io.jsonwebtoken.lang.Assert;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -38,20 +36,17 @@ public class AuthController {
     private JwtHelper jwtHelper;
 
     @Autowired
-    private UserMapper userMapper;
+    private UserRepository userRepository;
 
     @Autowired
-    private RoleMapper roleMapper;
-
-    @Autowired
-    private UserRoleMapper userRoleMapper;
+    private RoleRepository roleRepository;
 
     @PostMapping("/login")
     public Result login(@RequestBody LoginForm loginForm) {
         if (loginForm == null || StringUtils.isBlank(loginForm.getUsername()) || StringUtils.isBlank(loginForm.getPassword())) {
             return Result.fail(ResultCode.PARAMS_ERROR);
         }
-        User user = userMapper.selectByUsername(loginForm.getUsername());
+        User user = userRepository.findByUsername(loginForm.getUsername());
         if (user == null || !StringUtils.equals(EncryptUtils.encryptPassword(loginForm.getPassword(), user.getCredential()), user.getPassword())) {
             return Result.fail(ResultCode.LOGIN_FAIL);
         }
@@ -76,15 +71,10 @@ public class AuthController {
         String salt = UUID.nameUUIDFromBytes(user.getUsername().getBytes()).toString();
         user.setSalt(salt);
         user.setPassword(EncryptUtils.encryptPassword(user.getPassword(), user.getCredential()));
-        userMapper.insertSelective(user);
-        User userInDb = userMapper.selectByUsername(user.getUsername());
-        if (userInDb == null) {
-            return Result.fail(ResultCode.DB_ERROR);
-        }
-        Role role = roleMapper.selectByRoleName("user");
+        Role role = roleRepository.findByRoleName("user");
         Assert.notNull(role, "role[user] is null!");
-        UserRole userRole = new UserRole(userInDb.getId(), role.getId());
-        userRoleMapper.insert(userRole);
+        user.getRoles().add(role);
+        userRepository.save(user);
         return Result.ok();
     }
 
@@ -93,7 +83,7 @@ public class AuthController {
         UserDTO currentUser = null;
         String authToken = jwtHelper.getToken(request);
         if (authToken != null) {
-            User user = userMapper.selectByUsername(jwtHelper.getUsernameFromToken(authToken));
+            User user = userRepository.findByUsername(jwtHelper.getUsernameFromToken(authToken));
             if (user != null) {
                 currentUser = new UserDTO();
                 BeanUtils.copyProperties(user, currentUser);
@@ -109,7 +99,7 @@ public class AuthController {
         if (authToken != null && jwtHelper.canRefreshToken(authToken)) {
             //刷新token
             String refreshedToken = jwtHelper.refreshToken(authToken);
-            User user = userMapper.selectByUsername(jwtHelper.getUsernameFromToken(authToken));
+            User user = userRepository.findByUsername(jwtHelper.getUsernameFromToken(authToken));
             UserDTO userDTO = null;
             if (user != null) {
                 userDTO = new UserDTO();

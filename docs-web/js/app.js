@@ -58,7 +58,6 @@ function refreshAuthToken() {
                 console.warn('更新授权信息失败');
             }
         }).catch(function (error) {
-            console
             console.error('更新授权信息出错');
         });
 }

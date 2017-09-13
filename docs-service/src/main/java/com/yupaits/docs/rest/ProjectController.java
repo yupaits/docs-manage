@@ -2,8 +2,9 @@ package com.yupaits.docs.rest;
 
 import com.yupaits.docs.common.response.Result;
 import com.yupaits.docs.common.response.ResultCode;
-import com.yupaits.docs.mapper.ProjectMapper;
-import com.yupaits.docs.model.Project;
+import com.yupaits.docs.entity.Project;
+import com.yupaits.docs.repository.ProjectRepository;
+import com.yupaits.docs.util.bean.BeanUtil;
 import com.yupaits.docs.util.validate.ValidateUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,16 +21,14 @@ import java.sql.Timestamp;
 public class ProjectController {
 
     @Autowired
-    private ProjectMapper projectMapper;
+    private ProjectRepository projectRepository;
 
     @GetMapping("/owner/{ownerId}")
     public Result projects(@PathVariable Integer ownerId) {
         if (ValidateUtils.idInvalid(ownerId)) {
             return Result.fail(ResultCode.PARAMS_ERROR);
         }
-        Project project = new Project();
-        project.setOwnerId(ownerId);
-        return Result.ok(projectMapper.selectBySelective(project));
+        return Result.ok(projectRepository.findByOwnerId(ownerId));
     }
 
     @PostMapping("")
@@ -38,7 +37,7 @@ public class ProjectController {
             return Result.fail(ResultCode.PARAMS_ERROR);
         }
         project.setCreatedAt(new Timestamp(System.currentTimeMillis()));
-        projectMapper.insertSelective(project);
+        projectRepository.save(project);
         return Result.ok();
     }
 
@@ -47,7 +46,12 @@ public class ProjectController {
         if (ValidateUtils.idInvalid(projectId)) {
             return Result.fail(ResultCode.PARAMS_ERROR);
         }
-        projectMapper.deleteByPrimaryKey(projectId);
+        Project projectInDb = projectRepository.findOne(projectId);
+        if (projectInDb == null) {
+            return Result.fail(ResultCode.DATA_NOT_FOUND);
+        }
+        projectInDb.setIsDeleted(true);
+        projectRepository.save(projectInDb);
         return Result.ok();
     }
 
@@ -57,8 +61,13 @@ public class ProjectController {
                 || StringUtils.isBlank(project.getName())) {
             return Result.fail(ResultCode.PARAMS_ERROR);
         }
-        project.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
-        projectMapper.updateByPrimaryKeySelective(project);
+        Project projectInDb = projectRepository.findOne(project.getId());
+        if (projectInDb == null) {
+            return Result.fail(ResultCode.DATA_NOT_FOUND);
+        }
+        BeanUtil.copyProperties(project, projectInDb);
+        projectInDb.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+        projectRepository.save(projectInDb);
         return Result.ok();
     }
 }

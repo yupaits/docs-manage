@@ -1,9 +1,8 @@
 package com.yupaits.docs.config.shiro;
 
-import com.yupaits.docs.mapper.RoleMapper;
-import com.yupaits.docs.mapper.UserMapper;
-import com.yupaits.docs.model.Role;
-import com.yupaits.docs.model.User;
+import com.yupaits.auth.entity.Role;
+import com.yupaits.auth.entity.User;
+import com.yupaits.auth.repository.UserRepository;
 import io.jsonwebtoken.lang.Assert;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -23,15 +22,13 @@ import java.util.stream.Collectors;
 public class StatelessRealm extends AuthorizingRealm {
 
     @Autowired
-    private UserMapper userMapper;
-
-    @Autowired
-    private RoleMapper roleMapper;
+    private UserRepository userRepository;
 
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
         String username = (String) principalCollection.getPrimaryPrincipal();
-        List<Role> roleList = roleMapper.selectByUsername(username);
+        User user = userRepository.findByUsername(username);
+        List<Role> roleList = user.getRoles();
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         Set<String> roleSet = roleList.stream().map(Role::getRoleName).collect(Collectors.toSet());
         info.addRoles(roleSet);
@@ -43,7 +40,7 @@ public class StatelessRealm extends AuthorizingRealm {
         StatelessToken token = (StatelessToken) authenticationToken;
         Assert.notNull(authenticationToken, "token is null!");
         String username = (String) token.getPrincipal();
-        User user = this.userMapper.selectByUsername(username);
+        User user = userRepository.findByUsername(username);
         if (user == null) {
             throw new UnknownAccountException(String.format("user '%s' not found.", username));
         }

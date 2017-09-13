@@ -2,10 +2,11 @@ package com.yupaits.docs.rest;
 
 import com.yupaits.docs.common.response.Result;
 import com.yupaits.docs.common.response.ResultCode;
-import com.yupaits.docs.mapper.DirectoryMapper;
-import com.yupaits.docs.model.Directory;
+import com.yupaits.docs.entity.Directory;
+import com.yupaits.docs.repository.DirectoryRepository;
 import com.yupaits.docs.util.validate.ValidateUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,17 +19,14 @@ import org.springframework.web.bind.annotation.*;
 public class DirectoryController {
 
     @Autowired
-    private DirectoryMapper directoryMapper;
+    private DirectoryRepository directoryRepository;
 
     @GetMapping("")
     public Result projectDirectories(@PathVariable Integer projectId) {
         if (ValidateUtils.idInvalid(projectId)) {
             return Result.fail(ResultCode.PARAMS_ERROR);
         }
-        Directory directory = new Directory();
-        directory.setProjectId(projectId);
-        directory.setParentId(0);
-        return Result.ok(directoryMapper.selectBySelective(directory));
+        return Result.ok(directoryRepository.findByProjectIdAndParentId(projectId, 0));
     }
 
     @GetMapping("/parentId/{parentId}")
@@ -36,19 +34,16 @@ public class DirectoryController {
         if (ValidateUtils.idInvalid(projectId) || ValidateUtils.idInvalid(parentId)) {
             return Result.fail(ResultCode.PARAMS_ERROR);
         }
-        Directory directory = new Directory();
-        directory.setProjectId(projectId);
-        directory.setParentId(parentId);
-        return Result.ok(directoryMapper.selectBySelective(directory));
+        return Result.ok(directoryRepository.findByProjectIdAndParentId(projectId, parentId));
     }
 
     @PostMapping("")
     public Result createDirectory(@RequestBody Directory directory) {
-        if (directory == null|| ValidateUtils.idInvalid(directory.getParentId())
+        if (directory == null || ValidateUtils.idInvalid(directory.getOwnerId()) || ValidateUtils.idInvalid(directory.getParentId())
                 || ValidateUtils.idInvalid(directory.getProjectId()) || StringUtils.isBlank(directory.getName())) {
             return Result.fail(ResultCode.PARAMS_ERROR);
         }
-        directoryMapper.insertSelective(directory);
+        directoryRepository.save(directory);
         return Result.ok();
     }
 
@@ -57,17 +52,23 @@ public class DirectoryController {
         if (ValidateUtils.idInvalid(directoryId)) {
             return Result.fail(ResultCode.PARAMS_ERROR);
         }
-        directoryMapper.deleteByPrimaryKey(directoryId);
+        directoryRepository.delete(directoryId);
         return Result.ok();
     }
 
     @PutMapping("/{directoryId}")
     public Result updateDirectory(@RequestBody Directory directory) {
-        if (directory == null || ValidateUtils.idInvalid(directory.getId()) || ValidateUtils.idInvalid(directory.getParentId())
-                || ValidateUtils.idInvalid(directory.getProjectId()) || StringUtils.isBlank(directory.getName())) {
+        if (directory == null || ValidateUtils.idInvalid(directory.getId()) || ValidateUtils.idInvalid(directory.getOwnerId())
+                || ValidateUtils.idInvalid(directory.getParentId()) || ValidateUtils.idInvalid(directory.getProjectId())
+                || StringUtils.isBlank(directory.getName())) {
             return Result.fail(ResultCode.PARAMS_ERROR);
         }
-        directoryMapper.updateByPrimaryKeySelective(directory);
+        Directory directoryInDb = directoryRepository.findOne(directory.getId());
+        if (directoryInDb == null) {
+            return Result.fail(ResultCode.DATA_NOT_FOUND);
+        }
+        BeanUtils.copyProperties(directory, directoryInDb);
+        directoryRepository.save(directory);
         return Result.ok();
     }
 }

@@ -44,7 +44,7 @@ var docs = new Vue({
                     docs.showAlert('warning', '获取项目清单失败');
                 }
             }).catch(function (error) {
-
+                docs.showAlert('danger', '获取项目清单出错');
             });
         },
         jump: function (target) {
