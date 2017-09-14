@@ -1,4 +1,5 @@
 var defaultProject = {ownerId: null, name: '', description: '', sortCode: null};
+var defaultDocument = {name: ''};
 
 var docs = new Vue({
     el: '#main',
@@ -8,11 +9,12 @@ var docs = new Vue({
         hasLogin: false,
         user: null,
         showPart: 'projectList',
+        breadcrumbItems: [],
         projects: [],
         project: defaultProject,
         selectedProject: null,
         directoryTree: [],
-        selectedDocument: null,
+        selectedDocument: defaultDocument,
     },
     created: function () {
         const user = window.$cookies.get('user');
@@ -21,7 +23,7 @@ var docs = new Vue({
         this.user = hasLogin ? JSON.parse(user) : {id: 0, username: '', email: ''};
         this.hasLogin = hasLogin;
         if (hasLogin) {
-            this.getProjectList();
+            this.fetchProjectList();
         }
     },
     computed: {
@@ -34,7 +36,7 @@ var docs = new Vue({
             deleteLoginCookie();
             window.location.href = '/login.html';
         },
-        getProjectList: function () {
+        fetchProjectList: function () {
             Api.get('/projects/owner/' + this.user.id).then(function (result) {
                 if (result.code === 200) {
                     if (result.data.length === 0) {
@@ -47,6 +49,28 @@ var docs = new Vue({
                 }
             }).catch(function (error) {
                 docs.showAlert('danger', '获取项目清单出错');
+            });
+        },
+        fetchProjectDirectoryTree: function () {
+            Api.get('/directories/projects/' + this.selectedProject.id).then(function (result) {
+                if (result.code !== 200) {
+                    docs.showAlert('warning', result.msg);
+                } else {
+                    docs.directoryTree = result.data;
+                }
+            }).catch(function (error) {
+                docs.showAlert('warning', '获取文档目录出错');
+            });
+        },
+        selectDocument: function (documentId) {
+            Api.get('/documents/' + documentId).then(function (result) {
+                if (result.code !== 200) {
+                    docs.showAlert('warning', result.msg);
+                } else {
+                    docs.selectedDocument = result.data;
+                }
+            }).catch(function (error) {
+                docs.showAlert('error', '获取文档出错');
             });
         },
         jump: function (target) {
@@ -62,7 +86,7 @@ var docs = new Vue({
         },
         showProject: function () {
             this.jump('showProject');
-            this.project = defaultAlert;
+            this.project = defaultProject;
         },
         submitProject: function () {
             this.project.ownerId = this.user.id;
@@ -72,7 +96,7 @@ var docs = new Vue({
                 } else {
                     docs.project = defaultProject;
                     docs.showAlert('success', '创建项目成功');
-                    this.cancelProject();
+                    docs.cancelProject();
                 }
             }).catch(function (error) {
                 docs.showAlert('danger', '创建项目出错');
@@ -83,6 +107,8 @@ var docs = new Vue({
         },
         selectProject: function (project) {
             this.selectedProject = project;
+            this.selectedDocument = defaultDocument;
+            this.fetchProjectDirectoryTree();
             this.jump('documents');
         },
         addChild: function () {
@@ -90,8 +116,6 @@ var docs = new Vue({
         }
     }
 });
-
-var typeOptions = [{text: '目录', value: 0}, {text: '文档', value: 1}];
 
 var addModal = new Vue({
     el: '#add-modal',
@@ -114,7 +138,10 @@ var addModal = new Vue({
             this.alert.msg = msg;
             this.alert.countDown = secs ? secs : this.alert.secs;
         },
-        show: function (directory) {
+        show: function () {
+            this.alert = JSON.parse(JSON.stringify(defaultAlert));
+            this.name = '';
+            this.sortCode = null;
             this.$refs.add_modal.show();
         },
         hide: function () {
@@ -133,13 +160,12 @@ var addModal = new Vue({
                 if (result.code !== 200) {
                     addModal.showAlert('warning', result.msg);
                 } else {
-                    docs.directoryTree.push(directory);
+                    docs.fetchProjectDirectoryTree();
                     addModal.hide();
                 }
             }).catch(function (error) {
                 addModal.showAlert('error', '新建目录出错');
             });
-
         },
         cancelAdd: function () {
             this.hide();

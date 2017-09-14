@@ -4,7 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
+import java.sql.Timestamp;
 
 @Data
 @Entity
@@ -32,8 +32,8 @@ public class Project implements Serializable {
     private Boolean isDeleted;
 
     @Column(name = "create_at")
-    private Date createdAt;
+    private Timestamp createdAt;
 
     @Column(name = "update_at")
-    private Date updatedAt;
+    private Timestamp updatedAt;
 }

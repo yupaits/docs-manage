@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 /**
  * 文档REST接口
@@ -35,17 +36,10 @@ public class DocumentController {
         return Result.ok(documentRepository.findOne(documentId));
     }
 
-    @GetMapping("/directories/{directoryId}")
-    public Result getDirectoryDocuments(@PathVariable Integer directoryId) {
-        if (ValidateUtils.idInvalid(directoryId)) {
-            return Result.fail(ResultCode.PARAMS_ERROR);
-        }
-        return Result.ok(documentRepository.findByDirectoryId(directoryId));
-    }
-
     @PostMapping("")
     public Result createDocument(@RequestBody Document document) {
-        if (document == null || ValidateUtils.idInvalid(document.getDirectoryId()) || StringUtils.isBlank(document.getContent())) {
+        if (document == null || ValidateUtils.idInvalid(document.getOwnerId())
+                || ValidateUtils.idInvalid(document.getDirectoryId()) || StringUtils.isBlank(document.getName())) {
             return Result.fail(ResultCode.PARAMS_ERROR);
         }
         documentRepository.save(document);
@@ -68,8 +62,8 @@ public class DocumentController {
 
     @PutMapping("/{documentId}")
     public Result updateDocument(@RequestBody Document document) {
-        if (document == null || ValidateUtils.idInvalid(document.getId()) || ValidateUtils.idInvalid(document.getDirectoryId())
-                || StringUtils.isBlank(document.getContent())) {
+        if (document == null || ValidateUtils.idInvalid(document.getId()) || ValidateUtils.idInvalid(document.getOwnerId())
+                || ValidateUtils.idInvalid(document.getDirectoryId()) || StringUtils.isBlank(document.getName())) {
             return Result.fail(ResultCode.PARAMS_ERROR);
         }
         Document documentInDb = documentRepository.findOne(document.getId());
@@ -90,7 +84,7 @@ public class DocumentController {
         if (StringUtils.isNotBlank(document.getContent())) {
             documentHistory.setDocumentId(document.getId());
             documentHistory.setContent(document.getContent());
-            documentHistory.setSavedTime(new Date(System.currentTimeMillis()));
+            documentHistory.setSavedTime(new Timestamp(System.currentTimeMillis()));
             documentHistoryRepository.save(documentHistory);
         }
     }

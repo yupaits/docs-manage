@@ -4,7 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
+import java.sql.Timestamp;
 
 @Data
 @Entity
@@ -23,7 +23,7 @@ public class DocumentHistory implements Serializable {
     private Integer documentId;
 
     @Column(name = "saved_time")
-    private Date savedTime;
+    private Timestamp savedTime;
 
     @Column(name = "content")
     private String content;

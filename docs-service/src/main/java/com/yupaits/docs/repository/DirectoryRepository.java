@@ -11,7 +11,7 @@ import java.util.List;
  */
 public interface DirectoryRepository extends JpaRepository<Directory, Integer> {
 
-    List<Directory> findByProjectIdAndParentId(Integer projectId, Integer parentId);
+    List<Directory> findByProjectIdAndParentIdOrderBySortCodeAsc(Integer projectId, Integer parentId);
 
     @Override
     void delete(Integer directoryId);
@@ -21,4 +21,6 @@ public interface DirectoryRepository extends JpaRepository<Directory, Integer> {
 
     @Override
     <S extends Directory> S save(S s);
+
+    List<Directory> findByParentIdOrderBySortCodeAsc(Integer parentId);
 }

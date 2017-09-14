@@ -44,10 +44,10 @@ public class RedisCacheAspect {
         if (null == value) {
             result = joinPoint.proceed();
             redisTemplate.opsForHash().put(className, key, result);
-            logger.info("SPEND TIME: {}ms, FROM DB, CACHE_KEY: {}", (System.currentTimeMillis() - startTime), key);
+            logger.debug("SPEND TIME: {}ms, FROM DB, CACHE_KEY: {}", (System.currentTimeMillis() - startTime), key);
         } else {
             result = value;
-            logger.info("SPEND TIME: {}ms, FROM CACHE_NAME: {}, CACHE_KEY: {}", (System.currentTimeMillis() - startTime), className, key);
+            logger.debug("SPEND TIME: {}ms, FROM CACHE_NAME: {}, CACHE_KEY: {}", (System.currentTimeMillis() - startTime), className, key);
         }
         return result;
     }

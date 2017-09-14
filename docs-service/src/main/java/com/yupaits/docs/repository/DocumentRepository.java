@@ -13,7 +13,7 @@ public interface DocumentRepository extends JpaRepository<Document, Integer> {
     @Override
     Document findOne(Integer documentId);
 
-    List<Document> findByDirectoryId(Integer directoryId);
+    List<Document> findByDirectoryIdOrderBySortCodeAsc(Integer directoryId);
 
     @Override
     <S extends Document> S save(S s);
