@@ -70,7 +70,7 @@ var docs = new Vue({
                     docs.selectedDocument = result.data;
                 }
             }).catch(function (error) {
-                docs.showAlert('error', '获取文档出错');
+                docs.showAlert('danger', '获取文档出错');
             });
         },
         jump: function (target) {
@@ -164,7 +164,7 @@ var addModal = new Vue({
                     addModal.hide();
                 }
             }).catch(function (error) {
-                addModal.showAlert('error', '新建目录出错');
+                addModal.showAlert('danger', '新建目录出错');
             });
         },
         cancelAdd: function () {

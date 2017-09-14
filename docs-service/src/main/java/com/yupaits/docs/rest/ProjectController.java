@@ -36,6 +36,7 @@ public class ProjectController {
         if (project == null || ValidateUtils.idInvalid(project.getOwnerId()) || StringUtils.isBlank(project.getName())) {
             return Result.fail(ResultCode.PARAMS_ERROR);
         }
+        project.setIsDeleted(false);
         project.setCreatedAt(new Timestamp(System.currentTimeMillis()));
         projectRepository.save(project);
         return Result.ok();
@@ -51,6 +52,7 @@ public class ProjectController {
             return Result.fail(ResultCode.DATA_NOT_FOUND);
         }
         projectInDb.setIsDeleted(true);
+        projectInDb.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
         projectRepository.save(projectInDb);
         return Result.ok();
     }

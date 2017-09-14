@@ -76,14 +76,15 @@ Vue.component('tree-item', {
     },
     data: function () {
         return {
+            hover: false,
             open: false,
             alert: JSON.parse(JSON.stringify(defaultAlert)),
             typeOptions: typeOptions,
-            parentDirectoryId: null,
             showDocId: null,
             type: null,
             item: JSON.parse(JSON.stringify(defaultItem)),
             directory: JSON.parse(JSON.stringify(defaultItem)),
+            deleteId: null
         }
     },
     computed: {
@@ -107,7 +108,7 @@ Vue.component('tree-item', {
                     instance.directory = result.data;
                 }
             }).catch(function (error) {
-                instance.showAlert('error', '获取目录详情出错');
+                instance.showAlert('danger', '获取目录详情出错');
             });
         },
         countDownChanged: function (dismissCountDown) {
@@ -133,23 +134,33 @@ Vue.component('tree-item', {
         showEdit: function () {
             this.$refs.directory_edit_modal.show();
         },
-        hideEdit: function () {
-            this.$refs.directory_edit_modal.hide();
+        showDelete: function () {
+            this.$refs.directory_delete_modal.show();
         },
         hideAdd: function () {
             this.$refs.tree_add_modal.hide();
         },
-        addChild: function (parentId) {
-            this.parentDirectoryId = parentId;
+        hideDelete: function () {
+            this.$refs.directory_delete_modal.hide();
+        },
+        hideEdit: function () {
+            this.$refs.directory_edit_modal.hide();
+        },
+        addChild: function () {
             this.alert = JSON.parse(JSON.stringify(defaultAlert));
             this.type = null;
-            this.item = defaultItem;
+            this.item = JSON.parse(JSON.stringify(defaultItem));
             this.showAdd();
         },
         editDirectory: function (directoryId) {
             this.alert = JSON.parse(JSON.stringify(defaultAlert));
             this.fetchDirectory(directoryId);
             this.showEdit();
+        },
+        deleteDirectory: function (directoryId) {
+            this.alert = JSON.parse(JSON.stringify(defaultAlert));
+            this.deleteId = directoryId;
+            this.showDelete();
         },
         submitAdd: function (event) {
             event.cancel();
@@ -158,7 +169,7 @@ Vue.component('tree-item', {
                 var directory = {
                     ownerId: docs.user.id,
                     projectId: docs.selectedProject.id,
-                    parentId: this.parentDirectoryId,
+                    parentId: this.model.id,
                     name: this.item.name,
                     sortCode: this.item.sortCode
                 };
@@ -170,12 +181,12 @@ Vue.component('tree-item', {
                         instance.hideAdd();
                     }
                 }).catch(function (error) {
-                    instance.showAlert('error', '新建目录出错');
+                    instance.showAlert('danger', '新建目录出错');
                 });
             } else if (this.type === 1) {
                 var document = {
                     ownerId: docs.user.id,
-                    directoryId: this.parentDirectoryId,
+                    directoryId: this.model.id,
                     name: this.item.name,
                     sortCode: this.item.sortCode
                 };
@@ -187,7 +198,7 @@ Vue.component('tree-item', {
                         instance.hideAdd();
                     }
                 }).catch(function (eroor) {
-                    instance.showAlert('error', '新建文档出错');
+                    instance.showAlert('danger', '新建文档出错');
                 })
             } else {
                 instance.showAlert('warning', '请选择一种类型');
@@ -207,11 +218,28 @@ Vue.component('tree-item', {
                     instance.hideEdit();
                 }
             }).catch(function (error) {
-                instance.showAlert('error', '编辑目录出错');
+                instance.showAlert('danger', '编辑目录出错');
             });
         },
         cancelEdit: function () {
             this.hideEdit();
+        },
+        submitDelete: function (event) {
+            event.cancel();
+            var instance = this;
+            Api.delete('/directories/' + this.deleteId).then(function (result) {
+                if (result.code !== 200) {
+                    instance.showAlert('warning', result.msg);
+                } else {
+                    docs.fetchProjectDirectoryTree();
+                    instance.hideDelete();
+                }
+            }).catch(function (error) {
+                instance.showAlert('danger', '删除目录出错');
+            });
+        },
+        cancelDelete: function () {
+            this.hideDelete();
         }
     }
 });
