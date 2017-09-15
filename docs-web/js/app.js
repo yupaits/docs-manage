@@ -80,7 +80,6 @@ Vue.component('tree-item', {
             open: false,
             alert: JSON.parse(JSON.stringify(defaultAlert)),
             typeOptions: typeOptions,
-            showDocId: null,
             type: null,
             item: JSON.parse(JSON.stringify(defaultItem)),
             directory: JSON.parse(JSON.stringify(defaultItem)),
@@ -125,7 +124,6 @@ Vue.component('tree-item', {
             }
         },
         showDoc: function (documentId) {
-            this.showDocId = documentId;
             docs.selectDocument(documentId);
         },
         showAdd: function () {
@@ -240,6 +238,84 @@ Vue.component('tree-item', {
         },
         cancelDelete: function () {
             this.hideDelete();
+        }
+    }
+});
+
+//markdown编辑组件
+Vue.component('markdown-editor', {
+    template: '#editor-template',
+    props: {
+        value: String,
+        previewClass: String,
+        autoinit: {
+            type: Boolean,
+            default() {
+                return true;
+            },
+        },
+        highlight: {
+            type: Boolean,
+            default() {
+                return false;
+            },
+        },
+        configs: {
+            type: Object,
+            default() {
+                return {};
+            },
+        },
+    },
+    mounted() {
+        if (this.autoinit) this.initialize();
+    },
+    activated() {
+        const editor = this.simplemde;
+        if (!editor) return;
+        const isActive = editor.isSideBySideActive() || editor.isPreviewActive();
+        if (isActive) editor.toggleFullScreen();
+    },
+    methods: {
+        initialize() {
+            const configs = {
+                element: this.$el.firstElementChild,
+                initialValue: this.value,
+                renderingConfig: {},
+            };
+            Object.assign(configs, this.configs);
+            // 判断是否开启代码高亮
+            if (this.highlight) {
+                configs.renderingConfig.codeSyntaxHighlighting = true;
+            }
+            // 实例化编辑器
+            this.simplemde = new SimpleMDE(configs);
+            // 添加自定义 previewClass
+            const className = this.previewClass || '';
+            this.addPreviewClass(className);
+            // 绑定事件
+            this.bindingEvents();
+        },
+        bindingEvents() {
+            this.simplemde.codemirror.on('change', () => {
+                this.$emit('input', this.simplemde.value());
+            });
+        },
+        addPreviewClass(className) {
+            const wrapper = this.simplemde.codemirror.getWrapperElement();
+            const preview = document.createElement('div');
+            wrapper.nextSibling.className += ` ${className}`;
+            preview.className = `editor-preview ${className}`;
+            wrapper.appendChild(preview);
+        }
+    },
+    destroyed() {
+        this.simplemde = null;
+    },
+    watch: {
+        value(val) {
+            if (val === this.simplemde.value()) return;
+            this.simplemde.value(val);
         }
     }
 });

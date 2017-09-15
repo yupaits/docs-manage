@@ -1,5 +1,5 @@
 var defaultProject = {ownerId: null, name: '', description: '', sortCode: null};
-var defaultDocument = {name: ''};
+var defaultDocument = {id: null, name: '', content: '', sortCode: null};
 
 var docs = new Vue({
     el: '#main',
@@ -15,6 +15,8 @@ var docs = new Vue({
         selectedProject: null,
         directoryTree: [],
         selectedDocument: defaultDocument,
+        editMode: false,
+        documentContent: null
     },
     created: function () {
         const user = window.$cookies.get('user');
@@ -68,6 +70,8 @@ var docs = new Vue({
                     docs.showAlert('warning', result.msg);
                 } else {
                     docs.selectedDocument = result.data;
+                    docs.editMode = false;
+                    docs.documentContent = result.data.content;
                 }
             }).catch(function (error) {
                 docs.showAlert('danger', '获取文档出错');
@@ -113,6 +117,9 @@ var docs = new Vue({
         },
         addChild: function () {
             addModal.show();
+        },
+        toggleEditMode: function () {
+            this.editMode = !this.editMode;
         }
     }
 });
