@@ -16,7 +16,7 @@ var docs = new Vue({
         directoryTree: [],
         selectedDocument: defaultDocument,
         editMode: false,
-        documentContent: null
+        documentContent: null,
     },
     created: function () {
         const user = window.$cookies.get('user');
@@ -71,7 +71,7 @@ var docs = new Vue({
                 } else {
                     docs.selectedDocument = result.data;
                     docs.editMode = false;
-                    docs.documentContent = result.data.content;
+                    docs.documentContent = docs.$refs.editor.simplemde.markdown(docs.selectedDocument.content);
                 }
             }).catch(function (error) {
                 docs.showAlert('danger', '获取文档出错');
@@ -120,6 +120,11 @@ var docs = new Vue({
         },
         toggleEditMode: function () {
             this.editMode = !this.editMode;
+            if (this.editMode) {
+
+            } else {
+                this.documentContent = this.$refs.editor.simplemde.markdown(this.selectedDocument.content);
+            }
         }
     }
 });

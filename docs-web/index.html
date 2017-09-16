@@ -35,7 +35,7 @@
         </b-collapse>
     </b-navbar>
 
-    <b-container fluid class="mt-3" v-if="hasLogin">
+    <b-container fluid class="mt-3" v-show="hasLogin">
         <b-row align-h="center">
             <b-col cols="11">
                 <b-alert :variant="alert.type"
@@ -77,14 +77,16 @@
                 <b-breadcrumb>
                     <b-breadcrumb-item :text="'<b>' + selectedProject.name + '</b>' + (selectedDocument.name != '' ? ' --> ' : '') + selectedDocument.name" active/>
                 </b-breadcrumb>
-                <div v-if="selectedDocument.id != null">
+                <div v-show="selectedDocument.id != null">
                     <b-button @click="toggleEditMode">编辑</b-button>
-                    <markdown-editor
-                            v-model="selectedDocument.content"
-                            preview-class="markdown-body"
-                            ref="editor"
-                            v-if="editMode"></markdown-editor>
-                    <div v-html="documentContent" class="markdown-body" v-else></div>
+                    <keep-alive>
+                        <markdown-editor
+                                v-model="selectedDocument.content"
+                                preview-class="markdown-body"
+                                ref="editor"
+                                v-show="editMode"></markdown-editor>
+                    </keep-alive>
+                    <div v-html="documentContent" class="markdown-body" v-show="!editMode"></div>
                 </div>
             </b-col>
         </b-row>
