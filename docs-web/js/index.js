@@ -71,7 +71,7 @@ var docs = new Vue({
                 } else {
                     docs.selectedDocument = result.data;
                     docs.editMode = false;
-                    docs.documentContent = docs.$refs.editor.simplemde.markdown(docs.selectedDocument.content);
+                    docs.documentContent = marked(docs.selectedDocument.content);
                 }
             }).catch(function (error) {
                 docs.showAlert('danger', '获取文档出错');
@@ -121,9 +121,10 @@ var docs = new Vue({
         toggleEditMode: function () {
             this.editMode = !this.editMode;
             if (this.editMode) {
-
+                console.log(this.$refs.editor.simplemde.codemirror.refresh());
+                this.$refs.editor.simplemde.codemirror.refresh()
             } else {
-                this.documentContent = this.$refs.editor.simplemde.markdown(this.selectedDocument.content);
+                this.documentContent = marked(this.selectedDocument.content);
             }
         }
     }

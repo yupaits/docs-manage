@@ -186,6 +186,7 @@ Vue.component('tree-item', {
                     ownerId: docs.user.id,
                     directoryId: this.model.id,
                     name: this.item.name,
+                    content: '',
                     sortCode: this.item.sortCode
                 };
                 Api.post('/documents', document).then(function (result) {
@@ -248,6 +249,12 @@ Vue.component('markdown-editor', {
     props: {
         value: String,
         previewClass: String,
+        autofocus: {
+            type: Boolean,
+            default() {
+                return true;
+            }
+        },
         autoinit: {
             type: Boolean,
             default() {
@@ -269,6 +276,7 @@ Vue.component('markdown-editor', {
     },
     mounted() {
         if (this.autoinit) this.initialize();
+
     },
     activated() {
         const editor = this.simplemde;
@@ -281,7 +289,8 @@ Vue.component('markdown-editor', {
             const configs = {
                 element: this.$el.firstElementChild,
                 initialValue: this.value,
-                renderingConfig: {},
+                autofocus: true,
+                renderingConfig: {}
             };
             Object.assign(configs, this.configs);
             // 判断是否开启代码高亮
