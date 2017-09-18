@@ -10,7 +10,8 @@ public enum ResultCode {
     LOGIN_FAIL(202, "用户名或密码错误"),
     PARAMS_ERROR(203, "参数有误"),
     DATA_NOT_FOUND(204, "数据不存在或已被删除"),
-    DB_ERROR(205, "数据库错误"),
+    DATA_CANNOT_DELETE(205, "数据无法删除"),
+    DB_ERROR(206, "数据库错误"),
     UNAUTHORIZED(401, "无效的授权信息"),
     FORBIDDEN(403, "不允许访问");
 

@@ -20,4 +20,6 @@ public interface DocumentRepository extends JpaRepository<Document, Integer> {
 
     @Override
     void delete(Integer documentId);
+
+    int countByDirectoryId(Integer directoryId);
 }

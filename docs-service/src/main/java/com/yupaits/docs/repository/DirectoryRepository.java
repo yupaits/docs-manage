@@ -23,4 +23,6 @@ public interface DirectoryRepository extends JpaRepository<Directory, Integer> {
     <S extends Directory> S save(S s);
 
     List<Directory> findByParentIdOrderBySortCodeAsc(Integer parentId);
+
+    int countByParentId(Integer directoryId);
 }

@@ -113,7 +113,11 @@ public class DirectoryController {
         if (ValidateUtils.idInvalid(directoryId)) {
             return Result.fail(ResultCode.PARAMS_ERROR);
         }
-        //TODO 删除之前检查该目录下是否存在子目录或文档
+        int subDirectoryCount = directoryRepository.countByParentId(directoryId);
+        int documentCount = documentRepository.countByDirectoryId(directoryId);
+        if (subDirectoryCount > 0 || documentCount > 0) {
+            return Result.fail(ResultCode.DATA_CANNOT_DELETE);
+        }
         directoryRepository.delete(directoryId);
         return Result.ok();
     }

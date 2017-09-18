@@ -1,14 +1,14 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-import Login from '@/pages/Login'
-import Manage from '@/pages/Manage'
-import Projects from '@/pages/docs/Projects'
-import AddProject from '@/pages/docs/AddProject'
-import EditProject from '@/pages/docs/EditProject'
-import Documents from '@/pages/docs/Documents'
-import EditDocument from '@/pages/docs/EditDocument'
+import Vue from "vue";
+import Router from "vue-router";
+import Login from "@/pages/Login";
+import Manage from "@/pages/Manage";
+import Projects from "@/pages/docs/Projects";
+import AddProject from "@/pages/docs/AddProject";
+import EditProject from "@/pages/docs/EditProject";
+import Documents from "@/pages/docs/Documents";
+import EditDocument from "@/pages/docs/EditDocument";
 
-import constant from '@/utils/constant'
+import constant from "@/utils/constant";
 
 Vue.use(Router);
 
