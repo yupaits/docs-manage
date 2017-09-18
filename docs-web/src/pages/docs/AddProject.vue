@@ -51,6 +51,7 @@
 
 <script>
   import request from '../../utils/request'
+  import constant from '../../utils/constant'
 
   const defaultProject = {ownerId: null, name: '', description: '', sortCode: null};
   export default {
@@ -67,21 +68,17 @@
     },
     methods: {
       addProject: function () {
-        this.project.ownerId = this.user.id;
+        const user = JSON.parse(this.$cookies.get(constant.user));
+        this.project.ownerId = user.id;
         const instance = this;
         request.Api.post('/projects', this.project).then(function (result) {
           if (result.code !== 200) {
             instance.alert = {variant: 'warning', msg: result.msg, show: 5};
           } else {
-            var projects = result.data;
-            if (projects.length === 0) {
-              instance.alert = {variant: 'info', msg: '项目清单为空', show: 5};
-            } else {
-              instance.projects = result.data;
-            }
+            instance.$router.push('/docs');
           }
         }).catch(function (error) {
-          instance.alert = {variant: 'danger', msg: '获取项目清单出错', show: 5};
+          instance.alert = {variant: 'danger', msg: '创建项目出错', show: 5};
         });
       }
     }

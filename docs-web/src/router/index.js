@@ -4,6 +4,7 @@ import Login from '@/pages/Login'
 import Manage from '@/pages/Manage'
 import Projects from '@/pages/docs/Projects'
 import AddProject from '@/pages/docs/AddProject'
+import EditProject from '@/pages/docs/EditProject'
 import Documents from '@/pages/docs/Documents'
 import EditDocument from '@/pages/docs/EditDocument'
 
@@ -24,6 +25,10 @@ const router = new Router({
         {
           path: 'docs/projects/add',
           component: AddProject
+        },
+        {
+          path: 'docs/projects/:id/edit',
+          component: EditProject
         },
         {
           path: 'docs/projects/:id/documents',

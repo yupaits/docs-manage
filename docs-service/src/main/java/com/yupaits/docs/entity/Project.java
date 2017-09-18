@@ -28,6 +28,9 @@ public class Project implements Serializable {
     @Column(name = "visit_code")
     private String visitCode;
 
+    @Column(name = "sort_code")
+    private Integer sortCode;
+
     @Column(name = "is_deleted")
     private Boolean isDeleted;
 

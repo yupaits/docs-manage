@@ -1,16 +1,20 @@
 import axios from 'axios';
 import constant from './constant';
 
-const accessToken = window.$cookies.get(constant.accessToken);
 const apiBaseUrl = 'http://localhost:9000/api';
 const authBaseUrl = 'http://localhost:9100/auth';
-const authHeader = {'authority': 'bearer ' + accessToken};
 
 const refreshAuthTokenUrl = authBaseUrl + '/refresh';
 
 const Api = axios.create({
-  baseURL: apiBaseUrl,
-  headers: authHeader
+  baseURL: apiBaseUrl
+});
+
+Api.interceptors.request.use(function (config) {
+  config.headers.authority = 'bearer ' + window.$cookies.get(constant.accessToken);
+  return config;
+}, function (error) {
+  return Promise.reject(error);
 });
 
 Api.interceptors.response.use(function (response) {
@@ -21,8 +25,14 @@ Api.interceptors.response.use(function (response) {
 });
 
 const Auth = axios.create({
-  baseURL: authBaseUrl,
-  headers: authHeader
+  baseURL: authBaseUrl
+});
+
+Auth.interceptors.request.use(function (config) {
+  config.headers.authority = 'bearer ' + window.$cookies.get(constant.accessToken);
+  return config;
+}, function (error) {
+  return Promise.reject(error);
 });
 
 Auth.interceptors.response.use(function (response) {

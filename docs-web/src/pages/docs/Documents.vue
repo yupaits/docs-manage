@@ -14,7 +14,8 @@
             <h4 slot="header">文档目录</h4>
             <ul>
               <tree-item v-for="(directory, index) in directoryTree" :model="directory"
-                         :id="'directory-' + index" :projectId="selectedProject.id"></tree-item>
+                         :id="'directory-' + index" :projectId="selectedProject.id"
+                         :activeDocumentId="selectedDocument.id"></tree-item>
               <div class="fa fa-plus" v-b-modal="'addModal'"> 新建</div>
             </ul>
           </b-card>
@@ -26,7 +27,20 @@
               :text="'<b>' + selectedProject.name + '</b>' + (selectedDocument.name != '' ? ' --> ' : '') + selectedDocument.name"
               active/>
           </b-breadcrumb>
-          <b-button variant="outline-primary" size="sm" class="mb-3" :to="'/docs/projects/' + selectedProject.id + '/documents/' + selectedDocument.id + '/edit'" v-show="showEdit">编辑</b-button>
+          <b-button-toolbar justify v-show="showEdit">
+            <h1><span class="fa fa-file-text-o"> {{selectedDocument.name}}</span></h1>
+            <b-button-group class="mb-3">
+              <b-button variant="outline-primary"
+                        :to="'/docs/projects/' + selectedProject.id + '/documents/' + selectedDocument.id + '/edit'">
+                <span class="fa fa-pencil"> 编辑</span></b-button>
+              <b-dropdown text="删除" variant="outline-danger" right>
+                <b-dropdown-header class="text-danger"><h6 class="text-bold"><b>确定删除吗?</b></h6></b-dropdown-header>
+                <b-dropdown-divider></b-dropdown-divider>
+                <b-dropdown-item-button @click="submitDelete"><span class="fa fa-check"> 确定</span></b-dropdown-item-button>
+                <b-dropdown-item-button @click="cancelDelete"><span class="fa fa-times"> 取消</span></b-dropdown-item-button>
+              </b-dropdown>
+            </b-button-group>
+          </b-button-toolbar>
           <div v-html="documentContent" class="markdown-body"></div>
         </b-col>
       </b-row>
@@ -38,17 +52,14 @@
 <script>
   import TreeItem from '../../components/document/TreeItem'
   import AddDirectoryModal from '../../components/document/AddDirectoryModal'
-  import EditDirectoryModal from '../../components/document/EditDirectoryModal'
-  import DeleteDirectoryModal from '../../components/document/DeleteDirectoryModal'
   import marked from 'marked'
   import request from '../../utils/request'
 
+  const defaultDocument = {id: null, name: '', content: '', sortCode: null};
   export default {
     components: {
       TreeItem,
       AddDirectoryModal,
-      EditDirectoryModal,
-      DeleteDirectoryModal
     },
     data() {
       return {
@@ -56,7 +67,7 @@
         selectedProject: {},
         breadcrumbItems: [],
         directoryTree: [],
-        selectedDocument: {id: null, name: '', content: '', sortCode: null},
+        selectedDocument: Object.assign({}, defaultDocument),
         documentContent: null,
         showEdit: false
       }
@@ -64,6 +75,10 @@
     created() {
       this.selectedProject.id = parseInt(this.$route.params.id);
       this.fetchData();
+      const documentId = this.$route.query.documentId;
+      if (documentId) {
+        this.selectDocument(documentId);
+      }
       this.$root.eventHub.$on('updateTree', () => this.fetchDirectoryTree());
       this.$root.eventHub.$on('selectDocument', documentId => this.selectDocument(documentId));
     },
@@ -109,6 +124,24 @@
         }).catch(function (error) {
           instance.alert = {variant: 'danger', msg: '获取文档出错', show: 5};
         });
+      },
+      submitDelete: function () {
+        const instance = this;
+        request.Api.delete('/documents/' + this.selectedDocument.id).then(function (result) {
+          if (result.code !== 200) {
+            instance.alert = {variant: 'warning', msg: result.msg, show: 5};
+          } else {
+            instance.selectedDocument = Object.assign({}, defaultDocument);
+            instance.documentContent = null;
+            instance.showEdit = false;
+            instance.fetchDirectoryTree();
+          }
+        }).catch(function (error) {
+          instance.alert = {variant: 'danger', msg: '删除文档出错', show: 5};
+        });
+      },
+      cancelDelete: function () {
+        this.alert = {variant: 'success', msg: '多谢兄台放我一马，日后相见，必有重谢！', show: 5};
       }
     }
   }

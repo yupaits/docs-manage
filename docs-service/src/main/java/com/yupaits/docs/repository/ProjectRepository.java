@@ -10,7 +10,7 @@ import java.util.List;
  * Created by yupaits on 2017/9/13.
  */
 public interface ProjectRepository extends JpaRepository<Project, Integer> {
-    List<Project> findByOwnerIdAndIsDeletedIsFalse(Integer ownerId);
+    List<Project> findByOwnerIdAndIsDeletedIsFalseOrderBySortCodeAsc(Integer ownerId);
 
     @Override
     <S extends Project> S save(S s);

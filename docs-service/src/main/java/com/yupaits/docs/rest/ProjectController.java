@@ -28,7 +28,7 @@ public class ProjectController {
         if (ValidateUtils.idInvalid(ownerId)) {
             return Result.fail(ResultCode.PARAMS_ERROR);
         }
-        return Result.ok(projectRepository.findByOwnerIdAndIsDeletedIsFalse(ownerId));
+        return Result.ok(projectRepository.findByOwnerIdAndIsDeletedIsFalseOrderBySortCodeAsc(ownerId));
     }
 
     @GetMapping("/{projectId}")

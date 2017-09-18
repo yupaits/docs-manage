@@ -10,8 +10,9 @@
     </div>
     <ul v-show="open" v-if="isFolder">
       <tree-item v-for="(directory, index) in model.subDirectories" :model="directory"
-                 :id="id + '-' + index" :projectId="projectId"></tree-item>
-      <div v-for="document in model.documents" @click="showDoc(document.id)">&nbsp;<span
+                 :id="id + '-' + index" :projectId="projectId" :activeDocumentId="activeDocumentId"></tree-item>
+      <div v-for="document in model.documents" @click="showDoc(document.id)"
+           :class="{'document-active': document.id === activeDocumentId}">&nbsp;<span
         class="fa fa-file-text"> {{document.name}}</span></div>
       <div class="fa fa-plus" @click="addChild(model.id)"> 新建</div>
     </ul>
@@ -130,7 +131,8 @@
     props: {
       model: Object,
       projectId: Number,
-      id: String
+      id: String,
+      activeDocumentId: Number
     },
     data: function () {
       return {
@@ -296,5 +298,8 @@
 </script>
 
 <style>
-
+  .document-active {
+    background-color: darkslategray;
+    color: whitesmoke;
+  }
 </style>
