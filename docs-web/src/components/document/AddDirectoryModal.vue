@@ -41,6 +41,7 @@
 </template>
 
 <script>
+  import request from '../../utils/request'
   import constant from '../../utils/constant'
   export default {
     props: {
@@ -75,14 +76,14 @@
         event.cancel();
         const instance = this;
         const user = JSON.parse(this.$cookies.get(constant.user));
-        var directory = {
+        const directory = {
           ownerId: user.id,
           projectId: this.projectId,
           parentId: 0,
           name: this.name,
           sortCode: this.sortCode
         };
-        Api.post('/directories', directory).then(function (result) {
+        request.Api.post('/directories', directory).then(function (result) {
           if (result.code !== 200) {
             instance.alert = {variant: 'warning', msg: result.msg, show: 5};
           } else {
