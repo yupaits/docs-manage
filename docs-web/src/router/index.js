@@ -5,29 +5,36 @@ import Manage from '@/pages/Manage'
 import Projects from '@/pages/docs/Projects'
 import AddProject from '@/pages/docs/AddProject'
 import Documents from '@/pages/docs/Documents'
+import EditDocument from '@/pages/docs/EditDocument'
+
+import constant from '@/utils/constant'
 
 Vue.use(Router);
 
-export default new Router({
+const router = new Router({
   routes: [
     {
       path: '/',
       component: Manage,
       children: [
         {
-          path: '/docs',
+          path: 'docs',
           component: Projects
         },
         {
-          path: '/docs/projects/add',
+          path: 'docs/projects/add',
           component: AddProject
         },
         {
-          path: '/docs/projects/:id/documents',
+          path: 'docs/projects/:id/documents',
           component: Documents
         },
         {
-          path: '/files'
+          path: 'docs/projects/:id/documents/:docId/edit',
+          component: EditDocument
+        },
+        {
+          path: 'files'
         }
       ]
     },
@@ -36,4 +43,16 @@ export default new Router({
       component: Login
     },
   ]
-})
+});
+
+// 登录状态判断
+router.beforeEach((to, from, next) => {
+  const accessToken = window.$cookies.get(constant.accessToken);
+  if ((accessToken === null || accessToken === undefined || accessToken === '') && to.path !== '/login') {
+    next('/login');
+  } else {
+    next();
+  }
+});
+
+export default router;

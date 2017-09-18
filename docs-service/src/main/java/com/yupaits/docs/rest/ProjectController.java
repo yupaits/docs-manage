@@ -31,6 +31,14 @@ public class ProjectController {
         return Result.ok(projectRepository.findByOwnerIdAndIsDeletedIsFalse(ownerId));
     }
 
+    @GetMapping("/{projectId}")
+    public Result getProject(@PathVariable Integer projectId) {
+        if (ValidateUtils.idInvalid(projectId)) {
+            return Result.fail(ResultCode.PARAMS_ERROR);
+        }
+        return Result.ok(projectRepository.findOne(projectId));
+    }
+
     @PostMapping("")
     public Result createProject(@RequestBody Project project) {
         if (project == null || ValidateUtils.idInvalid(project.getOwnerId()) || StringUtils.isBlank(project.getName())) {
