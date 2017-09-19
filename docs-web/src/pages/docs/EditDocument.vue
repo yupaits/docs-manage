@@ -14,7 +14,7 @@
         <b-button variant="outline-secondary" @click="back"><span class="fa fa-times"> 取消</span></b-button>
       </b-button-group>
     </b-button-toolbar>
-    <markdown-editor v-model="document.content" ref="editor" :configs="configs"></markdown-editor>
+    <markdown-editor previewClass="markdown-body" v-model="document.content" ref="editor" :configs="configs"></markdown-editor>
   </b-container>
 </template>
 
@@ -80,5 +80,6 @@
 </script>
 
 <style>
-
+  @import '~simplemde/dist/simplemde.min.css';
+  @import '~github-markdown-css';
 </style>

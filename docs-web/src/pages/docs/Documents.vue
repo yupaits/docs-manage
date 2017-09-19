@@ -183,5 +183,6 @@
 </script>
 
 <style>
-
+  @import '~simplemde/dist/simplemde.min.css';
+  @import '~github-markdown-css';
 </style>
