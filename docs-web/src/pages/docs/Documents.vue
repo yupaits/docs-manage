@@ -36,7 +36,7 @@
               <b-dropdown text="历史" variant="outline-secondary" right>
                 <b-dropdown-item-button @click="showHistory(selectedDocument.content)"><span class="fa fa-eye"> 显示当前文档</span>
                 </b-dropdown-item-button>
-                <b-dropdown-header>文档记录</b-dropdown-header>
+                <b-dropdown-header v-show="documentHistories.length > 0">文档记录</b-dropdown-header>
                 <span v-for="history in documentHistories">
                   <b-dropdown-item-button @click="showHistory(history.content)">
                     <span class="fa fa-history"> {{history.savedTime | timeFormat}}</span>
