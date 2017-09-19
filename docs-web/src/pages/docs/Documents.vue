@@ -33,11 +33,23 @@
               <b-button variant="outline-primary"
                         :to="'/docs/projects/' + selectedProject.id + '/documents/' + selectedDocument.id + '/edit'">
                 <span class="fa fa-pencil"> 编辑</span></b-button>
+              <b-dropdown text="历史" variant="outline-secondary" right>
+                <b-dropdown-item-button @click="showHistory(selectedDocument.content)"><span class="fa fa-eye"> 显示当前文档</span>
+                </b-dropdown-item-button>
+                <b-dropdown-header>文档记录</b-dropdown-header>
+                <span v-for="history in documentHistories">
+                  <b-dropdown-item-button @click="showHistory(history.content)">
+                    <span class="fa fa-history"> {{history.savedTime | timeFormat}}</span>
+                  </b-dropdown-item-button>
+                </span>
+              </b-dropdown>
               <b-dropdown text="删除" variant="outline-danger" right>
                 <b-dropdown-header class="text-danger"><h6 class="text-bold"><b>确定删除吗?</b></h6></b-dropdown-header>
                 <b-dropdown-divider></b-dropdown-divider>
-                <b-dropdown-item-button @click="submitDelete"><span class="fa fa-check"> 确定</span></b-dropdown-item-button>
-                <b-dropdown-item-button @click="cancelDelete"><span class="fa fa-times"> 取消</span></b-dropdown-item-button>
+                <b-dropdown-item-button @click="submitDelete"><span class="fa fa-check"> 确定</span>
+                </b-dropdown-item-button>
+                <b-dropdown-item-button @click="cancelDelete"><span class="fa fa-times"> 取消</span>
+                </b-dropdown-item-button>
               </b-dropdown>
             </b-button-group>
           </b-button-toolbar>
@@ -53,6 +65,7 @@
   import TreeItem from '../../components/document/TreeItem'
   import AddDirectoryModal from '../../components/document/AddDirectoryModal'
   import marked from 'marked'
+  import dateFns from 'date-fns'
   import request from '../../utils/request'
 
   const defaultDocument = {id: null, name: '', content: '', sortCode: null};
@@ -68,6 +81,7 @@
         breadcrumbItems: [],
         directoryTree: [],
         selectedDocument: Object.assign({}, defaultDocument),
+        documentHistories: [],
         documentContent: null,
         showEdit: false
       }
@@ -81,6 +95,11 @@
       }
       this.$root.eventHub.$on('updateTree', () => this.fetchDirectoryTree());
       this.$root.eventHub.$on('selectDocument', documentId => this.selectDocument(documentId));
+    },
+    filters: {
+      timeFormat(date) {
+        return dateFns.format(date, 'YYYY-MM-DD HH:mm:ss');
+      }
     },
     methods: {
       fetchData: function () {
@@ -111,6 +130,18 @@
           instance.alert = {variant: 'danger', msg: '获取文档目录出错', show: 5};
         });
       },
+      fetchDocumentHistory: function (documentId) {
+        const instance = this;
+        request.Api.get('/documentHistories/documents/' + documentId).then(function (result) {
+          if (result.code !== 200) {
+            instance.alert = {variant: 'warning', msg: result.msg, show: 5};
+          } else {
+            instance.documentHistories = result.data;
+          }
+        }).catch(function (error) {
+          instance.alert = {variant: 'danger', msg: '获取文档出错', show: 5};
+        });
+      },
       selectDocument: function (documentId) {
         const instance = this;
         request.Api.get('/documents/' + documentId).then(function (result) {
@@ -119,6 +150,7 @@
           } else {
             instance.selectedDocument = result.data;
             instance.documentContent = marked(result.data.content);
+            instance.fetchDocumentHistory(documentId);
             instance.showEdit = true;
           }
         }).catch(function (error) {
@@ -142,6 +174,9 @@
       },
       cancelDelete: function () {
         this.alert = {variant: 'success', msg: '多谢兄台放我一马，日后相见，必有重谢！', show: 5};
+      },
+      showHistory: function (historyContent) {
+        this.documentContent = marked(historyContent);
       }
     }
   }

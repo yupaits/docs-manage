@@ -26,6 +26,6 @@ public class DocumentHistoryController {
         if (ValidateUtils.idInvalid(documentId)) {
             return Result.fail(ResultCode.PARAMS_ERROR);
         }
-        return Result.ok(documentHistoryRepository.findByDocumentId(documentId));
+        return Result.ok(documentHistoryRepository.findByDocumentIdOrderBySavedTimeDesc(documentId));
     }
 }

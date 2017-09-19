@@ -81,6 +81,7 @@ public class DocumentController {
     private void saveDocumentHistory(Document document) {
         DocumentHistory documentHistory = new DocumentHistory();
         if (StringUtils.isNotBlank(document.getContent())) {
+            documentHistory.setOwnerId(document.getOwnerId());
             documentHistory.setDocumentId(document.getId());
             documentHistory.setContent(document.getContent());
             documentHistory.setSavedTime(new Timestamp(System.currentTimeMillis()));
