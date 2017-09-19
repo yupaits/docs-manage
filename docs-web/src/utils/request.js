@@ -1,8 +1,8 @@
 import axios from "axios";
 import constant from "./constant";
 
-const apiBaseUrl = 'http://localhost:9000/api';
-const authBaseUrl = 'http://localhost:9100/auth';
+const apiBaseUrl = 'https://localhost:9000/api';
+const authBaseUrl = 'https://localhost:9100/auth';
 
 const refreshAuthTokenUrl = authBaseUrl + '/refresh';
 
