@@ -1,50 +1,48 @@
 <template>
-  <div>
-    <b-container>
-      <b-row align-h="center">
-        <b-col lg="4" md="6" sm="8">
-          <h1 class="text-center mt-5"><span class="fa fa-book"></span></h1>
-          <p class="lead text-center mt-2">登录文档管理</p>
-          <b-alert :variant="alert.variant" :show="alert.show" dismissible @dismissed="alert.show=null">
-            <b>{{alert.msg}}</b>
-          </b-alert>
-          <b-card>
-            <b-form @submit="login">
-              <b-form-group id="username"
-                            label="用户名"
-                            lable-for="username-input"
-                            description="项目名称是唯一的，不允许重复。">
-                <b-form-input id="username-input"
-                              type="text"
-                              v-model="username"
-                              required
-                              placeholder="输入用户名"></b-form-input>
-              </b-form-group>
-              <b-form-group id="password"
-                            label="密码"
-                            lable-for="password-input"
-                            description="密码不少于3位">
-                <b-form-input id="password-input"
-                              type="password"
-                              v-model="password"
-                              required
-                              placeholder="输入密码"></b-form-input>
-              </b-form-group>
-              <b-button type="submit" variant="success" block>登录</b-button>
-            </b-form>
-            <b-card-body class="text-center">
-              <a href="/register.html" class="card-link">创建账号</a>
-              <a href="/forgetPassword.html" class="card-link">忘记密码？</a>
-            </b-card-body>
-            <div slot="footer" class="text-center">
-              <router-link to="/" class="card-link">返回主页</router-link>
-              <router-link to="/feedback" class="card-link">用户反馈</router-link>
-            </div>
-          </b-card>
-        </b-col>
-      </b-row>
-    </b-container>
-  </div>
+  <b-container class="grey-bg">
+    <b-row align-h="center">
+      <b-col lg="4" md="6" sm="8">
+        <h1 class="text-center mt-5"><span class="fa fa-book"></span></h1>
+        <p class="lead text-center mt-2">登录文档管理</p>
+        <b-alert :variant="alert.variant" :show="alert.show" dismissible @dismissed="alert.show=null">
+          <b>{{alert.msg}}</b>
+        </b-alert>
+        <b-card>
+          <b-form @submit="login">
+            <b-form-group id="username"
+                          label="用户名"
+                          lable-for="username-input"
+                          description="项目名称是唯一的，不允许重复。">
+              <b-form-input id="username-input"
+                            type="text"
+                            v-model="username"
+                            required
+                            placeholder="输入用户名"></b-form-input>
+            </b-form-group>
+            <b-form-group id="password"
+                          label="密码"
+                          lable-for="password-input"
+                          description="密码不少于3位">
+              <b-form-input id="password-input"
+                            type="password"
+                            v-model="password"
+                            required
+                            placeholder="输入密码"></b-form-input>
+            </b-form-group>
+            <b-button type="submit" variant="success" block>登录</b-button>
+          </b-form>
+          <b-card-body class="text-center">
+            <router-link to="/register" class="card-link">创建账号</router-link>
+            <router-link to="/forgetPassword" class="card-link">忘记密码？</router-link>
+          </b-card-body>
+          <div slot="footer" class="text-center">
+            <router-link to="/" class="card-link">返回主页</router-link>
+            <router-link to="/feedback" class="card-link">用户反馈</router-link>
+          </div>
+        </b-card>
+      </b-col>
+    </b-row>
+  </b-container>
 </template>
 
 <script>
@@ -85,6 +83,6 @@
   }
 </script>
 
-<style>
+<style scoped>
 
 </style>
