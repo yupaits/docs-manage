@@ -2,10 +2,12 @@ package com.yupaits.docs.rest;
 
 import com.yupaits.docs.common.response.Result;
 import com.yupaits.docs.common.response.ResultCode;
+import com.yupaits.docs.config.jwt.JwtHelper;
 import com.yupaits.docs.entity.Document;
 import com.yupaits.docs.entity.DocumentHistory;
 import com.yupaits.docs.repository.DocumentHistoryRepository;
 import com.yupaits.docs.repository.DocumentRepository;
+import com.yupaits.docs.util.http.HttpUtil;
 import com.yupaits.docs.util.validate.ValidateUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,12 +29,19 @@ public class DocumentController {
     @Autowired
     private DocumentHistoryRepository documentHistoryRepository;
 
+    @Autowired
+    private JwtHelper jwtHelper;
+
     @GetMapping("/{documentId}")
     public Result getDocumentById(@PathVariable Integer documentId) {
         if (ValidateUtils.idInvalid(documentId)) {
             return Result.fail(ResultCode.PARAMS_ERROR);
         }
-        return Result.ok(documentRepository.findOne(documentId));
+        Document document = documentRepository.findOne(documentId);
+        if (document != null && document.getOwnerId().compareTo(jwtHelper.getUserId(HttpUtil.getRequest())) != 0) {
+            return Result.fail(ResultCode.FORBIDDEN);
+        }
+        return Result.ok(document);
     }
 
     @PostMapping("")
@@ -40,6 +49,9 @@ public class DocumentController {
         if (document == null || ValidateUtils.idInvalid(document.getOwnerId())
                 || ValidateUtils.idInvalid(document.getDirectoryId()) || StringUtils.isBlank(document.getName())) {
             return Result.fail(ResultCode.PARAMS_ERROR);
+        }
+        if (document.getOwnerId().compareTo(jwtHelper.getUserId(HttpUtil.getRequest())) != 0) {
+            return Result.fail(ResultCode.FORBIDDEN);
         }
         documentRepository.save(document);
         return Result.ok();
@@ -54,6 +66,9 @@ public class DocumentController {
         if (documentInDb == null) {
             return Result.fail(ResultCode.DATA_NOT_FOUND);
         }
+        if (documentInDb.getOwnerId().compareTo(jwtHelper.getUserId(HttpUtil.getRequest())) != 0) {
+            return Result.fail(ResultCode.FORBIDDEN);
+        }
         saveDocumentHistory(documentInDb);
         documentRepository.delete(documentId);
         return Result.ok();
@@ -61,13 +76,16 @@ public class DocumentController {
 
     @PutMapping("/{documentId}")
     public Result updateDocument(@RequestBody Document document) {
-        if (document == null || ValidateUtils.idInvalid(document.getId()) || ValidateUtils.idInvalid(document.getOwnerId())
-                || ValidateUtils.idInvalid(document.getDirectoryId()) || StringUtils.isBlank(document.getName())) {
+        if (document == null || ValidateUtils.idInvalid(document.getId()) || ValidateUtils.idInvalid(document.getDirectoryId())
+                || StringUtils.isBlank(document.getName())) {
             return Result.fail(ResultCode.PARAMS_ERROR);
         }
         Document documentInDb = documentRepository.findOne(document.getId());
         if (documentInDb == null) {
             return Result.fail(ResultCode.DATA_NOT_FOUND);
+        }
+        if (documentInDb.getOwnerId().compareTo(jwtHelper.getUserId(HttpUtil.getRequest())) != 0) {
+            return Result.fail(ResultCode.FORBIDDEN);
         }
         saveDocumentHistory(documentInDb);
         documentRepository.save(document);

@@ -13,7 +13,7 @@ public enum ResultCode {
     DATA_CANNOT_DELETE(205, "数据无法删除"),
     DB_ERROR(206, "数据库错误"),
     UNAUTHORIZED(401, "无效的授权信息"),
-    FORBIDDEN(403, "不允许访问");
+    FORBIDDEN(403, "无权访问请求资源");
 
     private int code;
     private String msg;

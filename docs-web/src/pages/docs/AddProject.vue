@@ -58,7 +58,7 @@
     data() {
       return {
         alert: {variant: 'info', msg: '', show: null},
-        project: defaultProject
+        project: Object.assign({}, defaultProject)
       }
     },
     computed: {

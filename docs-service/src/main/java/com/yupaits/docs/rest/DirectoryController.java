@@ -4,10 +4,12 @@ import com.yupaits.docs.bean.DirectoryDTO;
 import com.yupaits.docs.bean.DocumentDTO;
 import com.yupaits.docs.common.response.Result;
 import com.yupaits.docs.common.response.ResultCode;
+import com.yupaits.docs.config.jwt.JwtHelper;
 import com.yupaits.docs.entity.Directory;
 import com.yupaits.docs.entity.Document;
 import com.yupaits.docs.repository.DirectoryRepository;
 import com.yupaits.docs.repository.DocumentRepository;
+import com.yupaits.docs.util.http.HttpUtil;
 import com.yupaits.docs.util.validate.ValidateUtils;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -32,12 +34,19 @@ public class DirectoryController {
     @Autowired
     private DocumentRepository documentRepository;
 
+    @Autowired
+    private JwtHelper jwtHelper;
+
     @GetMapping("/projects/{projectId}")
     public Result projectDirectories(@PathVariable Integer projectId) {
         if (ValidateUtils.idInvalid(projectId)) {
             return Result.fail(ResultCode.PARAMS_ERROR);
         }
         List<Directory> directoryList = directoryRepository.findByProjectIdAndParentIdOrderBySortCodeAsc(projectId, 0);
+        if (CollectionUtils.isNotEmpty(directoryList)
+                && directoryList.get(0).getOwnerId().compareTo(jwtHelper.getUserId(HttpUtil.getRequest())) != 0) {
+            return Result.fail(ResultCode.FORBIDDEN);
+        }
         return Result.ok(transferDirectories(directoryList));
     }
 
@@ -87,7 +96,12 @@ public class DirectoryController {
         if (ValidateUtils.idInvalid(projectId) || ValidateUtils.idInvalid(parentId)) {
             return Result.fail(ResultCode.PARAMS_ERROR);
         }
-        return Result.ok(directoryRepository.findByParentIdOrderBySortCodeAsc(parentId));
+        List<Directory> subDirectoryList = directoryRepository.findByParentIdOrderBySortCodeAsc(parentId);
+        if (CollectionUtils.isNotEmpty(subDirectoryList)
+                && subDirectoryList.get(0).getOwnerId().compareTo(jwtHelper.getUserId(HttpUtil.getRequest())) != 0) {
+            return Result.fail(ResultCode.FORBIDDEN);
+        }
+        return Result.ok(subDirectoryList);
     }
 
     @GetMapping("/{directoryId}")
@@ -95,7 +109,11 @@ public class DirectoryController {
         if (ValidateUtils.idInvalid(directoryId)) {
             return Result.fail(ResultCode.PARAMS_ERROR);
         }
-        return Result.ok(directoryRepository.findOne(directoryId));
+        Directory directory = directoryRepository.findOne(directoryId);
+        if (directory != null && directory.getOwnerId().compareTo(jwtHelper.getUserId(HttpUtil.getRequest())) != 0) {
+            return Result.fail(ResultCode.FORBIDDEN);
+        }
+        return Result.ok(directory);
     }
 
     @PostMapping("")
@@ -103,6 +121,9 @@ public class DirectoryController {
         if (directory == null || ValidateUtils.idInvalid(directory.getOwnerId()) || !ValidateUtils.isUnsignedInteger(directory.getParentId())
                 || ValidateUtils.idInvalid(directory.getProjectId()) || StringUtils.isBlank(directory.getName())) {
             return Result.fail(ResultCode.PARAMS_ERROR);
+        }
+        if (directory.getOwnerId().compareTo(jwtHelper.getUserId(HttpUtil.getRequest())) != 0) {
+            return Result.fail(ResultCode.FORBIDDEN);
         }
         directoryRepository.save(directory);
         return Result.ok();
@@ -118,6 +139,10 @@ public class DirectoryController {
         if (subDirectoryCount > 0 || documentCount > 0) {
             return Result.fail(ResultCode.DATA_CANNOT_DELETE);
         }
+        Directory directoryInDb = directoryRepository.findOne(directoryId);
+        if (directoryInDb != null && directoryInDb.getOwnerId().compareTo(jwtHelper.getUserId(HttpUtil.getRequest())) != 0) {
+            return Result.fail(ResultCode.FORBIDDEN);
+        }
         directoryRepository.delete(directoryId);
         return Result.ok();
     }
@@ -132,6 +157,9 @@ public class DirectoryController {
         Directory directoryInDb = directoryRepository.findOne(directory.getId());
         if (directoryInDb == null) {
             return Result.fail(ResultCode.DATA_NOT_FOUND);
+        }
+        if (directoryInDb.getOwnerId().compareTo(jwtHelper.getUserId(HttpUtil.getRequest())) != 0) {
+            return Result.fail(ResultCode.FORBIDDEN);
         }
         BeanUtils.copyProperties(directory, directoryInDb);
         directoryRepository.save(directory);

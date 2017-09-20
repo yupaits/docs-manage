@@ -47,6 +47,12 @@
             <artifactId>spring-beans</artifactId>
             <version>4.3.10.RELEASE</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-core</artifactId>
+            <version>8.5.16</version>
+        </dependency>
     </dependencies>
 
     <build>

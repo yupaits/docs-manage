@@ -2,6 +2,7 @@ package com.yupaits.docs.config.web;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 /**
@@ -18,5 +19,10 @@ public class WebConfig extends WebMvcConfigurerAdapter {
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowCredentials(false)
                 .allowedHeaders("Accept", "Content-Type", "Origin", "authority");
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new ThreadLocalInterceptor()).addPathPatterns("/api/**");
     }
 }
