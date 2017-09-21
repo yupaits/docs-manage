@@ -4,6 +4,9 @@
       <b-col lg="5" md="7" sm="9">
         <h1 class="text-center mt-5"><span class="fa fa-book"></span></h1>
         <p class="lead text-center mt-2">注册账号</p>
+        <b-alert :variant="alert.variant" :show="alert.show" dismissible @dismissed="alert.show=null">
+          <b>{{alert.msg}}</b>
+        </b-alert>
         <b-card>
           <b-form @submit="register">
             <b-form-group id="username"
@@ -44,6 +47,7 @@
                             type="password"
                             v-model="confirmPassword"
                             required
+                            :state="passwordMatch"
                             placeholder="输入确认密码"></b-form-input>
             </b-form-group>
             <b-button type="submit" variant="success" block>注册账号</b-button>
@@ -62,7 +66,44 @@
 </template>
 
 <script>
-  export default {}
+  import request from '../utils/request'
+  import constant from '../utils/constant'
+  export default {
+    data() {
+      return {
+        alert: {variant: 'info', msg: '', show: null},
+        username: '',
+        email: '',
+        password: '',
+        confirmPassword: ''
+      }
+    },
+    computed: {
+      passwordMatch() {
+        return this.confirmPassword !== this.password;
+      }
+    },
+    methods: {
+      register: function () {
+        const instance = this;
+        const registerForm = {
+          username: this.username,
+          email: this.email,
+          password: this.email,
+          confirmPassword: this.confirmPassword
+        };
+        request.Auth.post(constant.register, registerForm).then(function (result) {
+          if (result.code !== 200) {
+            instance.alert = {variant: 'warning', msg: result.msg, show: 5};
+          } else {
+            instance.$router.push('/login');
+          }
+        }).catch(function (error) {
+          instance.alert = {variant: 'danger', msg: '注册账号出错', show: 5};
+        });
+      }
+    }
+  }
 </script>
 
 <style>

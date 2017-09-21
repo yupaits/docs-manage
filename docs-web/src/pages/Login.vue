@@ -74,7 +74,6 @@
             instance.$router.push('/');
           }
         }).catch(function (error) {
-          console.error(error);
           instance.alert = {variant: 'danger', msg: '登录出错', show: 5};
           instance.password = '';
         });
