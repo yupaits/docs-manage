@@ -1,8 +1,8 @@
 package com.yupaits.docs.config.shiro;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.yupaits.docs.common.response.Result;
-import com.yupaits.docs.common.response.ResultCode;
+import com.yupaits.docs.response.Result;
+import com.yupaits.docs.response.ResultCode;
 import com.yupaits.docs.config.jwt.JwtHelper;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.web.filter.AccessControlFilter;

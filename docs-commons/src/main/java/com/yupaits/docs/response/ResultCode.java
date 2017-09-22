@@ -1,4 +1,4 @@
-package com.yupaits.docs.common.response;
+package com.yupaits.docs.response;
 
 /**
  * 返回码和返回描述封装类

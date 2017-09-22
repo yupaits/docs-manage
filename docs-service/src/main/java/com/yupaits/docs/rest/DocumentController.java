@@ -1,7 +1,7 @@
 package com.yupaits.docs.rest;
 
-import com.yupaits.docs.common.response.Result;
-import com.yupaits.docs.common.response.ResultCode;
+import com.yupaits.docs.response.Result;
+import com.yupaits.docs.response.ResultCode;
 import com.yupaits.docs.config.jwt.JwtHelper;
 import com.yupaits.docs.entity.Document;
 import com.yupaits.docs.entity.DocumentHistory;

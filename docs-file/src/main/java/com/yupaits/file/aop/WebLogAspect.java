@@ -1,4 +1,4 @@
-package com.yupaits.auth.aop;
+package com.yupaits.file.aop;
 
 import com.yupaits.docs.response.Result;
 import org.aspectj.lang.JoinPoint;
@@ -27,7 +27,7 @@ public class WebLogAspect {
 
     private ThreadLocal<Long> startTime = new ThreadLocal<>();
 
-    @Pointcut("execution(public * com.yupaits.auth.web..*.*(..))")
+    @Pointcut("execution(public * com.yupaits.file.web..*.*(..))")
     public void webLog() {}
 
     @Before("webLog()")

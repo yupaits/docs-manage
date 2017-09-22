@@ -1,6 +1,6 @@
 package com.yupaits.docs.aop;
 
-import com.yupaits.docs.common.response.Result;
+import com.yupaits.docs.response.Result;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;

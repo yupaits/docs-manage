@@ -5,13 +5,15 @@
 
 	<groupId>com.yupaits</groupId>
 	<artifactId>docs-manage</artifactId>
-	<version>1.0.0</version>
+	<version>1.1.0</version>
 	<packaging>pom</packaging>
 
 	<name>docs-manage</name>
 	<description>文档管理</description>
 
 	<modules>
+		<module>docs-commons</module>
+		<module>docs-file</module>
 		<module>docs-service</module>
 		<module>sso</module>
 	</modules>

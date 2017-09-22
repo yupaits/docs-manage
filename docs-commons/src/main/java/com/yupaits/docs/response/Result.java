@@ -1,4 +1,4 @@
-package com.yupaits.docs.common.response;
+package com.yupaits.docs.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;

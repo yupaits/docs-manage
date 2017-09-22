@@ -2,8 +2,8 @@ package com.yupaits.docs.rest;
 
 import com.yupaits.docs.bean.DirectoryDTO;
 import com.yupaits.docs.bean.DocumentDTO;
-import com.yupaits.docs.common.response.Result;
-import com.yupaits.docs.common.response.ResultCode;
+import com.yupaits.docs.response.Result;
+import com.yupaits.docs.response.ResultCode;
 import com.yupaits.docs.config.jwt.JwtHelper;
 import com.yupaits.docs.entity.Directory;
 import com.yupaits.docs.entity.Document;
