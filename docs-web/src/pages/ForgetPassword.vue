@@ -43,7 +43,7 @@
     methods: {
       sendResetPasswordEmail: function () {
         const instance = this;
-        request.Api.post('/api/sendResetPasswordEmail?email=' + this.email).then(function (result) {
+        request.Api.post('/sendResetPasswordEmail?email=' + this.email).then(function (result) {
           if (result.code !== 200) {
             instance.alert = {variant: 'warning', msg: result.msg, show: 5};
           } else {

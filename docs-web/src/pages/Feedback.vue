@@ -84,7 +84,7 @@
           subject: this.subject,
           content: this.content
         };
-        request.Api.post('/api/feedback', feedbackForm).then(function (result) {
+        request.Api.post('/feedback', feedbackForm).then(function (result) {
           if (result.code !== 200) {
             instance.alert = {variant: 'warning', msg: result.msg, show: 5};
           } else {

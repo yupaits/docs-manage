@@ -28,17 +28,19 @@
               active/>
           </b-breadcrumb>
           <b-button-toolbar justify v-show="showEdit">
-            <h1><span class="fa fa-file-text-o"> {{selectedDocument.name}}</span></h1>
+            <h1>
+              <span class="fa fa-file-text-o"> {{selectedDocument.name}}</span>
+            </h1>
             <b-button-group class="mb-3">
               <b-button variant="outline-primary"
                         :to="'/docs/projects/' + selectedProject.id + '/documents/' + selectedDocument.id + '/edit'">
                 <span class="fa fa-pencil"> 编辑</span></b-button>
               <b-dropdown text="历史" variant="outline-secondary" right>
-                <b-dropdown-item-button @click="showHistory(selectedDocument.content)"><span class="fa fa-eye"> 显示当前文档</span>
+                <b-dropdown-item-button @click="showHistory()"><span class="fa fa-eye"> 显示当前文档</span>
                 </b-dropdown-item-button>
                 <b-dropdown-header v-show="documentHistories.length > 0">文档记录</b-dropdown-header>
                 <span v-for="history in documentHistories">
-                  <b-dropdown-item-button @click="showHistory(history.content)">
+                  <b-dropdown-item-button @click="showHistory(history)" :class="{'active': selectedHistory === history}">
                     <span class="fa fa-history"> {{history.savedTime | timeFormat}}</span>
                   </b-dropdown-item-button>
                 </span>
@@ -53,6 +55,7 @@
               </b-dropdown>
             </b-button-group>
           </b-button-toolbar>
+          <h5 class="text-secondary" v-if="selectedHistory != null"><span class="fa fa-history"> {{selectedHistory.savedTime | timeFormat}}</span></h5>
           <div v-html="documentContent" class="markdown-body"></div>
         </b-col>
       </b-row>
@@ -82,6 +85,7 @@
         directoryTree: [],
         selectedDocument: Object.assign({}, defaultDocument),
         documentHistories: [],
+        selectedHistory: null,
         documentContent: null,
         showEdit: false
       }
@@ -175,8 +179,14 @@
       cancelDelete: function () {
         this.alert = {variant: 'success', msg: '多谢兄台放我一马，日后相见，必有重谢！', show: 5};
       },
-      showHistory: function (historyContent) {
-        this.documentContent = marked(historyContent);
+      showHistory: function (history) {
+        if (history === null || history === undefined) {
+          this.selectedHistory = null;
+          this.documentContent = marked(this.selectedDocument.content);
+        } else {
+          this.selectedHistory = history;
+          this.documentContent = marked(history.content);
+        }
       }
     }
   }

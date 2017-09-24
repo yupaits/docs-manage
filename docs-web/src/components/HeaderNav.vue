@@ -6,6 +6,7 @@
       <b-collapse is-nav id="nav-collapse">
         <b-nav is-nav-bar v-if="hasLogin">
           <b-nav-item to="/docs"><span class="fa fa-file-text-o"> 文档</span></b-nav-item>
+          <b-nav-item to="/templates"><span class="fa fa-file-code-o"> 模板</span></b-nav-item>
           <b-nav-item to="/files"><span class="fa fa-file-word-o"> 文件</span></b-nav-item>
         </b-nav>
         <b-nav is-nav-bar class="ml-auto" v-if="hasLogin">

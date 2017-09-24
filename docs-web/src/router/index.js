@@ -11,6 +11,7 @@ import AddProject from "@/pages/docs/AddProject";
 import EditProject from "@/pages/docs/EditProject";
 import Documents from "@/pages/docs/Documents";
 import EditDocument from "@/pages/docs/EditDocument";
+import Templates from "@/pages/templates/Templates";
 
 import constant from "@/utils/constant";
 
@@ -43,7 +44,11 @@ const router = new Router({
           component: EditDocument
         },
         {
-          path: 'files'
+          path: 'files',
+        },
+        {
+          path: 'templates',
+          component: Templates
         }
       ]
     },
