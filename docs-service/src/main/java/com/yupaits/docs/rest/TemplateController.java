@@ -1,6 +1,5 @@
 package com.yupaits.docs.rest;
 
-import com.yupaits.docs.bean.TemplateQuery;
 import com.yupaits.docs.config.jwt.JwtHelper;
 import com.yupaits.docs.entity.Template;
 import com.yupaits.docs.repository.TemplateRepository;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.criteria.*;
 import java.sql.Timestamp;
-import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 

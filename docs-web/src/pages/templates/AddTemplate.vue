@@ -1,5 +1,5 @@
 <template>
-  <b-container class="mt-3">
+  <b-container class="mt-3 mb-3">
     <b-row align-h="center">
       <b-col cols="6">
         <b-alert :variant="alert.variant" :show="alert.show" dismissible @dismissed="alert.show=null">
@@ -8,71 +8,55 @@
         <b-button variant="light" @click="back"><span class="fa fa-arrow-left"> 返回</span></b-button>
         <b-card class="mt-3">
           <b-form @submit="addTemplate">
-            <b-form-group id="template-sort-code"
+            <b-form-group id="template-name"
                           label="模板名"
-                          lable-for="template-sort-code-input"
-                          description="越小越靠前">
-              <b-form-input id="template-sort-code-input"
-                            type="number"
-                            v-model="template.sortCode"
+                          lable-for="template-name-input">
+              <b-form-input id="template-name-input"
+                            type="text"
+                            v-model="template.name"
                             required
-                            :state="sortCodeState"
                             placeholder="输入模板名"></b-form-input>
             </b-form-group>
-            <b-form-group id="template-sort-code"
-                          label="模板简介"
-                          lable-for="template-sort-code-input"
-                          description="越小越靠前">
-              <b-form-input id="template-sort-code-input"
-                            type="number"
-                            v-model="template.sortCode"
-                            required
-                            :state="sortCodeState"
-                            placeholder="输入模板简介"></b-form-input>
+            <b-form-group id="template-description"
+                          label="简介"
+                          lable-for="template-description-input">
+              <b-form-textarea id="template-description-input"
+                               :rows="5"
+                               :max-rows="8"
+                               v-model="template.description"
+                               placeholder="输入模板简介"></b-form-textarea>
             </b-form-group>
-            <b-form-group id="template-sort-code"
-                          label="模板内容"
-                          lable-for="template-sort-code-input"
-                          description="越小越靠前">
-              <b-form-input id="template-sort-code-input"
-                            type="number"
-                            v-model="template.sortCode"
+            <b-form-group id="template-content"
+                          label="内容"
+                          lable-for="template-content-input">
+              <b-form-input id="template-content-input"
+                            type="text"
+                            v-model="template.content"
                             required
-                            :state="sortCodeState"
                             placeholder="输入模板内容"></b-form-input>
             </b-form-group>
-            <b-form-group id="template-sort-code"
-                          label="模板分类"
-                          lable-for="template-sort-code-input"
-                          description="越小越靠前">
-              <b-form-input id="template-sort-code-input"
-                            type="number"
-                            v-model="template.sortCode"
+            <b-form-group id="template-category"
+                          label="分类"
+                          lable-for="template-category-input">
+              <b-form-input id="template-category-input"
+                            type="text"
+                            v-model="template.category"
                             required
-                            :state="sortCodeState"
                             placeholder="输入模板分类"></b-form-input>
             </b-form-group>
-            <b-form-group id="template-sort-code"
-                          label="模板标签"
-                          lable-for="template-sort-code-input"
-                          description="越小越靠前">
-              <b-form-input id="template-sort-code-input"
-                            type="number"
-                            v-model="template.sortCode"
+            <b-form-group id="template-tags"
+                          label="标签"
+                          lable-for="template-tags-input">
+              <b-form-input id="template-tags-input"
+                            type="text"
+                            v-model="template.tags"
                             required
-                            :state="sortCodeState"
                             placeholder="输入模板标签"></b-form-input>
             </b-form-group>
             <b-form-group id="template-sort-code"
                           label="是否开放"
-                          lable-for="template-sort-code-input"
-                          description="越小越靠前">
-              <b-form-input id="template-sort-code-input"
-                            type="number"
-                            v-model="template.sortCode"
-                            required
-                            :state="sortCodeState"
-                            placeholder="输入排序码"></b-form-input>
+                          lable-for="template-isOpen-input">
+              <b-form-radio v-model="template.isOpen" :options="openOptions"></b-form-radio>
             </b-form-group>
             <b-form-group id="template-sort-code"
                           label="排序码"
@@ -98,12 +82,26 @@
   import request from '../../utils/request'
   import constant from '../../utils/constant'
 
-  const defaultTemplate = {ownerId: null, name: '', description: '', content: '', category: null, tags: null, isOpen: false, sortCode: null};
+  const defaultTemplate = {
+    ownerId: null,
+    name: '',
+    description: '',
+    content: '',
+    category: null,
+    tags: null,
+    isOpen: false,
+    sortCode: null
+  };
+  const openOptions = [
+    {text: '开放', value: true},
+    {text: '不开放', value: false}
+  ];
   export default {
     data() {
       return {
         alert: {variant: 'info', msg: '', show: null},
-        template: Object.assign({}, defaultTemplate)
+        template: Object.assign({}, defaultTemplate),
+        openOptions: openOptions
       }
     },
     created() {

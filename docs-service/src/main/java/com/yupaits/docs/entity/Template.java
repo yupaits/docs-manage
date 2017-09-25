@@ -5,7 +5,6 @@ import lombok.Data;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.List;
 
 @Data
 @Entity
@@ -42,10 +41,10 @@ public class Template implements Serializable {
     private Integer sortCode;
 
     @Column(name = "visit_count")
-    private Integer visitCount = 0;
+    private Integer visitCount;
 
     @Column(name = "likings")
-    private Integer likings = 0;
+    private Integer likings;
 
     @Column(name = "is_deleted")
     private Boolean isDeleted;

@@ -1,10 +1,10 @@
 package com.yupaits.docs.rest;
 
-import com.yupaits.docs.response.Result;
-import com.yupaits.docs.response.ResultCode;
 import com.yupaits.docs.config.jwt.JwtHelper;
 import com.yupaits.docs.entity.DocumentHistory;
 import com.yupaits.docs.repository.DocumentHistoryRepository;
+import com.yupaits.docs.response.Result;
+import com.yupaits.docs.response.ResultCode;
 import com.yupaits.docs.util.http.HttpUtil;
 import com.yupaits.docs.util.validate.ValidateUtils;
 import org.apache.commons.collections4.CollectionUtils;

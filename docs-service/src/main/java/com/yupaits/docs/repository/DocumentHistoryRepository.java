@@ -1,7 +1,6 @@
 package com.yupaits.docs.repository;
 
 import com.yupaits.docs.entity.DocumentHistory;
-import org.springframework.data.domain.Example;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

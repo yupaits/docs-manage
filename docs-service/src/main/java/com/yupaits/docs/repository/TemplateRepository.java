@@ -5,12 +5,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 /**
  * TemplateRepository
  * Created by ts495 on 2017/9/21.
  */
-public interface TemplateRepository extends JpaRepository<Template, Integer>, Specification<Template> {
+public interface TemplateRepository extends JpaRepository<Template, Integer>, JpaSpecificationExecutor<Template> {
 
     Page<Template> findAll(Specification<Template> specification, Pageable pageable);
 
