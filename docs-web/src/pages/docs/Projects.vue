@@ -5,7 +5,7 @@
         <b-alert :variant="alert.variant" :show="alert.show" dismissible @dismissed="alert.show=null">
           <b>{{alert.msg}}</b>
         </b-alert>
-        <b-button variant="success" to="/docs/projects/add">创建项目</b-button>
+        <b-button variant="outline-success" to="/docs/projects/add">创建项目</b-button>
         <div v-for="project in projects" @mouseenter="hoverId = project.id" @mouseleave="hoverId = null">
           <hr>
           <b-button-toolbar justify>

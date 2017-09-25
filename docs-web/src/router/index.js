@@ -12,6 +12,8 @@ import EditProject from "@/pages/docs/EditProject";
 import Documents from "@/pages/docs/Documents";
 import EditDocument from "@/pages/docs/EditDocument";
 import Templates from "@/pages/templates/Templates";
+import AddTemplate from "@/pages/templates/AddTemplate";
+import EditTemplate from "@/pages/templates/EditTemplate";
 
 import constant from "@/utils/constant";
 
@@ -49,6 +51,14 @@ const router = new Router({
         {
           path: 'templates',
           component: Templates
+        },
+        {
+          path: 'templates/add',
+          component: AddTemplate
+        },
+        {
+          path: 'templates/:id/edit',
+          component: EditTemplate
         }
       ]
     },
