@@ -2,13 +2,13 @@ package com.yupaits.docs.rest;
 
 import com.yupaits.docs.bean.DirectoryDTO;
 import com.yupaits.docs.bean.DocumentDTO;
-import com.yupaits.docs.response.Result;
-import com.yupaits.docs.response.ResultCode;
 import com.yupaits.docs.config.jwt.JwtHelper;
 import com.yupaits.docs.entity.Directory;
 import com.yupaits.docs.entity.Document;
 import com.yupaits.docs.repository.DirectoryRepository;
 import com.yupaits.docs.repository.DocumentRepository;
+import com.yupaits.docs.response.Result;
+import com.yupaits.docs.response.ResultCode;
 import com.yupaits.docs.util.http.HttpUtil;
 import com.yupaits.docs.util.validate.ValidateUtils;
 import org.apache.commons.collections4.CollectionUtils;
@@ -44,7 +44,7 @@ public class DirectoryController {
         }
         List<Directory> directoryList = directoryRepository.findByProjectIdAndParentIdOrderBySortCodeAsc(projectId, 0);
         if (CollectionUtils.isNotEmpty(directoryList)
-                && directoryList.get(0).getOwnerId().compareTo(jwtHelper.getUserId(HttpUtil.getRequest())) != 0) {
+                && !directoryList.get(0).getOwnerId().equals(jwtHelper.getUserId(HttpUtil.getRequest()))) {
             return Result.fail(ResultCode.FORBIDDEN);
         }
         return Result.ok(transferDirectories(directoryList));
@@ -98,7 +98,7 @@ public class DirectoryController {
         }
         List<Directory> subDirectoryList = directoryRepository.findByParentIdOrderBySortCodeAsc(parentId);
         if (CollectionUtils.isNotEmpty(subDirectoryList)
-                && subDirectoryList.get(0).getOwnerId().compareTo(jwtHelper.getUserId(HttpUtil.getRequest())) != 0) {
+                && !subDirectoryList.get(0).getOwnerId().equals(jwtHelper.getUserId(HttpUtil.getRequest()))) {
             return Result.fail(ResultCode.FORBIDDEN);
         }
         return Result.ok(subDirectoryList);
@@ -110,7 +110,7 @@ public class DirectoryController {
             return Result.fail(ResultCode.PARAMS_ERROR);
         }
         Directory directory = directoryRepository.findOne(directoryId);
-        if (directory != null && directory.getOwnerId().compareTo(jwtHelper.getUserId(HttpUtil.getRequest())) != 0) {
+        if (directory != null && !directory.getOwnerId().equals(jwtHelper.getUserId(HttpUtil.getRequest()))) {
             return Result.fail(ResultCode.FORBIDDEN);
         }
         return Result.ok(directory);
@@ -122,7 +122,7 @@ public class DirectoryController {
                 || ValidateUtils.idInvalid(directory.getProjectId()) || StringUtils.isBlank(directory.getName())) {
             return Result.fail(ResultCode.PARAMS_ERROR);
         }
-        if (directory.getOwnerId().compareTo(jwtHelper.getUserId(HttpUtil.getRequest())) != 0) {
+        if (!directory.getOwnerId().equals(jwtHelper.getUserId(HttpUtil.getRequest()))) {
             return Result.fail(ResultCode.FORBIDDEN);
         }
         directoryRepository.save(directory);
@@ -140,7 +140,7 @@ public class DirectoryController {
             return Result.fail(ResultCode.DATA_CANNOT_DELETE);
         }
         Directory directoryInDb = directoryRepository.findOne(directoryId);
-        if (directoryInDb != null && directoryInDb.getOwnerId().compareTo(jwtHelper.getUserId(HttpUtil.getRequest())) != 0) {
+        if (directoryInDb != null && !directoryInDb.getOwnerId().equals(jwtHelper.getUserId(HttpUtil.getRequest()))) {
             return Result.fail(ResultCode.FORBIDDEN);
         }
         directoryRepository.delete(directoryId);
@@ -158,7 +158,7 @@ public class DirectoryController {
         if (directoryInDb == null) {
             return Result.fail(ResultCode.DATA_NOT_FOUND);
         }
-        if (directoryInDb.getOwnerId().compareTo(jwtHelper.getUserId(HttpUtil.getRequest())) != 0) {
+        if (!directoryInDb.getOwnerId().equals(jwtHelper.getUserId(HttpUtil.getRequest()))) {
             return Result.fail(ResultCode.FORBIDDEN);
         }
         BeanUtils.copyProperties(directory, directoryInDb);

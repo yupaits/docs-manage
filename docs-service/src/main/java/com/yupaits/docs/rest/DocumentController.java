@@ -38,7 +38,7 @@ public class DocumentController {
             return Result.fail(ResultCode.PARAMS_ERROR);
         }
         Document document = documentRepository.findOne(documentId);
-        if (document != null && document.getOwnerId().compareTo(jwtHelper.getUserId(HttpUtil.getRequest())) != 0) {
+        if (document != null && !document.getOwnerId().equals(jwtHelper.getUserId(HttpUtil.getRequest()))) {
             return Result.fail(ResultCode.FORBIDDEN);
         }
         return Result.ok(document);
@@ -50,7 +50,7 @@ public class DocumentController {
                 || ValidateUtils.idInvalid(document.getDirectoryId()) || StringUtils.isBlank(document.getName())) {
             return Result.fail(ResultCode.PARAMS_ERROR);
         }
-        if (document.getOwnerId().compareTo(jwtHelper.getUserId(HttpUtil.getRequest())) != 0) {
+        if (!document.getOwnerId().equals(jwtHelper.getUserId(HttpUtil.getRequest()))) {
             return Result.fail(ResultCode.FORBIDDEN);
         }
         documentRepository.save(document);
@@ -66,7 +66,7 @@ public class DocumentController {
         if (documentInDb == null) {
             return Result.fail(ResultCode.DATA_NOT_FOUND);
         }
-        if (documentInDb.getOwnerId().compareTo(jwtHelper.getUserId(HttpUtil.getRequest())) != 0) {
+        if (!documentInDb.getOwnerId().equals(jwtHelper.getUserId(HttpUtil.getRequest()))) {
             return Result.fail(ResultCode.FORBIDDEN);
         }
         saveDocumentHistory(documentInDb);
@@ -84,7 +84,7 @@ public class DocumentController {
         if (documentInDb == null) {
             return Result.fail(ResultCode.DATA_NOT_FOUND);
         }
-        if (documentInDb.getOwnerId().compareTo(jwtHelper.getUserId(HttpUtil.getRequest())) != 0) {
+        if (!documentInDb.getOwnerId().equals(jwtHelper.getUserId(HttpUtil.getRequest()))) {
             return Result.fail(ResultCode.FORBIDDEN);
         }
         saveDocumentHistory(documentInDb);

@@ -37,7 +37,7 @@ public class DocumentHistoryController {
         }
         List<DocumentHistory> documentHistoryList = documentHistoryRepository.findByDocumentIdOrderBySavedTimeDesc(documentId);
         if (CollectionUtils.isNotEmpty(documentHistoryList)
-                && documentHistoryList.get(0).getOwnerId().compareTo(jwtHelper.getUserId(HttpUtil.getRequest())) != 0) {
+                && !documentHistoryList.get(0).getOwnerId().equals(jwtHelper.getUserId(HttpUtil.getRequest()))) {
             return Result.fail(ResultCode.FORBIDDEN);
         }
         return Result.ok(documentHistoryList);

@@ -33,7 +33,7 @@ public class ProjectController {
         if (ValidateUtils.idInvalid(ownerId)) {
             return Result.fail(ResultCode.PARAMS_ERROR);
         }
-        if (ownerId.compareTo(jwtHelper.getUserId(HttpUtil.getRequest())) != 0) {
+        if (!ownerId.equals(jwtHelper.getUserId(HttpUtil.getRequest()))) {
             return Result.fail(ResultCode.FORBIDDEN);
         }
         return Result.ok(projectRepository.findByOwnerIdAndIsDeletedIsFalseOrderBySortCodeAsc(ownerId));
@@ -45,7 +45,7 @@ public class ProjectController {
             return Result.fail(ResultCode.PARAMS_ERROR);
         }
         Project project = projectRepository.findOne(projectId);
-        if (project!= null && project.getOwnerId().compareTo(jwtHelper.getUserId(HttpUtil.getRequest())) != 0) {
+        if (project!= null && !project.getOwnerId().equals(jwtHelper.getUserId(HttpUtil.getRequest()))) {
             return Result.fail(ResultCode.FORBIDDEN);
         }
         return Result.ok(project);
@@ -56,7 +56,7 @@ public class ProjectController {
         if (project == null || ValidateUtils.idInvalid(project.getOwnerId()) || StringUtils.isBlank(project.getName())) {
             return Result.fail(ResultCode.PARAMS_ERROR);
         }
-        if (project.getOwnerId().compareTo(jwtHelper.getUserId(HttpUtil.getRequest())) != 0) {
+        if (!project.getOwnerId().equals(jwtHelper.getUserId(HttpUtil.getRequest()))) {
             return Result.fail(ResultCode.FORBIDDEN);
         }
         project.setIsDeleted(false);
@@ -74,7 +74,7 @@ public class ProjectController {
         if (projectInDb == null) {
             return Result.fail(ResultCode.DATA_NOT_FOUND);
         }
-        if (projectInDb.getOwnerId().compareTo(jwtHelper.getUserId(HttpUtil.getRequest())) != 0) {
+        if (!projectInDb.getOwnerId().equals(jwtHelper.getUserId(HttpUtil.getRequest()))) {
             return Result.fail(ResultCode.FORBIDDEN);
         }
         projectInDb.setIsDeleted(true);
@@ -92,7 +92,7 @@ public class ProjectController {
         if (projectInDb == null) {
             return Result.fail(ResultCode.DATA_NOT_FOUND);
         }
-        if (projectInDb.getOwnerId().compareTo(jwtHelper.getUserId(HttpUtil.getRequest())) != 0) {
+        if (!projectInDb.getOwnerId().equals(jwtHelper.getUserId(HttpUtil.getRequest()))) {
             return Result.fail(ResultCode.FORBIDDEN);
         }
         BeanUtil.copyProperties(project, projectInDb);
