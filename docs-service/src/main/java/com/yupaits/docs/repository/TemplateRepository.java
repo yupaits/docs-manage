@@ -6,6 +6,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+import java.util.List;
 
 /**
  * TemplateRepository
@@ -23,4 +27,6 @@ public interface TemplateRepository extends JpaRepository<Template, Integer>, Jp
     @Override
     <S extends Template> S save(S s);
 
+    @Query("select category from Template where ownerId = :ownerId group by category order by count(id) desc")
+    List<String> findTemplateCategoryList(@Param("ownerId") Integer ownerId);
 }

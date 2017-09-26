@@ -1,78 +1,72 @@
 <template>
-  <b-container class="mt-3 mb-3">
+  <b-container fluid class="mt-3 mb-3">
     <b-row align-h="center">
-      <b-col cols="6">
+      <b-col cols="8">
         <b-alert :variant="alert.variant" :show="alert.show" dismissible @dismissed="alert.show=null">
           <b>{{alert.msg}}</b>
         </b-alert>
-        <b-button variant="light" @click="back"><span class="fa fa-arrow-left"> 返回</span></b-button>
-        <b-card class="mt-3">
-          <b-form @submit="addTemplate">
-            <b-form-group id="template-name"
-                          label="模板名"
-                          lable-for="template-name-input">
-              <b-form-input id="template-name-input"
-                            type="text"
-                            v-model="template.name"
-                            required
-                            placeholder="输入模板名"></b-form-input>
-            </b-form-group>
-            <b-form-group id="template-description"
-                          label="简介"
-                          lable-for="template-description-input">
-              <b-form-textarea id="template-description-input"
-                               :rows="5"
-                               :max-rows="8"
-                               v-model="template.description"
-                               placeholder="输入模板简介"></b-form-textarea>
-            </b-form-group>
-            <b-form-group id="template-content"
-                          label="内容"
-                          lable-for="template-content-input">
-              <b-form-input id="template-content-input"
-                            type="text"
-                            v-model="template.content"
-                            required
-                            placeholder="输入模板内容"></b-form-input>
-            </b-form-group>
-            <b-form-group id="template-category"
-                          label="分类"
-                          lable-for="template-category-input">
-              <b-form-input id="template-category-input"
-                            type="text"
-                            v-model="template.category"
-                            required
-                            placeholder="输入模板分类"></b-form-input>
-            </b-form-group>
-            <b-form-group id="template-tags"
-                          label="标签"
-                          lable-for="template-tags-input">
-              <b-form-input id="template-tags-input"
-                            type="text"
-                            v-model="template.tags"
-                            required
-                            placeholder="输入模板标签"></b-form-input>
-            </b-form-group>
-            <b-form-group id="template-sort-code"
-                          label="是否开放"
-                          lable-for="template-isOpen-input">
-              <b-form-radio v-model="template.isOpen" :options="openOptions"></b-form-radio>
-            </b-form-group>
-            <b-form-group id="template-sort-code"
-                          label="排序码"
-                          lable-for="template-sort-code-input"
-                          description="越小越靠前">
-              <b-form-input id="template-sort-code-input"
-                            type="number"
-                            v-model="template.sortCode"
-                            required
-                            :state="sortCodeState"
-                            placeholder="输入排序码"></b-form-input>
-            </b-form-group>
-            <b-button type="submit" variant="success">提交</b-button>
-            <b-button type="reset" variant="secondary">重置</b-button>
-          </b-form>
-        </b-card>
+        <b-form @submit="save">
+          <b-button-toolbar justify class="mr-auto mb-3">
+            <h4 class="mt-3 w-75">基本信息</h4>
+            <b-button-group size="sm" class="mb-3">
+              <b-button type="submit" variant="outline-success"><span class="fa fa-save"> 保存</span></b-button>
+              <b-button variant="outline-secondary" @click="back"><span class="fa fa-times"> 取消</span></b-button>
+            </b-button-group>
+          </b-button-toolbar>
+
+          <b-row>
+            <b-col cols="6">
+              <b-input-group left="模板名" class="mb-3">
+                <b-form-input type="text"
+                              v-model="template.name"
+                              required
+                              placeholder="输入模板名"></b-form-input>
+              </b-input-group>
+              <b-button-toolbar justify class="mb-3">
+                <b-input-group left="排序码">
+                  <b-form-input type="number"
+                                v-model="template.sortCode"
+                                required
+                                placeholder="输入排序码，越小越靠前"></b-form-input>
+                </b-input-group>
+                <b-input-group left="是否开放">
+                  <b-form-select v-model="template.isOpen" required :options="openOptions"></b-form-select>
+                </b-input-group>
+              </b-button-toolbar>
+            </b-col>
+            <b-col cols="6">
+              <b-input-group left="简介">
+                <b-form-textarea v-model="template.description" :rows="4" :max-rows="6"></b-form-textarea>
+              </b-input-group>
+            </b-col>
+          </b-row>
+
+          <h4>模板内容</h4>
+          <b-button-toolbar class="mb-3">
+            <b-input-group size="sm" left="分类" class="w-25 mx-1">
+              <b-form-input v-model="template.category" required placeholder="选择或输入分类"></b-form-input>
+              <b-input-group-button slot="right">
+                <b-dropdown text="选择" variant="outline-secondary" right>
+                  <b-dropdown-item v-for="category in categories" @click="selectCategory(category)">{{category}}</b-dropdown-item>
+                </b-dropdown>
+              </b-input-group-button>
+            </b-input-group>
+            <b-input-group size="sm" left="标签" class="w-25 mx-1">
+              <b-form-input v-model="tag"
+                            :state="tagState"
+                            placeholder="不能包含英文逗号，Enter添加"
+                            @keyup.enter.native="addTag"></b-form-input>
+            </b-input-group>
+            <h5 class="mx-1">
+            <span v-for="(t, index) in tags">
+              <b-badge size="lg" variant="secondary" class="mx-1" @mouseenter="hoverTag = t" @mouseleave="hoverTag = null">
+                {{t}} <span class="fa fa-remove" v-if="hoverTag === t" @click="removeTag(index)"></span>
+              </b-badge>
+            </span>
+            </h5>
+          </b-button-toolbar>
+          <markdown-editor previewClass="markdown-body" v-model="template.content" :configs="configs"></markdown-editor>
+        </b-form>
       </b-col>
     </b-row>
   </b-container>
@@ -96,38 +90,77 @@
     {text: '开放', value: true},
     {text: '不开放', value: false}
   ];
+  const configs = {
+    showIcons: ['code', 'table']
+  };
   export default {
     data() {
       return {
         alert: {variant: 'info', msg: '', show: null},
         template: Object.assign({}, defaultTemplate),
-        openOptions: openOptions
+        openOptions: openOptions,
+        tags: [],
+        tag: null,
+        hoverTag: null,
+        categories: [],
+        configs: configs
       }
     },
     created() {
-
+      this.fetchData();
     },
     computed: {
-      sortCodeState() {
-        return this.template.sortCode > 0 ? null : 'invalid';
+      tagState() {
+        return this.tag !== null && this.tag.indexOf(',') >= 0 ? 'invalid' : null;
       }
     },
     methods: {
-      back: function () {
-        this.$router.go(-1);
+      fetchData: function () {
+        this.fetchCategories();
       },
-      addTemplate: function () {
+      fetchCategories: function () {
         const user = JSON.parse(this.$cookies.get(constant.user));
-        this.project.ownerId = user.id;
+        const instance = this;
+        request.Api.get('/templates/categories/owner/' + user.id).then(function (result) {
+          if (result.code !== 200) {
+            instance.alert = {variant: 'warning', msg: result.msg, show: 5};
+          } else {
+            instance.categories = result.data;
+          }
+        }).catch(function (error) {
+          instance.alert = {variant: 'danger', msg: '获取模板备选分类列表出错', show: 5};
+        });
+      },
+      back: function () {
+        this.$router.push('/templates');
+      },
+      selectCategory: function (category) {
+        this.template.category = category;
+      },
+      addTag: function () {
+        if (this.tag !== '' && this.tag !== null && this.tag.indexOf(',') < 0) {
+          this.tags.push(this.tag);
+          this.tag = null;
+        }
+      },
+      removeTag: function (index) {
+        this.tags.splice(index, 1);
+      },
+      save: function () {
+        const user = JSON.parse(this.$cookies.get(constant.user));
+        this.template.ownerId = user.id;
+        this.template.tags = this.tags.join(',');
+        const category = this.template.category;
+        this.template.category = (category === null || category === '') ? '未分类' : category;
         const instance = this;
         request.Api.post('/templates', this.template).then(function (result) {
           if (result.code !== 200) {
             instance.alert = {variant: 'warning', msg: result.msg, show: 5};
           } else {
-            instance.$router.go(-1);
+            instance.back();
           }
         }).catch(function (error) {
-          instance.alert = {variant: 'danger', msg: '创建项目出错', show: 5};
+          instance.alert = {variant: 'danger', msg: '创建文档模板出错', show: 5};
         });
       }
     }
@@ -135,5 +168,6 @@
 </script>
 
 <style>
-
+  @import '~simplemde/dist/simplemde.min.css';
+  @import '~github-markdown-css';
 </style>

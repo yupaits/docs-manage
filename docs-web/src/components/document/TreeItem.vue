@@ -22,7 +22,7 @@
              button-size="sm"
              no-close-on-backdrop
              no-close-on-esc
-             close-title="取消"
+             cancel-title="取消"
              ok-title="提交"
              @ok="submitAdd"
              @cancel="cancelAdd"
@@ -35,9 +35,9 @@
         <b-form-group id="add-modal-type"
                       label="类型"
                       label-for="add-modal-type-radio">
-          <b-form-radio id="add-modal-type-radio"
+          <b-form-radio-group id="add-modal-type-radio"
                         v-model="type"
-                        :options="typeOptions"></b-form-radio>
+                        :options="typeOptions"></b-form-radio-group>
         </b-form-group>
         <b-form-group id="add-modal-name"
                       label="名称"
@@ -107,7 +107,7 @@
              button-size="sm"
              no-close-on-backdrop
              no-close-on-esc
-             close-title="取消"
+             cancel-title="取消"
              ok-title="确定"
              @ok="submitDelete"
              @cancel="cancelDelete"

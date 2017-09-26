@@ -156,4 +156,15 @@ public class TemplateController {
         templateRepository.save(templateInDb);
         return Result.ok();
     }
+
+    @GetMapping("/categories/owner/{ownerId}")
+    public Result templateCategories(@PathVariable Integer ownerId) {
+        if (ValidateUtils.idInvalid(ownerId)) {
+            return Result.fail(ResultCode.PARAMS_ERROR);
+        }
+        if (!ownerId.equals(jwtHelper.getUserId(HttpUtil.getRequest()))) {
+            return Result.fail(ResultCode.FORBIDDEN);
+        }
+        return Result.ok(templateRepository.findTemplateCategoryList(ownerId));
+    }
 }
