@@ -3,6 +3,7 @@
            ref="add_modal"
            title="新建目录"
            button-size="sm"
+           no-fade
            no-close-on-backdrop
            no-close-on-esc
            cancel-title="取消"

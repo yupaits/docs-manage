@@ -20,6 +20,7 @@
     <b-modal ref="tree_add_modal"
              title="新建目录或文档"
              button-size="sm"
+             no-fade
              no-close-on-backdrop
              no-close-on-esc
              cancel-title="取消"
@@ -66,6 +67,7 @@
     <b-modal ref="directory_edit_modal"
              title="编辑目录"
              button-size="sm"
+             no-fade
              no-close-on-backdrop
              no-close-on-esc
              close-title="取消"
@@ -105,6 +107,7 @@
     <b-modal ref="directory_delete_modal"
              title="删除目录"
              button-size="sm"
+             no-fade
              no-close-on-backdrop
              no-close-on-esc
              cancel-title="取消"

@@ -32,15 +32,18 @@
               <span class="fa fa-file-text-o"> {{selectedDocument.name}}</span>
             </h1>
             <b-button-group class="mb-3">
-              <b-button variant="light" :to="'/docs/projects/' + selectedProject.id + '/documents/' + selectedDocument.id + '/edit'">
+              <b-button variant="light"
+                        :to="'/docs/projects/' + selectedProject.id + '/documents/' + selectedDocument.id + '/edit'">
                 <span class="fa fa-pencil"> 编辑</span>
               </b-button>
+              <b-button variant="light" v-b-modal="'shareModal'"><span class="fa fa-share"> 分享</span></b-button>
               <b-dropdown text="历史" variant="light" right>
                 <b-dropdown-item-button @click="showHistory()"><span class="fa fa-eye"> 显示当前文档</span>
                 </b-dropdown-item-button>
                 <b-dropdown-header v-show="documentHistories.length > 0">文档记录</b-dropdown-header>
                 <span v-for="history in documentHistories">
-                  <b-dropdown-item-button @click="showHistory(history)" :class="{'active': selectedHistory === history}">
+                  <b-dropdown-item-button @click="showHistory(history)"
+                                          :class="{'active': selectedHistory === history}">
                     <span class="fa fa-history"> {{history.savedTime | timeFormat}}</span>
                   </b-dropdown-item-button>
                 </span>
@@ -55,18 +58,21 @@
               </b-dropdown>
             </b-button-group>
           </b-button-toolbar>
-          <h5 class="text-secondary" v-if="selectedHistory != null"><span class="fa fa-history"> {{selectedHistory.savedTime | timeFormat}}</span></h5>
-          <div v-html="documentContent" class="markdown-body"></div>
+          <h5 class="text-secondary" v-if="selectedHistory != null"><span
+            class="fa fa-history"> {{selectedHistory.savedTime | timeFormat}}</span></h5>
+          <div v-html="documentContent" class="markdown-body mb-5"></div>
         </b-col>
       </b-row>
     </b-container>
     <add-directory-modal :projectId="selectedProject.id"></add-directory-modal>
+    <share-document-modal :documentId="selectedDocument.id" v-if="selectedDocument.id"></share-document-modal>
   </div>
 </template>
 
 <script>
   import TreeItem from '../../components/document/TreeItem'
   import AddDirectoryModal from '../../components/document/AddDirectoryModal'
+  import ShareDocumentModal from '../../components/document/ShareDocumentModal'
   import marked from 'marked'
   import dateFns from 'date-fns'
   import request from '../../utils/request'
@@ -76,6 +82,7 @@
     components: {
       TreeItem,
       AddDirectoryModal,
+      ShareDocumentModal
     },
     data() {
       return {
