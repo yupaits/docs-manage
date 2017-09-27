@@ -29,4 +29,7 @@ public interface TemplateRepository extends JpaRepository<Template, Integer>, Jp
 
     @Query("select category from Template where ownerId = :ownerId group by category order by count(id) desc")
     List<String> findTemplateCategoryList(@Param("ownerId") Integer ownerId);
+
+    @Query("select tags from Template where ownerId = :ownerId")
+    List<String> findTagsList(@Param("ownerId") Integer ownerId);
 }

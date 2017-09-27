@@ -8,6 +8,10 @@ import com.yupaits.docs.response.ResultCode;
 import com.yupaits.docs.util.bean.BeanUtil;
 import com.yupaits.docs.util.http.HttpUtil;
 import com.yupaits.docs.util.validate.ValidateUtils;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.jpa.criteria.OrderImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.criteria.*;
 import java.sql.Timestamp;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * 文档模板REST接口
@@ -166,5 +169,54 @@ public class TemplateController {
             return Result.fail(ResultCode.FORBIDDEN);
         }
         return Result.ok(templateRepository.findTemplateCategoryList(ownerId));
+    }
+
+    @GetMapping("/tags/owner/{ownerId}")
+    public Result templatesTags(@PathVariable Integer ownerId) {
+        if (ValidateUtils.idInvalid(ownerId)) {
+            return Result.fail(ResultCode.PARAMS_ERROR);
+        }
+        if (!ownerId.equals(jwtHelper.getUserId(HttpUtil.getRequest()))) {
+            return Result.fail(ResultCode.FORBIDDEN);
+        }
+        List<String> tagsList = templateRepository.findTagsList(ownerId);
+        if (CollectionUtils.isNotEmpty(tagsList)) {
+            Comparator<Map.Entry<String, Integer>> comparator = new Comparator<Map.Entry<String, Integer>>() {
+                @Override
+                public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
+                    return o2.getValue().compareTo(o1.getValue());
+                }
+            };
+            Map<String, Integer> tagMap = new HashMap<>();
+            for (String tags : tagsList) {
+                String[] tagArray = tags.split(",");
+                if (ArrayUtils.isNotEmpty(tagArray)) {
+                    for (String tag : tagArray) {
+                        if (tagMap.containsKey(tag)) {
+                            tagMap.put(tag, tagMap.get(tag) + 1);
+                        } else {
+                            tagMap.put(tag, 1);
+                        }
+                    }
+                }
+            }
+            ArrayList<Map.Entry<String, Integer>> tagRateList = new ArrayList<>(tagMap.entrySet());
+            tagRateList.sort(comparator);
+            List<TagRate> sortedTagRateList = new LinkedList<>();
+            TagRate tagRate;
+            for (Map.Entry<String, Integer> entry : tagRateList) {
+                tagRate = new TagRate(entry.getKey(), entry.getValue());
+                sortedTagRateList.add(tagRate);
+            }
+            return Result.ok(sortedTagRateList);
+        }
+        return Result.ok();
+    }
+
+    @Data
+    @AllArgsConstructor
+    private class TagRate {
+        private String tag;
+        private Integer rate;
     }
 }

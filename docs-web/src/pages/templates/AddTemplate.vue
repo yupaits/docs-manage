@@ -40,8 +40,9 @@
               </b-input-group>
             </b-col>
           </b-row>
+        </b-form>
 
-          <h4>模板内容</h4>
+        <h4>模板内容</h4>
           <b-button-toolbar class="mb-3">
             <b-input-group size="sm" left="分类" class="w-25 mx-1">
               <b-form-input v-model="template.category" required placeholder="选择或输入分类"></b-form-input>
@@ -66,7 +67,6 @@
             </h5>
           </b-button-toolbar>
           <markdown-editor previewClass="markdown-body" v-model="template.content" :configs="configs"></markdown-editor>
-        </b-form>
       </b-col>
     </b-row>
   </b-container>

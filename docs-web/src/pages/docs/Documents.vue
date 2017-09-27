@@ -11,7 +11,7 @@
         <b-col cols="3">
           <b-button variant="light" to="/docs"><span class="fa fa-arrow-left"> 返回</span></b-button>
           <b-card class="mt-3">
-            <h4 slot="header">文档目录</h4>
+            <h4>文档目录</h4>
             <ul>
               <tree-item v-for="(directory, index) in directoryTree" :model="directory"
                          :id="'directory-' + index" :projectId="selectedProject.id"
@@ -32,10 +32,10 @@
               <span class="fa fa-file-text-o"> {{selectedDocument.name}}</span>
             </h1>
             <b-button-group class="mb-3">
-              <b-button variant="outline-primary"
-                        :to="'/docs/projects/' + selectedProject.id + '/documents/' + selectedDocument.id + '/edit'">
-                <span class="fa fa-pencil"> 编辑</span></b-button>
-              <b-dropdown text="历史" variant="outline-secondary" right>
+              <b-button variant="light" :to="'/docs/projects/' + selectedProject.id + '/documents/' + selectedDocument.id + '/edit'">
+                <span class="fa fa-pencil"> 编辑</span>
+              </b-button>
+              <b-dropdown text="历史" variant="light" right>
                 <b-dropdown-item-button @click="showHistory()"><span class="fa fa-eye"> 显示当前文档</span>
                 </b-dropdown-item-button>
                 <b-dropdown-header v-show="documentHistories.length > 0">文档记录</b-dropdown-header>
@@ -45,7 +45,7 @@
                   </b-dropdown-item-button>
                 </span>
               </b-dropdown>
-              <b-dropdown text="删除" variant="outline-danger" right>
+              <b-dropdown text="删除" variant="light" right>
                 <b-dropdown-header class="text-danger"><h6 class="text-bold"><b>确定删除吗?</b></h6></b-dropdown-header>
                 <b-dropdown-divider></b-dropdown-divider>
                 <b-dropdown-item-button @click="submitDelete"><span class="fa fa-check"> 确定</span>

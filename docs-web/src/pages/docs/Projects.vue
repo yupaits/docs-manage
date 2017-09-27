@@ -15,9 +15,9 @@
               </b-link>
             </h3>
             <b-button-group v-if="hoverId === project.id">
-              <b-button variant="outline-primary" :to="'/docs/projects/' + hoverId + '/edit'"><span
+              <b-button variant="light" :to="'/docs/projects/' + hoverId + '/edit'"><span
                 class="fa fa-pencil"> 编辑</span></b-button>
-              <b-dropdown text="删除" variant="outline-danger" right>
+              <b-dropdown text="删除" variant="light" right>
                 <b-dropdown-header class="text-danger"><h6 class="text-bold"><b>确定删除吗?</b></h6></b-dropdown-header>
                 <b-dropdown-divider></b-dropdown-divider>
                 <b-dropdown-item-button @click="submitDelete"><span class="fa fa-check"> 确定</span>

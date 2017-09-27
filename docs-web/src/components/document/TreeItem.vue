@@ -217,7 +217,7 @@
         const instance = this;
         const user = JSON.parse(this.$cookies.get(constant.user));
         if (this.type === 0) {
-          var directory = {
+          const directory = {
             ownerId: user.id,
             projectId: this.projectId,
             parentId: this.model.id,
@@ -235,7 +235,7 @@
             instance.alert = {variant: 'danger', msg: '新建目录出错', show: 5};
           });
         } else if (this.type === 1) {
-          var document = {
+          const document = {
             ownerId: user.id,
             directoryId: this.model.id,
             name: this.item.name,
