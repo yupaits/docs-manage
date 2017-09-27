@@ -21,6 +21,8 @@ public interface TemplateRepository extends JpaRepository<Template, Integer>, Jp
 
     Page<Template> findByOwnerIdAndIsDeletedIsFalseOrderBySortCodeAsc(Integer ownerId, Pageable pageable);
 
+    List<Template> findByOwnerIdAndCategoryAndIsDeletedIsFalseOrderBySortCodeAsc(Integer ownerId, String category);
+
     @Override
     Template findOne(Integer templateId);
 

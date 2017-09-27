@@ -83,6 +83,17 @@ public class TemplateController {
         return Result.ok(templateRepository.findByOwnerIdAndIsDeletedIsFalseOrderBySortCodeAsc(ownerId, pageable));
     }
 
+    @GetMapping("/owner/{ownerId}/category/{category}")
+    public Result getTemplatesByCategory(@PathVariable Integer ownerId, @PathVariable String category) {
+        if (ValidateUtils.idInvalid(ownerId) || StringUtils.isBlank(category)) {
+            return Result.fail(ResultCode.PARAMS_ERROR);
+        }
+        if (!ownerId.equals(jwtHelper.getUserId(HttpUtil.getRequest()))) {
+            return Result.fail(ResultCode.FORBIDDEN);
+        }
+        return Result.ok(templateRepository.findByOwnerIdAndCategoryAndIsDeletedIsFalseOrderBySortCodeAsc(ownerId, category));
+    }
+
     /**
      * 验证查询条件是否有效
      * @param keyword 关键字
