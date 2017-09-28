@@ -23,6 +23,8 @@
 			<groupId>com.yupaits.docs</groupId>
 			<artifactId>docs-commons</artifactId>
 			<version>${docs.version}</version>
+			<scope>system</scope>
+			<systemPath>${docs.system.path}/docs-manage/docs-commons/target/docs-commons-1.1.0.jar</systemPath>
 		</dependency>
 	</dependencies>
 
@@ -31,6 +33,17 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+							<goal>build-info</goal>
+						</goals>
+						<configuration>
+							<includeSystemScope>true</includeSystemScope>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

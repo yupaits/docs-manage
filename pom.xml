@@ -30,6 +30,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
 		<docs.version>1.1.0</docs.version>
+		<docs.system.path>E:/Demo</docs.system.path>
 	</properties>
 
 	<dependencies>
