@@ -75,6 +75,7 @@ public class ShiroConfig {
 
         Map<String, String> filterChains = new LinkedHashMap<>();
 //        filterChains.put("/api/projects/**", "roles[ADMIN]");
+        filterChains.put("/api/documents/*/read", "anon");
         filterChains.put("/**", "jwtAuthc");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChains);
 

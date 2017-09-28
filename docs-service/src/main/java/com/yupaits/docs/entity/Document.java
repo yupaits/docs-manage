@@ -29,4 +29,7 @@ public class Document implements Serializable {
 
     @Column(name = "content")
     private String content;
+
+    @Column(name = "visit_code")
+    private String visitCode;
 }

@@ -35,7 +35,7 @@
                       required
                       :state="sortCodeState"
                       placeholder="输入排序码"></b-form-input>
-        <b-form-feedback>排序吗必须大于0</b-form-feedback>
+        <b-form-feedback>排序码必须大于0</b-form-feedback>
       </b-form-group>
     </b-form>
   </b-modal>

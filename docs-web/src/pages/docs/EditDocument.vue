@@ -14,7 +14,7 @@
         <b-button variant="outline-secondary" @click="back"><span class="fa fa-times"> 取消</span></b-button>
       </b-button-group>
     </b-button-toolbar>
-    <b-button-toolbar class="mb-3">
+    <b-button-toolbar justify class="mb-3">
       <b-input-group size="sm" left="模板分类">
         <b-form-select v-model="selectedCate" :options="cateOptions" @input="selectCate"
                        class="select-width"></b-form-select>
@@ -22,9 +22,14 @@
         <b-form-select v-model="selectedTemplate" :options="templateOptions" class="select-width"
                        v-if="selectedCate"></b-form-select>
         <b-input-group-button v-if="selectedTemplate !== null">
-          <b-button size="sm" variant="outline-primary" @click="insertTemplate"><span class="fa fa-plus-circle"> 插入模板</span>
+          <b-button variant="outline-primary" @click="insertTemplate"><span
+            class="fa fa-plus-circle"> 插入模板</span>
           </b-button>
         </b-input-group-button>
+      </b-input-group>
+      <b-input-group size="sm">
+        <b-input-group-addon @click="changeable = !changeable">{{changeable ? '更改' : '保持之前'}}访问码</b-input-group-addon>
+        <b-form-input type="password" v-model="visitCode" :disabled="!changeable"></b-form-input>
       </b-input-group>
     </b-button-toolbar>
     <markdown-editor previewClass="markdown-body" v-model="document.content" ref="editor"
@@ -45,6 +50,8 @@
         alert: {variant: 'info', msg: '', show: null},
         configs: configs,
         document: {id: null, name: '', content: '', sortCode: null},
+        visitCode: null,
+        changeable: false,
         categories: [],
         selectedCate: null,
         templates: [],
@@ -54,16 +61,14 @@
     created() {
       this.fetchData();
     },
-    mounted() {
-      const simplemde = this.simplemde;
-      setTimeout(function () {
-        simplemde.codemirror.refresh();
-      }.bind(simplemde), 0);
+    watch: {
+      changeable: function (val, oldVal) {
+        if (!val) {
+          this.visitCode = null;
+        }
+      }
     },
     computed: {
-      simplemde() {
-        return this.$refs.editor.simplemde;
-      },
       cateOptions() {
         const cateOptions = [];
         cateOptions.push({text: '未选择', value: null});
@@ -135,6 +140,9 @@
       },
       save: function () {
         const instance = this;
+        if (this.changeable) {
+          this.document.visitCode = this.visitCode;
+        }
         request.Api.put('/documents/' + this.document.id, this.document).then(function (result) {
           if (result.code !== 200) {
             instance.alert = {variant: 'warning', msg: result.msg, show: 5};
@@ -162,5 +170,9 @@
   .select-width {
     min-width: 8rem;
     max-width: 16rem;
+  }
+
+  .markdown-editor .CodeMirror {
+    height: 36rem;
   }
 </style>

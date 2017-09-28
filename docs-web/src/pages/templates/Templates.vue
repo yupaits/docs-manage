@@ -1,9 +1,13 @@
 <template>
-  <b-container>
-    <b-row class="mt-3">
-      <b-alert :variant="alert.variant" :show="alert.show" dismissible @dismissed="alert.show=null">
-        <b>{{alert.msg}}</b>
-      </b-alert>
+  <b-container fluid class="my-3">
+    <b-row align-h="center">
+      <b-col cols="11">
+        <b-alert :variant="alert.variant" :show="alert.show" dismissible @dismissed="alert.show=null">
+          <b>{{alert.msg}}</b>
+        </b-alert>
+      </b-col>
+    </b-row>
+    <b-row align-h="center">
       <b-col cols="2">
         <b-button variant="outline-success" to="/templates/add">添加模板</b-button>
         <div class="mt-3" v-if="categories.length > 0">
@@ -16,7 +20,7 @@
                     :pressed="selectedCate === category">{{category}}
           </b-button>
         </div>
-        <div class="mt-3">
+        <div class="mt-3" v-if="tagRates.length > 0">
           <p>热门标签</p>
           <b-button v-for="(tagRate, index) in tagRates"
                     size="sm"
@@ -27,7 +31,7 @@
           </b-button>
         </div>
       </b-col>
-      <b-col cols="10">
+      <b-col cols="9">
         <b-card-group columns class="mt-5">
           <b-card v-for="template in templatePage.content"
                   @mouseenter="hoverId = template.id"
@@ -49,7 +53,8 @@
             <p class="card-text text-muted" v-if="template.tags">
               <small>标签: {{template.tags}}</small>
               <br>
-              <small><span class="fa fa-heart-o"> {{template.likings}}</span> &nbsp;&nbsp;&nbsp;&nbsp; <span class="fa fa-eye"> {{template.visitCount}}</span></small>
+              <small><span class="fa fa-heart-o"> {{template.likings}}</span> &nbsp;&nbsp;&nbsp;&nbsp; <span
+                class="fa fa-eye"> {{template.visitCount}}</span></small>
             </p>
           </b-card>
         </b-card-group>

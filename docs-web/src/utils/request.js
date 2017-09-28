@@ -3,6 +3,7 @@ import constant from "./constant";
 
 const apiBaseUrl = 'https://localhost:9000/api';
 const authBaseUrl = 'https://localhost:9100/auth';
+const publicApiBaseUrl = 'https://localhost:9000/api';
 
 const refreshAuthTokenUrl = authBaseUrl + '/refresh';
 
@@ -41,6 +42,16 @@ Auth.interceptors.response.use(function (response) {
   return Promise.reject(error);
 });
 
+const PublicApi = axios.create({
+  baseURL: publicApiBaseUrl
+});
+
+PublicApi.interceptors.response.use(function (response) {
+  return response.data;
+}, function (error) {
+  return Promise.reject(error);
+});
+
 function refreshAuthToken() {
   Auth.get(refreshAuthTokenUrl).then(function (result) {
     if (result.code === 200) {
@@ -55,5 +66,5 @@ function refreshAuthToken() {
 }
 
 export default {
-  Auth, Api
+  Auth, Api, PublicApi
 };

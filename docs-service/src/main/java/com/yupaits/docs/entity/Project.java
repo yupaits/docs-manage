@@ -25,9 +25,6 @@ public class Project implements Serializable {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "visit_code")
-    private String visitCode;
-
     @Column(name = "sort_code")
     private Integer sortCode;
 

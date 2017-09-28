@@ -1,7 +1,7 @@
 <template>
   <b-container fluid class="mt-3 mb-3">
     <b-row align-h="center">
-      <b-col cols="8">
+      <b-col cols="11">
         <b-alert :variant="alert.variant" :show="alert.show" dismissible @dismissed="alert.show=null">
           <b>{{alert.msg}}</b>
         </b-alert>
@@ -175,4 +175,8 @@
 <style>
   @import '~simplemde/dist/simplemde.min.css';
   @import '~github-markdown-css';
+
+  .markdown-editor .CodeMirror {
+    height: 28rem;
+  }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <b-container fluid class="mt-3 mb-3">
     <b-row align-h="center">
-      <b-col cols="8">
+      <b-col cols="11">
         <b-alert :variant="alert.variant" :show="alert.show" dismissible @dismissed="alert.show=null">
           <b>{{alert.msg}}</b>
         </b-alert>
@@ -43,30 +43,32 @@
         </b-form>
 
         <h4>模板内容</h4>
-          <b-button-toolbar class="mb-3">
-            <b-input-group size="sm" left="分类" class="w-25 mx-1">
-              <b-form-input v-model="template.category" required placeholder="选择或输入分类"></b-form-input>
-              <b-input-group-button slot="right">
-                <b-dropdown text="选择" variant="outline-secondary" right>
-                  <b-dropdown-item v-for="category in categories" @click="selectCategory(category)">{{category}}</b-dropdown-item>
-                </b-dropdown>
-              </b-input-group-button>
-            </b-input-group>
-            <b-input-group size="sm" left="标签" class="w-25 mx-1">
-              <b-form-input v-model="tag"
-                            :state="tagState"
-                            placeholder="不能包含英文逗号，Enter添加"
-                            @keyup.enter.native="addTag"></b-form-input>
-            </b-input-group>
-            <h5 class="mx-1">
+        <b-button-toolbar class="mb-3">
+          <b-input-group size="sm" left="分类" class="w-25 mx-1">
+            <b-form-input v-model="template.category" required placeholder="选择或输入分类"></b-form-input>
+            <b-input-group-button slot="right">
+              <b-dropdown text="选择" variant="outline-secondary" right>
+                <b-dropdown-item v-for="category in categories" @click="selectCategory(category)">{{category}}
+                </b-dropdown-item>
+              </b-dropdown>
+            </b-input-group-button>
+          </b-input-group>
+          <b-input-group size="sm" left="标签" class="w-25 mx-1">
+            <b-form-input v-model="tag"
+                          :state="tagState"
+                          placeholder="不能包含英文逗号，Enter添加"
+                          @keyup.enter.native="addTag"></b-form-input>
+          </b-input-group>
+          <h5 class="mx-1">
             <span v-for="(t, index) in tags">
-              <b-badge size="lg" variant="secondary" class="mx-1" @mouseenter="hoverTag = t" @mouseleave="hoverTag = null">
+              <b-badge size="lg" variant="secondary" class="mx-1" @mouseenter="hoverTag = t"
+                       @mouseleave="hoverTag = null">
                 {{t}} <span class="fa fa-remove" v-if="hoverTag === t" @click="removeTag(index)"></span>
               </b-badge>
             </span>
-            </h5>
-          </b-button-toolbar>
-          <markdown-editor previewClass="markdown-body" v-model="template.content" :configs="configs"></markdown-editor>
+          </h5>
+        </b-button-toolbar>
+        <markdown-editor previewClass="markdown-body" v-model="template.content" :configs="configs"></markdown-editor>
       </b-col>
     </b-row>
   </b-container>
@@ -170,4 +172,8 @@
 <style>
   @import '~simplemde/dist/simplemde.min.css';
   @import '~github-markdown-css';
+
+  .markdown-editor .CodeMirror {
+    height: 28rem;
+  }
 </style>

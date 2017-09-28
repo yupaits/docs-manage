@@ -5,6 +5,7 @@ import Register from "@/pages/Register";
 import Feedback from "@/pages/Feedback";
 import ForgetPassword from "@/pages/ForgetPassword";
 import PasswordReset from "@/pages/PasswordReset";
+import ReadDocument from "@/pages/docs/ReadDocument";
 import Manage from "@/pages/Manage";
 import Projects from "@/pages/docs/Projects";
 import AddProject from "@/pages/docs/AddProject";
@@ -63,6 +64,11 @@ const router = new Router({
       ]
     },
     {
+      path: '/docs/read/documents/:id',
+      name: 'ReadDocument',
+      component: ReadDocument
+    },
+    {
       path: '/login',
       component: Login
     },
@@ -87,11 +93,15 @@ const router = new Router({
 
 //无需认证信息的path
 const ignorePaths = ['/register', '/feedback', '/forgetPassword', '/passwordReset', '/'];
+
+//特殊path无需认证的特殊
+const ignoreNames = ['ReadDocument'];
+
 //登录状态判断
 router.beforeEach((to, from, next) => {
   const accessToken = window.$cookies.get(constant.accessToken);
   if ((accessToken === null || accessToken === undefined || accessToken === '') && to.path !== '/login') {
-    if (ignorePaths.indexOf(to.path) >= 0) {
+    if (ignorePaths.indexOf(to.path) >= 0 || ignoreNames.indexOf(to.name) >= 0) {
       next();
     } else {
       next('/login');

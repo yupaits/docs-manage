@@ -15,6 +15,8 @@ public interface DocumentRepository extends JpaRepository<Document, Integer> {
 
     List<Document> findByDirectoryIdOrderBySortCodeAsc(Integer directoryId);
 
+    Document findByIdAndVisitCode(Integer documentId, String visitCode);
+
     @Override
     <S extends Document> S save(S s);
 

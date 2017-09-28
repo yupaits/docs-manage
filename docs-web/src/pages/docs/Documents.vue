@@ -1,13 +1,14 @@
 <template>
   <div>
-    <b-container fluid class="mt-3">
+    <b-container fluid class="my-3">
       <b-row align-h="center">
         <b-col cols="11">
           <b-alert :variant="alert.variant" :show="alert.show" dismissible @dismissed="alert.show=null">
             <b>{{alert.msg}}</b>
           </b-alert>
         </b-col>
-
+      </b-row>
+      <b-row align-h="center">
         <b-col cols="3">
           <b-button variant="light" to="/docs"><span class="fa fa-arrow-left"> 返回</span></b-button>
           <b-card class="mt-3">

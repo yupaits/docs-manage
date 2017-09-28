@@ -59,7 +59,18 @@
                         required
                         :state="addSortCodeState"
                         placeholder="输入排序码"></b-form-input>
-          <b-form-feedback>排序吗必须大于0</b-form-feedback>
+          <b-form-feedback>排序码必须大于0</b-form-feedback>
+        </b-form-group>
+        <b-form-group id="visit-code"
+                      label="访问码"
+                      lable-for="visit-code-input"
+                      description="分享的文档需要输入访问码才能阅读"
+                      v-if="type === 1">
+          <b-form-input id="visit-code-input"
+                        type="password"
+                        v-model="item.visitCode"
+                        placeholder="输入访问码，输入为空时默认设置为文档名"></b-form-input>
+          <b-form-feedback>访问码不少于6位</b-form-feedback>
         </b-form-group>
       </b-form>
     </b-modal>
@@ -99,7 +110,7 @@
                         required
                         :state="editSortCodeState"
                         placeholder="输入排序码"></b-form-input>
-          <b-form-feedback>排序吗必须大于0</b-form-feedback>
+          <b-form-feedback>排序码必须大于0</b-form-feedback>
         </b-form-group>
       </b-form>
     </b-modal>
@@ -243,7 +254,8 @@
             directoryId: this.model.id,
             name: this.item.name,
             content: '',
-            sortCode: this.item.sortCode
+            sortCode: this.item.sortCode,
+            visitCode: this.item.visitCode
           };
           request.Api.post('/documents', document).then(function (result) {
             if (result.code !== 200) {
