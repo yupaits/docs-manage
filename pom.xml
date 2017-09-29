@@ -20,7 +20,6 @@
 
 	<modules>
 		<module>docs-commons</module>
-		<module>docs-file</module>
 		<module>docs-service</module>
 		<module>sso</module>
 	</modules>
