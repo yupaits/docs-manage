@@ -1,13 +1,17 @@
 <template>
   <b-container class="my-3">
     <div v-if="visitCodePass">
-      <h1 class="text-center mt-3">{{document.name}}</h1>
-      <p class="text-center text-muted">
-        <span class="fa fa-user-o"> {{document.author.username}}</span>
-        &nbsp;&nbsp;&nbsp;&nbsp;
-        <span class="fa fa-envelope-o"> {{document.author.email}}</span>
-      </p>
-      <div v-html="documentContent" class="markdown-body my-5"></div>
+      <b-row align-h="center">
+        <b-col cols="10">
+          <h1 class="text-center mt-3">{{document.name}}</h1>
+          <p class="text-center text-muted">
+            <span class="fa fa-user-o"> {{document.author.username}}</span>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <span class="fa fa-envelope-o"> {{document.author.email}}</span>
+          </p>
+          <div v-html="documentContent" class="markdown-body my-5"></div>
+        </b-col>
+      </b-row>
     </div>
     <b-row align-h="center" class="mt-5" v-else>
       <b-col cols="4">
