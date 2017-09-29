@@ -1,23 +1,22 @@
 <template>
-  <b-container fluid class="mt-3">
+  <b-container fluid class="my-3">
     <b-row align-h="center">
-      <b-col cols="6">
+      <b-col cols="9">
         <b-alert :variant="alert.variant" :show="alert.show" dismissible @dismissed="alert.show=null">
           <b>{{alert.msg}}</b>
         </b-alert>
         <b-button variant="outline-success" to="/docs/projects/add">创建项目</b-button>
-        <div v-for="project in projects" @mouseenter="hoverId = project.id" @mouseleave="hoverId = null">
-          <hr>
-          <b-button-toolbar justify>
-            <h3>
+        <b-card-group columns class="mt-3">
+          <b-card v-for="project in projects" @mouseenter="hoverId = project.id" @mouseleave="hoverId = null">
+            <h4>
               <b-link active :to="{path: '/docs/projects/' + project.id + '/documents', params: {project: project}}"
                       class="card-link">{{project.name}}
               </b-link>
-            </h3>
-            <b-button-group v-if="hoverId === project.id">
-              <b-button variant="light" :to="'/docs/projects/' + hoverId + '/edit'"><span
+            </h4>
+            <div class="float-right">
+              <b-button size="sm" variant="light" :to="'/docs/projects/' + hoverId + '/edit'" v-if="hoverId === project.id"><span
                 class="fa fa-pencil"> 编辑</span></b-button>
-              <b-dropdown text="删除" variant="light" right>
+              <b-dropdown size="sm" text="删除" variant="light" right v-show="hoverId === project.id">
                 <b-dropdown-header class="text-danger"><h6 class="text-bold"><b>确定删除吗?</b></h6></b-dropdown-header>
                 <b-dropdown-divider></b-dropdown-divider>
                 <b-dropdown-item-button @click="submitDelete"><span class="fa fa-check"> 确定</span>
@@ -25,12 +24,11 @@
                 <b-dropdown-item-button @click="cancelDelete"><span class="fa fa-times"> 取消</span>
                 </b-dropdown-item-button>
               </b-dropdown>
-            </b-button-group>
-          </b-button-toolbar>
-          <p>{{project.description}}</p>
-          <p><span class="fa fa-clock-o"> {{project.createdAt | dateFormat}}</span></p>
-        </div>
-        <hr>
+            </div>
+            <p><span class="fa fa-clock-o"> {{project.createdAt | dateFormat}}</span></p>
+            <p>{{project.description}}</p>
+          </b-card>
+        </b-card-group>
       </b-col>
     </b-row>
   </b-container>

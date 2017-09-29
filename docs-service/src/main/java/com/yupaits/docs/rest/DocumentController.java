@@ -4,7 +4,7 @@ import com.yupaits.auth.bean.UserDTO;
 import com.yupaits.auth.entity.User;
 import com.yupaits.auth.repository.UserRepository;
 import com.yupaits.docs.bean.DocumentVO;
-import com.yupaits.docs.config.jwt.JwtHelper;
+import com.yupaits.docs.config.JwtHelper;
 import com.yupaits.docs.entity.Document;
 import com.yupaits.docs.entity.DocumentHistory;
 import com.yupaits.docs.repository.DocumentHistoryRepository;
@@ -16,7 +16,6 @@ import com.yupaits.docs.util.encrypt.EncryptUtils;
 import com.yupaits.docs.util.http.HttpUtil;
 import com.yupaits.docs.util.validate.ValidateUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

@@ -10,6 +10,15 @@
     <b-row align-h="center">
       <b-col cols="2">
         <b-button variant="outline-success" to="/templates/add">添加模板</b-button>
+        <b-input-group size="sm" class="mt-3">
+          <b-form-input type="text"
+                        v-model="keyword"
+                        placeholder="请输入搜索关键字"></b-form-input>
+          <b-input-group-button>
+            <b-button variant="outline-secondary" @click="clearKeyword"><span class="fa fa-remove"></span></b-button>
+            <b-button variant="outline-primary" @click="search"><span class="fa fa-search"></span></b-button>
+          </b-input-group-button>
+        </b-input-group>
         <div class="mt-3" v-if="categories.length > 0">
           <p>模板分类</p>
           <b-button v-for="category in categories"
@@ -30,6 +39,9 @@
                     class="mx-1 mb-1">{{tagRate.tag}}
           </b-button>
         </div>
+        <div class="mt-3">
+          <b-link to="" class="card-link">模板广场</b-link>
+        </div>
       </b-col>
       <b-col cols="9">
         <b-card-group columns class="mt-5">
@@ -40,6 +52,16 @@
               <router-link :to="'/templates/' + template.id + '/edit'" class="card-link">{{template.name}}
               </router-link>
             </h4>
+            <div class="float-right">
+              <b-dropdown size="sm" text="删除" variant="light" right v-show="hoverId === template.id">
+                <b-dropdown-header class="text-danger"><h6 class="text-bold"><b>确定删除吗?</b></h6></b-dropdown-header>
+                <b-dropdown-divider></b-dropdown-divider>
+                <b-dropdown-item-button @click="submitDelete"><span class="fa fa-check"> 确定</span>
+                </b-dropdown-item-button>
+                <b-dropdown-item-button @click="cancelDelete"><span class="fa fa-times"> 取消</span>
+                </b-dropdown-item-button>
+              </b-dropdown>
+            </div>
             <p class="card-text text-muted">
               <small v-if="template.category">分类: {{template.category}}</small>
               <br>
@@ -58,6 +80,14 @@
             </p>
           </b-card>
         </b-card-group>
+        <b-button-toolbar justify v-if="!templatePage.first || !templatePage.last">
+          <b-button size="sm" variant="light" :disabled="templatePage.first" @click="previousPage">
+            <span class="fa fa-arrow-left"> 上一页</span>
+          </b-button>
+          <b-button size="sm" variant="light" :disabled="templatePage.last" @click="nextPage">
+            <span class="fa fa-arrow-right"> 下一页</span>
+          </b-button>
+        </b-button-toolbar>
       </b-col>
     </b-row>
   </b-container>
@@ -74,12 +104,13 @@
       return {
         alert: {variant: 'info', msg: '', show: null},
         hoverId: null,
-        templatePage: [],
+        templatePage: {},
         categories: [],
         selectedCate: '',
         tagRates: [],
         selectedTag: '',
-        keyword: ''
+        keyword: '',
+        page: 0
       }
     },
     created() {
@@ -102,7 +133,8 @@
       fetchTemplatePage: function () {
         const user = JSON.parse(this.$cookies.get(constant.user));
         const instance = this;
-        const fetchTemplatePageUrl = '/templates/owner/' + user.id + '?category=' + this.selectedCate + '&tag=' + this.selectedTag + '&keyword=' + this.keyword;
+        const fetchTemplatePageUrl = '/templates/owner/' + user.id + '?page=' + this.page +
+          '&category=' + this.selectedCate + '&tag=' + this.selectedTag + '&keyword=' + this.keyword;
         request.Api.get(fetchTemplatePageUrl).then(function (result) {
           if (result.code !== 200) {
             instance.alert = {variant: 'warning', msg: result.msg, show: 5};
@@ -139,6 +171,12 @@
           instance.alert = {variant: 'danger', msg: '获取模板标签列表出错', show: 5};
         });
       },
+      clearKeyword: function () {
+        this.keyword = '';
+      },
+      search: function () {
+        this.fetchTemplatePage();
+      },
       toggleSelectCate: function (category) {
         if (category === this.selectedCate) {
           this.selectedCate = '';
@@ -154,6 +192,33 @@
           this.selectedTag = tag;
         }
         this.fetchTemplatePage();
+      },
+      previousPage: function () {
+        if (!this.templatePage.first) {
+          this.page = this.templatePage.number - 1;
+          this.fetchTemplatePage();
+        }
+      },
+      nextPage: function () {
+        if (!this.templatePage.last) {
+          this.page = this.templatePage.number + 1;
+          this.fetchTemplatePage();
+        }
+      },
+      submitDelete: function () {
+        const instance = this;
+        request.Api.delete('/templates/' + this.hoverId).then(function (result) {
+          if (result.code !== 200) {
+            instance.alert = {variant: 'warning', msg: result.msg, show: 5};
+          } else {
+            instance.fetchData();
+          }
+        }).catch(function (error) {
+          instance.alert = {variant: 'danger', msg: '删除文档出错', show: 5};
+        });
+      },
+      cancelDelete: function () {
+        this.alert = {variant: 'success', msg: '多谢兄台放我一马，日后相见，必有重谢！', show: 5};
       }
     }
   }

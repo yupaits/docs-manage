@@ -20,6 +20,13 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>com.yupaits.docs</groupId>
+			<artifactId>docs-commons</artifactId>
+			<version>${docs.version}</version>
+			<scope>system</scope>
+			<systemPath>${docs.system.path}/docs-manage/docs-commons/target/docs-commons-1.1.0.jar</systemPath>
+		</dependency>
+		<dependency>
 			<groupId>com.yupaits.auth</groupId>
 			<artifactId>sso</artifactId>
 			<version>${docs.version}</version>

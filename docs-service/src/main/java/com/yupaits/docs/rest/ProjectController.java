@@ -1,6 +1,6 @@
 package com.yupaits.docs.rest;
 
-import com.yupaits.docs.config.jwt.JwtHelper;
+import com.yupaits.docs.config.JwtHelper;
 import com.yupaits.docs.entity.Project;
 import com.yupaits.docs.repository.ProjectRepository;
 import com.yupaits.docs.response.Result;

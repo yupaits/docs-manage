@@ -81,7 +81,7 @@
              no-fade
              no-close-on-backdrop
              no-close-on-esc
-             close-title="取消"
+             cancel-title="取消"
              ok-title="提交"
              @ok="submitEdit"
              @cancel="cancelEdit"
