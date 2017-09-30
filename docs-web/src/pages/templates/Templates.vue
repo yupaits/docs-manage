@@ -58,7 +58,7 @@
                 <b-dropdown-divider></b-dropdown-divider>
                 <b-dropdown-item-button @click="submitDelete"><span class="fa fa-check"> 确定</span>
                 </b-dropdown-item-button>
-                <b-dropdown-item-button @click="cancelDelete"><span class="fa fa-times"> 取消</span>
+                <b-dropdown-item-button><span class="fa fa-times"> 取消</span>
                 </b-dropdown-item-button>
               </b-dropdown>
             </div>
@@ -216,9 +216,6 @@
         }).catch(function (error) {
           instance.alert = {variant: 'danger', msg: '删除文档出错', show: 5};
         });
-      },
-      cancelDelete: function () {
-        this.alert = {variant: 'success', msg: '多谢兄台放我一马，日后相见，必有重谢！', show: 5};
       }
     }
   }

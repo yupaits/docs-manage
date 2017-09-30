@@ -5,8 +5,10 @@
         <b-alert :variant="alert.variant" :show="alert.show" dismissible @dismissed="alert.show=null">
           <b>{{alert.msg}}</b>
         </b-alert>
-        <b-button variant="outline-success" to="/docs/projects/add">创建项目</b-button>
         <b-card-group columns class="mt-3">
+          <b-card>
+            <h4 class="text-center my-auto"><b-link to="/docs/projects/add" class="text-success"><span class="fa fa-plus"> 创建项目</span></b-link></h4>
+          </b-card>
           <b-card v-for="project in projects" @mouseenter="hoverId = project.id" @mouseleave="hoverId = null">
             <h4>
               <b-link active :to="{path: '/docs/projects/' + project.id + '/documents', params: {project: project}}"
@@ -14,16 +16,12 @@
               </b-link>
             </h4>
             <div class="float-right">
-              <b-button size="sm" variant="light" :to="'/docs/projects/' + hoverId + '/edit'" v-if="hoverId === project.id"><span
-                class="fa fa-pencil"> 编辑</span></b-button>
-              <b-dropdown size="sm" text="删除" variant="light" right v-show="hoverId === project.id">
-                <b-dropdown-header class="text-danger"><h6 class="text-bold"><b>确定删除吗?</b></h6></b-dropdown-header>
-                <b-dropdown-divider></b-dropdown-divider>
-                <b-dropdown-item-button @click="submitDelete"><span class="fa fa-check"> 确定</span>
-                </b-dropdown-item-button>
-                <b-dropdown-item-button @click="cancelDelete"><span class="fa fa-times"> 取消</span>
-                </b-dropdown-item-button>
-              </b-dropdown>
+              <b-button size="sm" variant="light" :to="'/docs/projects/' + hoverId + '/edit'" v-if="hoverId === project.id">
+                <span class="fa fa-pencil"> 编辑</span>
+              </b-button>
+              <b-button size="sm" variant="light" id="delete-button" @click="showDeleteModal(project.id)" v-if="hoverId === project.id">
+                <span class="fa fa-trash"> 删除</span>
+              </b-button>
             </div>
             <p><span class="fa fa-clock-o"> {{project.createdAt | dateFormat}}</span></p>
             <p>{{project.description}}</p>
@@ -31,6 +29,19 @@
         </b-card-group>
       </b-col>
     </b-row>
+    <b-modal ref="project_delete_modal"
+             title="删除项目"
+             button-size="sm"
+             no-fade
+             no-close-on-backdrop
+             no-close-on-esc
+             cancel-title="取消"
+             ok-title="确定"
+             @ok="submitDelete"
+             @cancel="cancelDelete"
+             v-cloak>
+      <p class="text-danger"><b>确定删除该项目吗？</b></p>
+    </b-modal>
   </b-container>
 </template>
 
@@ -44,7 +55,8 @@
       return {
         alert: {variant: 'info', msg: '', show: null},
         hoverId: null,
-        projects: []
+        projects: [],
+        projectId: null
       }
     },
     created() {
@@ -74,9 +86,13 @@
           instance.alert = {variant: 'danger', msg: '获取项目清单出错', show: 5};
         });
       },
+      showDeleteModal: function (projectId) {
+        this.projectId = projectId;
+        this.$refs.project_delete_modal.show();
+      },
       submitDelete: function () {
         const instance = this;
-        request.Api.delete('/projects/' + this.hoverId).then(function (result) {
+        request.Api.delete('/projects/' + this.projectId).then(function (result) {
           if (result.code !== 200) {
             instance.alert = {variant: 'warning', msg: result.msg, show: 5};
           } else {
@@ -87,7 +103,7 @@
         });
       },
       cancelDelete: function () {
-        this.alert = {variant: 'success', msg: '多谢兄台放我一马，日后相见，必有重谢！', show: 5};
+        this.projectId = null;
       }
     }
   }
