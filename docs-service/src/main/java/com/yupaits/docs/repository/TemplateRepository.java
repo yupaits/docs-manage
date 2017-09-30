@@ -29,9 +29,9 @@ public interface TemplateRepository extends JpaRepository<Template, Integer>, Jp
     @Override
     <S extends Template> S save(S s);
 
-    @Query("select category from Template where ownerId = :ownerId group by category order by count(id) desc")
+    @Query("select category from Template where ownerId = :ownerId and isDeleted = false group by category order by count(id) desc")
     List<String> findTemplateCategoryList(@Param("ownerId") Integer ownerId);
 
-    @Query("select tags from Template where ownerId = :ownerId")
+    @Query("select tags from Template where ownerId = :ownerId and isDeleted = false")
     List<String> findTagsList(@Param("ownerId") Integer ownerId);
 }
