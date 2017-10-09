@@ -15,7 +15,6 @@ import EditDocument from "@/pages/docs/EditDocument";
 import Templates from "@/pages/templates/Templates";
 import AddTemplate from "@/pages/templates/AddTemplate";
 import EditTemplate from "@/pages/templates/EditTemplate";
-import Fun from "@/pages/fun/Fun";
 
 import constant from "@/utils/constant";
 
@@ -46,10 +45,6 @@ const router = new Router({
         {
           path: 'docs/projects/:id/documents/:docId/edit',
           component: EditDocument
-        },
-        {
-          path: 'fun',
-          component: Fun
         },
         {
           path: 'templates',
