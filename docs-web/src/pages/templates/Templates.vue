@@ -80,7 +80,7 @@
             </p>
           </b-card>
         </b-card-group>
-        <b-button-toolbar justify v-if="!templatePage.first || !templatePage.last">
+        <b-button-toolbar v-if="showPagination">
           <b-button size="sm" variant="light" :disabled="templatePage.first" @click="previousPage">
             <span class="fa fa-arrow-left"> 上一页</span>
           </b-button>
@@ -115,6 +115,11 @@
     },
     created() {
       this.fetchData();
+    },
+    computed: {
+      showPagination() {
+        return !this.templatePage.first || !this.templatePage.last;
+      }
     },
     filters: {
       dateFormat(date) {

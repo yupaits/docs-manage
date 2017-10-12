@@ -9,7 +9,7 @@
             &nbsp;&nbsp;&nbsp;&nbsp;
             <span class="fa fa-envelope-o"> {{document.author.email}}</span>
           </p>
-          <div v-html="documentContent" class="markdown-body my-5"></div>
+          <div v-html="documentContent" class="markdown-body my-3"></div>
         </b-col>
       </b-row>
     </div>
