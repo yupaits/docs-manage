@@ -221,7 +221,7 @@ public class TemplateController {
             }
             return Result.ok(sortedTagRateList);
         }
-        return Result.ok();
+        return Result.ok(new ArrayList<>());
     }
 
     @Data

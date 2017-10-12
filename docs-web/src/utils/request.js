@@ -1,9 +1,13 @@
 import axios from "axios";
 import constant from "./constant";
 
-const apiBaseUrl = 'https://localhost:9010/api';
-const authBaseUrl = 'https://localhost:9000/auth';
-const publicApiBaseUrl = 'https://localhost:9010/api';
+const env = 'prod'; //dev-开发环境 prod-生产环境
+const serverHost = '121.42.197.101';
+const host = (env === 'prod' ? serverHost : 'localhost');
+
+const apiBaseUrl = 'https://' + host + ':9010/api';
+const authBaseUrl = 'https://' + host + ':9000/auth';
+const publicApiBaseUrl = 'https://' + host + ':9010/api';
 
 const refreshAuthTokenUrl = authBaseUrl + '/refresh';
 
