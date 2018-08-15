@@ -1,0 +1,45 @@
+server:
+  port: 9010
+  ssl:
+    key-store: classpath:keystore.jks
+    key-store-password: password
+    key-password: password
+
+spring:
+  application:
+    name: docs-service
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/docs?useUnicode=true&characterEncoding=utf8&useSSL=false
+    username: root
+    password: sql123
+    driver-class-name: com.mysql.jdbc.Driver
+    initialSize: 1
+    maxActive: 20
+    minIdle: 1
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: SELECT 'x'
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    maxPoolPreparedStatementPerConnectionSize: 20
+    filters: stat
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+# log配置
+logging:
+  file: logs/docs.log
+  level:
+    root: warn
+    com.yupaits.docs: info
+
+# jwt配置
+jwt:
+  auth-header: Authorization
+  expiredIn: 600
+  secret: yupaits
+  auth-cookie: accessToken
