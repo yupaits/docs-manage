@@ -18,5 +18,5 @@ public interface AuthService {
 
     Result getCurrentUser(HttpServletRequest request);
 
-    Result refreshToken(HttpServletRequest request);
+    Result getUserByUsername(String username);
 }

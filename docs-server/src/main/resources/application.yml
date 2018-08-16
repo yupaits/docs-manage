@@ -29,10 +29,22 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+  redis:
+    database: 0
+    host: localhost
+    port: 6379
+    password:
+    pool:
+      max-active: 8
+      max-wait: 1
+      max-idle: 8
+      min-idle: 0
+    timeout: 0
+
 
 # log配置
 logging:
-  file: logs/docs.log
+  file: /logs/docs.log
   level:
     root: warn
     com.yupaits.docs: info
@@ -40,6 +52,6 @@ logging:
 # jwt配置
 jwt:
   auth-header: Authorization
-  expiredIn: 600
+  expiredIn: 120
+  refreshIn: 10080
   secret: yupaits
-  auth-cookie: accessToken

@@ -4,9 +4,11 @@ import org.apache.shiro.authc.AuthenticationToken;
 
 /**
  * 无状态Token
- * Created by ts495 on 2017/9/9.
+ * @author ts495
+ * @date 2017/9/9
  */
 public class StatelessToken implements AuthenticationToken {
+    private static final long serialVersionUID = 1L;
 
     private String username;
     private String token;

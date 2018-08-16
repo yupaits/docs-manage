@@ -1,18 +1,19 @@
 package com.yupaits.docs.config;
 
 import com.yupaits.docs.common.constants.DocsConsts;
+import com.yupaits.docs.dto.TokenRefresh;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
-import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Jwt辅助类
@@ -22,15 +23,18 @@ import java.util.Map;
 public class JwtHelper {
 
     @Value("${spring.application.name}")
-    private String applicationName;
-
-    private final JwtProperties jwtProperties;
+    private String appName;
 
     private SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS512;
 
+    private final JwtProperties jwtProperties;
+
+    private final RedisTemplate redisTemplate;
+
     @Autowired
-    public JwtHelper(JwtProperties jwtProperties) {
+    public JwtHelper(JwtProperties jwtProperties, RedisTemplate redisTemplate) {
         this.jwtProperties = jwtProperties;
+        this.redisTemplate = redisTemplate;
     }
 
     /**
@@ -49,17 +53,16 @@ public class JwtHelper {
     /**
      * 从token中获取username信息
      * @param token token
-     * @return
+     * @return username
      */
     public String getUsernameFromToken(String token) {
-        String username;
+        final Claims claims;
         try {
-            final Claims claims = this.getClaimsFromToken(token);
-            username = claims.getSubject();
+            claims = this.getClaimsFromToken(token);
+            return claims.getSubject();
         } catch (Exception e) {
-            username = null;
+            return null;
         }
-        return username;
     }
 
     /**
@@ -68,16 +71,10 @@ public class JwtHelper {
      * @return 已声明的内容
      */
     public Claims getClaimsFromToken(String token) {
-        Claims claims;
-        try {
-            claims = Jwts.parser()
-                    .setSigningKey(jwtProperties.getSecret())
-                    .parseClaimsJws(token)
-                    .getBody();
-        } catch (Exception e) {
-            claims = null;
-        }
-        return claims;
+        return Jwts.parser()
+                .setSigningKey(jwtProperties.getSecret())
+                .parseClaimsJws(token)
+                .getBody();
     }
 
     /**
@@ -85,64 +82,43 @@ public class JwtHelper {
      * @param username username
      * @return token
      */
+    @SuppressWarnings("unchecked")
     public String generateToken(String username) {
-        return Jwts.builder()
-                .setIssuer(applicationName)
+        String token = Jwts.builder()
+                .setIssuer(appName)
                 .setSubject(username)
                 .setIssuedAt(new Date())
-                .setExpiration(generateExpirationDate())
+                .setExpiration(getExpirationDate())
                 .signWith(signatureAlgorithm, jwtProperties.getSecret())
                 .compact();
-    }
-
-    public String generateToken(Map<String, Object> claims) {
-        return Jwts.builder()
-                .setClaims(claims)
-                .setExpiration(generateExpirationDate())
-                .signWith(signatureAlgorithm, jwtProperties.getSecret())
-                .compact();
-    }
-
-    /**
-     * 能否刷新token
-     * @param token token
-     * @return 判定结果
-     */
-    public Boolean canRefreshToken(String token) {
-        try {
-            final Date expirationDate = getClaimsFromToken(token).getExpiration();
-            return expirationDate.compareTo(new Date()) > 0;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    public String refreshToken(String token) {
-        String refreshedToken;
-        try {
-            final Claims claims = getClaimsFromToken(token);
-            claims.setIssuedAt(new Date());
-            refreshedToken = generateToken(claims);
-        } catch (Exception e) {
-            refreshedToken = null;
-        }
-        return refreshedToken;
+        TokenRefresh tokenRefresh = new TokenRefresh(username, getRefreshDeadline());
+        redisTemplate.opsForValue().set(DocsConsts.REFRESH_TTL_KEY + token.hashCode(), tokenRefresh, jwtProperties.getRefreshIn(), TimeUnit.MINUTES);
+        redisTemplate.opsForHash().put(DocsConsts.VALID_TOKEN_STORE, username, token);
+        return token;
     }
 
     /**
      * 获取过期时间戳
-     * @param expiredIn 预设的过期时间，单位：分钟
+     * @param minutes 预设的过期时间，单位：分钟
      * @return 预期的过期时间戳
      */
-    private Long generateExpirationTimeMillis(int expiredIn) {
-        return System.currentTimeMillis() + expiredIn * 1000;
+    private Long generateTime(int minutes) {
+        return System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(minutes);
     }
 
     /**
      * 得到过期日期时间
      * @return 预期的过期日期时间信息
      */
-    private Date generateExpirationDate() {
-        return new Date(generateExpirationTimeMillis(jwtProperties.getExpiredIn()));
+    private Date getExpirationDate() {
+        return new Date(generateTime(jwtProperties.getExpiredIn()));
+    }
+
+    /**
+     * 得到刷新token截止时间
+     * @return token可刷新截止时间
+     */
+    private Date getRefreshDeadline() {
+        return new Date(generateTime(jwtProperties.getRefreshIn()));
     }
 }

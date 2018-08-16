@@ -3,7 +3,6 @@ package com.yupaits.docs.service.impl;
 import com.yupaits.docs.common.result.Result;
 import com.yupaits.docs.common.result.ResultCode;
 import com.yupaits.docs.common.utils.EncryptUtils;
-import com.yupaits.docs.common.utils.SecurityContextUtils;
 import com.yupaits.docs.config.JwtHelper;
 import com.yupaits.docs.dto.LoginForm;
 import com.yupaits.docs.dto.RegisterForm;
@@ -23,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * @author yupaits
@@ -84,23 +84,36 @@ public class AuthServiceImpl implements AuthService {
         UserVO userVO = null;
         String authToken = jwtHelper.getToken(request);
         if (authToken != null) {
-            User user = userRepository.findByUsername(SecurityContextUtils.currentUsername());
-            if (user != null) {
-                userVO = new UserVO();
-                BeanUtils.copyProperties(user, userVO);
-                userVO.setId(user.getId());
-            }
+            String username = jwtHelper.getUsernameFromToken(authToken);
+            userVO = getUserByName(jwtHelper.getUsernameFromToken(authToken));
         }
         return Result.ok(userVO);
     }
 
     @Override
-    public Result refreshToken(HttpServletRequest request) {
-        String authToken = jwtHelper.getToken(request);
-        if (authToken == null || !jwtHelper.canRefreshToken(authToken)) {
-            return Result.fail(ResultCode.TOKEN_REFRESH_INVALID);
+    public Result getUserByUsername(String username) {
+        if (StringUtils.isBlank(username)) {
+            return Result.fail(ResultCode.PARAMS_ERROR);
         }
-        //刷新token
-        return Result.ok(jwtHelper.refreshToken(authToken));
+        return Result.ok(getUserByName(username));
+    }
+
+    /**
+     * 根据用户名查找用户信息
+     * @param username 用户名
+     * @return UserVO
+     */
+    private UserVO getUserByName(String username) {
+        UserVO userVO = null;
+        User user = userRepository.findByUsername(username);
+        if (user != null) {
+            userVO = new UserVO();
+            BeanUtils.copyProperties(user, userVO);
+            userVO.setId(user.getId());
+            userVO.setRoles(roleRepository.findAllByIdIsIn(userRoleRepository.findAllByUserId(user.getId())
+                    .stream().map(UserRole::getRoleId).collect(Collectors.toList()))
+                    .stream().map(Role::getRoleName).collect(Collectors.toList()));
+        }
+        return userVO;
     }
 }

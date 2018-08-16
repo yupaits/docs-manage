@@ -1,20 +1,5 @@
 import Vue from "vue";
 import Router from "vue-router";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import Feedback from "./pages/Feedback";
-import ForgetPassword from "./pages/ForgetPassword";
-import PasswordReset from "./pages/PasswordReset";
-import ReadDocument from "./pages/docs/ReadDocument";
-import Manage from "./pages/Manage";
-import Projects from "./pages/docs/Projects";
-import AddProject from "./pages/docs/AddProject";
-import EditProject from "./pages/docs/EditProject";
-import Documents from "./pages/docs/Documents";
-import EditDocument from "./pages/docs/EditDocument";
-import Templates from "./pages/templates/Templates";
-import AddTemplate from "./pages/templates/AddTemplate";
-import EditTemplate from "./pages/templates/EditTemplate";
 
 import constant from "./utils/constant";
 

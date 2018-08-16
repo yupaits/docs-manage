@@ -12,7 +12,9 @@ public enum ResultCode {
     DATA_NOT_FOUND(204, "数据不存在或已被删除"),
     DATA_CANNOT_DELETE(205, "数据无法删除"),
     DB_ERROR(206, "数据库错误"),
-    TOKEN_REFRESH_INVALID(207, "已过刷新凭证时限"),
+    TOKEN_REFRESH_TIMEOUT(207, "已过刷新凭证时限"),
+    TOKEN_ILLEGAL(208, "Token丢失或被非法篡改"),
+    TOKEN_INVALID(209, "无效的Token"),
     UNAUTHORIZED(401, "无效的授权信息"),
     FORBIDDEN(403, "无权访问请求资源");
 

@@ -2,6 +2,7 @@ package com.yupaits.docs.config.shiro;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yupaits.docs.config.JwtHelper;
+import com.yupaits.docs.config.JwtProperties;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.mgt.DefaultSessionStorageEvaluator;
 import org.apache.shiro.mgt.DefaultSubjectDAO;
@@ -11,6 +12,7 @@ import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import javax.servlet.Filter;
 import java.util.HashMap;
@@ -24,11 +26,16 @@ import java.util.Map;
 @Configuration
 public class ShiroConfig {
 
-    @Autowired
-    public ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper;
+    private final JwtHelper jwtHelper;
+    private final RedisTemplate redisTemplate;
 
     @Autowired
-    public JwtHelper jwtHelper;
+    public ShiroConfig(ObjectMapper objectMapper, JwtHelper jwtHelper, RedisTemplate redisTemplate) {
+        this.objectMapper = objectMapper;
+        this.jwtHelper = jwtHelper;
+        this.redisTemplate = redisTemplate;
+    }
 
     @Bean
     public StatelessRealm statelessRealm() {
@@ -69,7 +76,7 @@ public class ShiroConfig {
         shiroFilterFactoryBean.setSecurityManager(securityManager());
 
         Map<String, Filter> filterMap = new HashMap<>();
-        StatelessAuthcFilter statelessAuthcFilter = new StatelessAuthcFilter(objectMapper, jwtHelper);
+        StatelessAuthcFilter statelessAuthcFilter = new StatelessAuthcFilter(objectMapper, jwtHelper, redisTemplate);
         filterMap.put("jwtAuthc", statelessAuthcFilter);
         shiroFilterFactoryBean.setFilters(filterMap);
 
@@ -79,8 +86,8 @@ public class ShiroConfig {
         filterChains.put("/v2/api-docs", "anon");
         filterChains.put("/swagger-resources/**", "anon");
         filterChains.put("/webjars/**", "anon");
-        filterChains.put("/api/documents/*/read", "anon");
-        filterChains.put("/auth/**", "anon");
+        filterChains.put("/login", "anon");
+        filterChains.put("/register", "anon");
         filterChains.put("/**", "jwtAuthc");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChains);
 

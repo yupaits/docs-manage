@@ -46,6 +46,7 @@ public class WebLogAspect {
     @AfterReturning(returning = "result", pointcut = "webLog()")
     public void doAfterReturning(Result result) {
         logger.info("SPEND TIME: {}ms, RESULT: {}", (System.currentTimeMillis() - startTime.get()), result);
+        startTime.remove();
     }
 
 }
