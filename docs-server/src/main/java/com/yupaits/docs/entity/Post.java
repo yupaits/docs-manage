@@ -30,5 +30,6 @@ public class Post extends BaseEntity<Long> {
     @Column(nullable = false)
     private Long cateId;
 
+    @Column(name = "is_open")
     private boolean open;
 }

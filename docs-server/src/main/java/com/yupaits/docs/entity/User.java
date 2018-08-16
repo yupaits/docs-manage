@@ -20,16 +20,16 @@ import java.util.List;
 public class User extends BaseEntity<Long> {
     private static final long serialVersionUID = 1L;
 
-    @Column(name = "username", unique = true)
+    @Column(unique = true, nullable = false)
     private String username;
 
-    @Column(name = "email")
+    @Column(unique = true)
     private String email;
 
-    @Column(name = "salt", length = 36)
+    @Column(length = 36, nullable = false)
     private String salt;
 
-    @Column(name = "password", length = 64)
+    @Column(length = 64, nullable = false)
     private String password;
 
     @Transient

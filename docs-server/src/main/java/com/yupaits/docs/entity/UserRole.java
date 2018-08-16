@@ -3,6 +3,7 @@ package com.yupaits.docs.entity;
 import com.yupaits.docs.entity.keys.UserRoleKey;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -12,6 +13,7 @@ import java.io.Serializable;
  * @date 2018/8/12
  */
 @Data
+@NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @IdClass(UserRoleKey.class)

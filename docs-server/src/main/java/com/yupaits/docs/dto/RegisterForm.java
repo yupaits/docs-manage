@@ -1,5 +1,6 @@
 package com.yupaits.docs.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
@@ -7,6 +8,7 @@ import lombok.Data;
  * Created by ts495 on 2017/9/10.
  */
 @Data
+@AllArgsConstructor
 public class RegisterForm {
 
     private String username;

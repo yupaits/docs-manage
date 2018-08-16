@@ -13,7 +13,7 @@ import java.util.List;
 public class UserVO implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private Integer id;
+    private Long id;
     private String username;
     private String email;
     private List<String> roles;
