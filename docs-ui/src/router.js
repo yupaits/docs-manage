@@ -1,7 +1,8 @@
 import Vue from "vue";
 import Router from "vue-router";
 
-import constant from "./utils/constant";
+
+import consts from "./consts";
 
 Vue.use(Router);
 
