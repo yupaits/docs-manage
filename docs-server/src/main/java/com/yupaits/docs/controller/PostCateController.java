@@ -23,21 +23,21 @@ public class PostCateController {
 
     @GetMapping("/docs/cate/list")
     public Result listDocsCate() {
-        return postCateService.listDocsCate();
+        return postCateService.listPostCate();
     }
 
     @PostMapping("/docs/cate")
     public Result addDocsCate(@RequestBody PostCateCreate postCateCreate) {
-        return postCateService.addDocsCate(postCateCreate);
+        return postCateService.addPostCate(postCateCreate);
     }
 
     @PutMapping("/docs/cate/{cateId}")
     public Result updateDocsCate(@RequestBody PostCateUpdate postCateUpdate) {
-        return postCateService.updateDocsCate(postCateUpdate);
+        return postCateService.updatePostCate(postCateUpdate);
     }
 
     @DeleteMapping("/docs/cate/{cateId}")
     public Result deleteDocsCate(@PathVariable Long cateId) {
-        return postCateService.deleteDocsCate(cateId);
+        return postCateService.deletePostCate(cateId);
     }
 }

@@ -7,7 +7,7 @@
 </template>
 
 <script>
-  import zhCN from 'vue-antd-ui/lib/locale-provider/zh_CN'
+  import zhCN from 'ant-design-vue/lib/locale-provider/zh_CN'
   export default {
     data() {
       return {
@@ -19,10 +19,10 @@
 
 
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif, "Microsoft YaHei UI";
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
-}
+  #app {
+    font-family: 'Avenir', Helvetica, Arial, sans-serif, "Microsoft YaHei UI";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: #2c3e50;
+  }
 </style>

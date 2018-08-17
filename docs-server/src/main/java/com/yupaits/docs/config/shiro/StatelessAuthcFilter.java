@@ -5,7 +5,6 @@ import com.yupaits.docs.common.constants.DocsConsts;
 import com.yupaits.docs.common.result.Result;
 import com.yupaits.docs.common.result.ResultCode;
 import com.yupaits.docs.config.JwtHelper;
-import com.yupaits.docs.config.JwtProperties;
 import com.yupaits.docs.dto.TokenRefresh;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -22,7 +21,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Jwt验证过滤器

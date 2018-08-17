@@ -1,24 +1,21 @@
-package com.yupaits.docs.entity.keys;
+package com.yupaits.docs.vo.impl;
 
+import com.yupaits.docs.vo.PostTagCount;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-
-import java.io.Serializable;
 
 /**
  * @author yupaits
- * @date 2018/8/12
+ * @date 2018/8/17
  */
 @Data
-@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-public class PostTagKey implements Serializable {
+public class PostTagCountImpl implements PostTagCount {
     private static final long serialVersionUID = 1L;
 
-    private Long postId;
-
     private String tagName;
+
+    private Integer counts;
 }

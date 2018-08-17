@@ -2,12 +2,15 @@ package com.yupaits.docs.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 注册表单封装
- * Created by ts495 on 2017/9/10.
+ * @author ts495
+ * @date 2017/9/10
  */
 @Data
+@NoArgsConstructor
 @AllArgsConstructor
 public class RegisterForm {
 

@@ -1,6 +1,5 @@
 package com.yupaits.docs;
 
-import com.fasterxml.jackson.databind.ser.std.StdKeySerializers;
 import com.yupaits.docs.common.base.jpa.BaseRepositoryImpl;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

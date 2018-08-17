@@ -24,9 +24,19 @@ public class PostController {
         this.postService = postService;
     }
 
+    @GetMapping("/docs/options")
+    public Result getPostOptions() {
+        return postService.getPostOptions();
+    }
+
     @PostMapping("/docs/page")
     public Result getPostPage(@PageableDefault Pageable pageable, @RequestBody PostQuery postQuery) {
         return postService.getPostPage(postQuery, pageable);
+    }
+
+    @GetMapping("/docs/{postId}")
+    public Result getPost(@PathVariable Long postId) {
+        return postService.getPost(postId);
     }
 
     @PostMapping("/docs")

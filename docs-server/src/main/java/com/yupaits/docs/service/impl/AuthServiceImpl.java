@@ -16,11 +16,11 @@ import com.yupaits.docs.service.AuthService;
 import com.yupaits.docs.vo.UserVO;
 import io.jsonwebtoken.lang.Assert;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -80,12 +80,11 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public Result getCurrentUser(HttpServletRequest request) {
+    public Result getCurrentUser() {
         UserVO userVO = null;
-        String authToken = jwtHelper.getToken(request);
-        if (authToken != null) {
-            String username = jwtHelper.getUsernameFromToken(authToken);
-            userVO = getUserByName(jwtHelper.getUsernameFromToken(authToken));
+        String username = SecurityUtils.getSubject().getPrincipal().toString();
+        if (StringUtils.isNotBlank(username)) {
+            userVO = getUserByName(username);
         }
         return Result.ok(userVO);
     }

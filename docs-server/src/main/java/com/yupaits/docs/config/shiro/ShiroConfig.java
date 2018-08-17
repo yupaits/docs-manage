@@ -2,7 +2,6 @@ package com.yupaits.docs.config.shiro;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yupaits.docs.config.JwtHelper;
-import com.yupaits.docs.config.JwtProperties;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.mgt.DefaultSessionStorageEvaluator;
 import org.apache.shiro.mgt.DefaultSubjectDAO;

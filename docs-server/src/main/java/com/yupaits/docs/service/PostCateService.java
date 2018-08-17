@@ -9,11 +9,11 @@ import com.yupaits.docs.dto.PostCateUpdate;
  * @date 2018/8/16
  */
 public interface PostCateService {
-    Result listDocsCate();
+    Result listPostCate();
 
-    Result addDocsCate(PostCateCreate postCateCreate);
+    Result addPostCate(PostCateCreate postCateCreate);
 
-    Result updateDocsCate(PostCateUpdate postCateUpdate);
+    Result updatePostCate(PostCateUpdate postCateUpdate);
 
-    Result deleteDocsCate(Long cateId);
+    Result deletePostCate(Long cateId);
 }

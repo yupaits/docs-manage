@@ -1,6 +1,8 @@
 package com.yupaits.docs.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.yupaits.docs.common.utils.ValidateUtils;
+import com.yupaits.docs.common.utils.serializer.LongJsonDeserializer;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,12 +22,14 @@ import java.util.List;
 public class PostUpdate implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    @JsonDeserialize(using = LongJsonDeserializer.class)
     private Long id;
 
     private String title;
 
     private String content;
 
+    @JsonDeserialize(using = LongJsonDeserializer.class)
     private Long cateId;
 
     private Boolean open;

@@ -1,7 +1,9 @@
 package com.yupaits.docs.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.common.collect.Lists;
 import com.yupaits.docs.common.utils.ValidateUtils;
+import com.yupaits.docs.common.utils.serializer.LongJsonDeserializer;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,6 +27,7 @@ public class PostCreate implements Serializable {
 
     private String content;
 
+    @JsonDeserialize(using = LongJsonDeserializer.class)
     private Long cateId;
 
     private Boolean open;

@@ -11,7 +11,12 @@ import org.springframework.data.domain.Pageable;
  * @date 2018/8/16
  */
 public interface PostService {
+
+    Result getPostOptions();
+
     Result getPostPage(PostQuery postQuery, Pageable pageable);
+
+    Result getPost(Long postId);
 
     Result addPost(PostCreate postCreate);
 

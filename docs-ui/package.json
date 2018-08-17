@@ -9,9 +9,11 @@
     "dependencies": {
         "ant-design-vue": "^1.0.3",
         "axios": "^0.18.0",
+        "date-fns": "^1.29.0",
         "vue": "^2.5.16",
-        "vue-antd-ui": "^1.0.1",
+        "vue-cookies": "^1.5.6",
         "vue-router": "^3.0.1",
+        "vue-simplemde": "^0.4.8",
         "vuex": "^3.0.1"
     },
     "devDependencies": {
