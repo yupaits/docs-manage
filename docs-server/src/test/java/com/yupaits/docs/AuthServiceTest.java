@@ -49,8 +49,8 @@ public class AuthServiceTest {
 
     @Test
     public void test02RegisterUsers() {
-        authService.register(new RegisterForm("admin", "qq@qq.com", "admin", "admin"));
-        authService.register(new RegisterForm("user", "163@163.com", "user", "user"));
+        authService.register(new RegisterForm("admin", "qq@qq.com", "123456", "123456"));
+        authService.register(new RegisterForm("user", "163@163.com", "123456", "123456"));
     }
 
     @Test
