@@ -1,54 +1,72 @@
-package com.yupaits.docs.config.shiro;
+package com.yupaits.docs.config.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Lists;
 import com.yupaits.docs.common.constants.DocsConsts;
 import com.yupaits.docs.common.result.Result;
 import com.yupaits.docs.common.result.ResultCode;
 import com.yupaits.docs.config.JwtHelper;
 import com.yupaits.docs.dto.TokenRefresh;
+import com.yupaits.docs.entity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.SignatureException;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.web.filter.AccessControlFilter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.OrRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
+import org.springframework.web.filter.OncePerRequestFilter;
 
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 /**
- * Jwt验证过滤器
- * @author ts495
- * @date 2017/9/9
+ * @author yupaits
+ * @date 2018/8/18
  */
-public class StatelessAuthcFilter extends AccessControlFilter {
+public class TokenAuthFilter extends OncePerRequestFilter {
 
     private final ObjectMapper objectMapper;
     private final JwtHelper jwtHelper;
     private final RedisTemplate redisTemplate;
+    private final UserDetailsService userDetailsService;
 
-    public StatelessAuthcFilter(ObjectMapper objectMapper, JwtHelper jwtHelper, RedisTemplate redistTemplate) {
+    @Autowired
+    public TokenAuthFilter(ObjectMapper objectMapper, JwtHelper jwtHelper, RedisTemplate redisTemplate,
+                           UserDetailsService userDetailsService) {
         this.objectMapper = objectMapper;
         this.jwtHelper = jwtHelper;
-        this.redisTemplate = redistTemplate;
+        this.redisTemplate = redisTemplate;
+        this.userDetailsService = userDetailsService;
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    protected boolean isAccessAllowed(ServletRequest servletRequest, ServletResponse servletResponse, Object o) throws Exception {
-        HttpServletRequest request = (HttpServletRequest) servletRequest;
-        HttpServletResponse response = (HttpServletResponse) servletResponse;
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = jwtHelper.getToken(request);
         if (StringUtils.isBlank(token)) {
-            response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
-            objectMapper.writeValue(response.getWriter(), Result.fail(ResultCode.UNAUTHORIZED));
-            return false;
+            if (skipPathRequest(request)) {
+                //请求路径无需鉴权时，token为空也可访问
+                SecurityContextHolder.getContext().setAuthentication(new AnonymousAuthentication());
+                filterChain.doFilter(request, response);
+            } else {
+                //请求路径需要鉴权，如果token为空则返回UNAUTHORIZED
+                response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
+                objectMapper.writeValue(response.getWriter(), Result.fail(ResultCode.UNAUTHORIZED));
+            }
         }
         //判断token是否过期以及是否能被解析
         boolean tokenExpired = false;
@@ -69,53 +87,37 @@ public class StatelessAuthcFilter extends AccessControlFilter {
             } else {
                 response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
                 objectMapper.writeValue(response.getWriter(), Result.fail(ResultCode.TOKEN_REFRESH_TIMEOUT));
-                return false;
             }
         } else if (claims == null) {
             response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
             objectMapper.writeValue(response.getWriter(), Result.fail(ResultCode.TOKEN_ILLEGAL));
-            return false;
         }
         //从请求中获取token中的username
         String username = jwtHelper.getUsernameFromToken(token);
         if (StringUtils.isBlank(username)) {
             response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
             objectMapper.writeValue(response.getWriter(), Result.fail(ResultCode.TOKEN_INVALID));
-            return false;
         }
         //将当前username缓存中的有效token与当前token进行匹配，匹配失败则token无效
         if (!StringUtils.equals((CharSequence) redisTemplate.opsForHash().get(DocsConsts.VALID_TOKEN_STORE, username), token)) {
             response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
             objectMapper.writeValue(response.getWriter(), Result.fail(ResultCode.TOKEN_INVALID));
-            return false;
         }
-        StatelessToken accessToken = new StatelessToken(username, token);
         try {
-            getSubject(servletRequest, servletResponse).login(accessToken);
-        } catch (AuthenticationException e) {
+            User user = (User) userDetailsService.loadUserByUsername(username);
+            TokenAuthentication authentication = new TokenAuthentication(user);
+            authentication.setToken(token);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            filterChain.doFilter(request, response);
+        } catch (UsernameNotFoundException e) {
             response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
             objectMapper.writeValue(response.getWriter(), Result.fail(ResultCode.UNAUTHORIZED));
-            return false;
         }
-        getSubject(servletRequest, servletResponse).isPermitted(request.getRequestURI());
-        return true;
     }
 
-    @Override
-    protected boolean onAccessDenied(ServletRequest servletRequest, ServletResponse servletResponse) throws Exception {
-        HttpServletResponse response = (HttpServletResponse) servletResponse;
-        response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
-        objectMapper.writeValue(response.getWriter(), Result.fail(ResultCode.FORBIDDEN));
-        return false;
-    }
-
-    @Override
-    protected boolean preHandle(ServletRequest servletRequest, ServletResponse servletResponse) throws Exception {
-        HttpServletRequest request = (HttpServletRequest) servletRequest;
-        // 允许跨域访问
-        if (request.getMethod().equals(RequestMethod.OPTIONS.name())) {
-            return true;
-        }
-        return super.preHandle(request, servletResponse);
+    private boolean skipPathRequest(HttpServletRequest request) {
+        List<RequestMatcher> matchers = Lists.newArrayList();
+        Arrays.stream(DocsConsts.ignorePaths).forEach(path -> matchers.add(new AntPathRequestMatcher(path)));
+        return new OrRequestMatcher(matchers).matches(request);
     }
 }

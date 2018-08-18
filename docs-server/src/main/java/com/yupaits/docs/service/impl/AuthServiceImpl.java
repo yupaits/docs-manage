@@ -16,9 +16,9 @@ import com.yupaits.docs.service.AuthService;
 import com.yupaits.docs.vo.UserVO;
 import io.jsonwebtoken.lang.Assert;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -82,7 +82,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public Result getCurrentUser() {
         UserVO userVO = null;
-        String username = SecurityUtils.getSubject().getPrincipal().toString();
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
         if (StringUtils.isNotBlank(username)) {
             userVO = getUserByName(username);
         }

@@ -1,9 +1,8 @@
 package com.yupaits.docs.common.utils;
 
-import org.apache.shiro.codec.Base64;
-import org.apache.shiro.crypto.hash.SimpleHash;
 
-import java.util.Arrays;
+import com.yupaits.docs.common.constants.EncryptConsts;
+import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 
 /**
  * @author yupaits
@@ -11,15 +10,14 @@ import java.util.Arrays;
  */
 public class EncryptUtils {
 
-    private static String algorithmName = "SHA-256";
-    private static int iterations = 3;
-    private static String visitCodeSalt = Arrays.toString(Base64.decode("ZG9jcy1tYW5hZ2U="));
+    private static ShaPasswordEncoder shaPasswordEncoder = new ShaPasswordEncoder(EncryptConsts.SHA_NUMBER);
+
+    static {
+        shaPasswordEncoder.setIterations(EncryptConsts.PASSWORD_ENCODER_ITERATIONS);
+    }
 
     public static String encryptPassword(String password, String salt) {
-        return new SimpleHash(algorithmName, password, salt, iterations).toHex();
+         return shaPasswordEncoder.encodePassword(password, salt);
     }
 
-    public static String encryptVisitCode(String visitCode) {
-        return new SimpleHash(algorithmName, visitCode, visitCodeSalt, iterations).toBase64();
-    }
 }
