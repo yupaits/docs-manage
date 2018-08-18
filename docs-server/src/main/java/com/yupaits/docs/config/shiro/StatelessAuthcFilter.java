@@ -63,9 +63,9 @@ public class StatelessAuthcFilter extends AccessControlFilter {
             TokenRefresh tokenRefresh = (TokenRefresh) redisTemplate.opsForValue().get(DocsConsts.REFRESH_TTL_KEY + token.hashCode());
             if (tokenRefresh != null && new Date().compareTo(tokenRefresh.getRefreshDeadline()) < 0) {
                 String refreshedToken = jwtHelper.generateToken(tokenRefresh.getUsername());
+                redisTemplate.delete(DocsConsts.REFRESH_TTL_KEY + token.hashCode());
                 token = refreshedToken;
                 response.setHeader(DocsConsts.AUTH_HEADER_NAME, refreshedToken);
-                redisTemplate.delete(DocsConsts.REFRESH_TTL_KEY + token.hashCode());
             } else {
                 response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
                 objectMapper.writeValue(response.getWriter(), Result.fail(ResultCode.TOKEN_REFRESH_TIMEOUT));

@@ -87,6 +87,11 @@ public class ShiroConfig {
         filterChains.put("/webjars/**", "anon");
         filterChains.put("/login", "anon");
         filterChains.put("/register", "anon");
+        //如果将构建之后的前端文件部署到服务端时，需要使用下列规则
+//        filterChains.put("/", "anon");
+//        filterChains.put("/js/**", "anon");
+//        filterChains.put("/css/**", "anon");
+//        filterChains.put("/favicon.ico", "anon");
         filterChains.put("/**", "jwtAuthc");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChains);
 

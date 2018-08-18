@@ -1,7 +1,7 @@
 package com.yupaits.docs.config;
 
+import com.yupaits.docs.common.constants.DocsConsts;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
@@ -12,13 +12,13 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @Configuration
 public class WebConfig extends WebMvcConfigurerAdapter {
 
-    @Profile("dev")
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOrigins("*")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                .allowedHeaders("Accept", "Content-Type", "Origin", "Authorization")
                 .allowCredentials(false)
-                .allowedHeaders("Accept", "Content-Type", "Origin", "Authorization");
+                .exposedHeaders(DocsConsts.AUTH_HEADER_NAME);
     }
 }
