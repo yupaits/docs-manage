@@ -1,5 +1,5 @@
 server:
-  port: 11020
+  port: 11010
 
 eureka:
   client:
@@ -11,7 +11,7 @@ eureka:
 
 spring:
   application:
-    name: docs-server
+    name: auth-server
   datasource:
     url: jdbc:mysql://127.0.0.1:3306/docs-oauth2?useUnicode=true&characterEncoding=utf8&useSSL=false
     username: root
@@ -32,10 +32,9 @@ spring:
       min-idle: 0
     timeout: 0
 
-
 # log配置
 logging:
-  file: /logs/docs.log
+  file: /logs/docs-auth.log
   level:
     root: warn
-    com.yupaits.docs: info
+    com.yupaits.docs.auth: info

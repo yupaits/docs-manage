@@ -8,7 +8,6 @@ import com.yupaits.docs.dto.PostUpdate;
 import com.yupaits.docs.entity.Post;
 import com.yupaits.docs.repository.PostCateRepository;
 import com.yupaits.docs.repository.PostRepository;
-import com.yupaits.docs.repository.PostTagRepository;
 import com.yupaits.docs.service.PostCateService;
 import com.yupaits.docs.service.PostService;
 import org.junit.Assert;
@@ -43,9 +42,6 @@ public class PostServiceTest {
 
     @Autowired
     private PostCateRepository postCateRepository;
-
-    @Autowired
-    private PostTagRepository postTagRepository;
 
     @Test
     public void test01AddPostCates() {
