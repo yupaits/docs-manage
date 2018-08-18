@@ -2,7 +2,7 @@
 
 ## 分支
 
-- [shiro-jwt](https://github.com/YupaiTS/docs-manage/tree/shiro-jwt): DocsManage 之 Shior-jwt 实现认证授权
+- [shiro-jwt](https://github.com/YupaiTS/docs-manage/tree/shiro-jwt): DocsManage 之 Shiro-jwt 实现认证授权
 - [spring-security-jwt](https://github.com/YupaiTS/docs-manage/tree/spring-security-jwt): DocsManage 之 spring-security-jwt 实现认证授权
 
 ## 启动步骤
