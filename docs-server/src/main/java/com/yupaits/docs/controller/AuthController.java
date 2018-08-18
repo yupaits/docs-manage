@@ -1,7 +1,6 @@
 package com.yupaits.docs.controller;
 
 import com.yupaits.docs.common.result.Result;
-import com.yupaits.docs.dto.LoginForm;
 import com.yupaits.docs.dto.RegisterForm;
 import com.yupaits.docs.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +22,6 @@ public class AuthController {
     @Autowired
     public AuthController(AuthService authService) {
         this.authService = authService;
-    }
-
-    @PostMapping("/login")
-    public Result login(@RequestBody LoginForm loginForm) {
-        return authService.login(loginForm);
     }
 
     @PostMapping("/register")

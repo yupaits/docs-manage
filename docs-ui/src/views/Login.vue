@@ -49,15 +49,22 @@
       login() {
         if (this.validateLoginForm()) {
           this.loginProcessing = true;
-          let loginUrl = '/login';
-          this.api.post(loginUrl, this.loginForm).then(res => {
+          let loginUrl = '/login?username=' + this.loginForm.username + '&password=' + this.loginForm.password;
+          this.api.post(loginUrl).then(res => {
             this.$cookies.set(this.consts.tokenCookie, res.data, this.consts.tokenExpiredInMinutes);
+            this.fetchUser();
             this.$router.push('/');
             this.loginProcessing = false;
           }).catch(error => {
             this.loginProcessing = false;
           });
         }
+      },
+      fetchUser() {
+        let fetchUserUrl = '/user';
+        this.api.get(fetchUserUrl).then(res => {
+          this.$store.dispatch('setUserInfo', res.data);
+        });
       },
       validateLoginForm() {
         let valid = true;

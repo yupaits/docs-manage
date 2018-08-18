@@ -16,8 +16,8 @@ api.interceptors.request.use(config => {
 api.interceptors.response.use(res => {
   if (res.status === 200) {
     //返回头里如果存在Authorization，则说明返回了刷新之后的token
-    if (res.headers.Authorization) {
-      window.$cookies.set(consts.tokenCookie, res.headers.Authorization, consts.tokenExpiredInMinutes);
+    if (res.headers.accesstoken) {
+      window.$cookies.set(consts.tokenCookie, res.headers.accesstoken, consts.tokenExpiredInMinutes);
     }
     //自定义的错误信息
     if (res.data.code !== 200) {

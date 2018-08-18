@@ -92,7 +92,9 @@ public class JwtHelper {
                 .signWith(signatureAlgorithm, jwtProperties.getSecret())
                 .compact();
         TokenRefresh tokenRefresh = new TokenRefresh(username, getRefreshDeadline());
+        //将token中的用户名和有效刷新时间存入redis中
         redisTemplate.opsForValue().set(DocsConsts.REFRESH_TTL_KEY + token.hashCode(), tokenRefresh, jwtProperties.getRefreshIn(), TimeUnit.MINUTES);
+        //设置当前用户的有效token并存入redis中
         redisTemplate.opsForHash().put(DocsConsts.VALID_TOKEN_STORE, username, token);
         return token;
     }

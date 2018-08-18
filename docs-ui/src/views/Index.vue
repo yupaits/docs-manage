@@ -29,16 +29,7 @@
 <script>
   export default {
     name: "Index",
-    mounted() {
-      this.fetchUser();
-    },
     methods: {
-      fetchUser() {
-        let fetchUserUrl = '/user';
-        this.api.get(fetchUserUrl).then(res => {
-          this.$store.dispatch('setUserInfo', res.data);
-        });
-      },
       logout() {
         this.$store.dispatch('removeUserInfo');
         this.$cookies.remove(this.consts.tokenCookie);

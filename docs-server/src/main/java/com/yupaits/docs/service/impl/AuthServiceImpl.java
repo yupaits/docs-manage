@@ -4,7 +4,6 @@ import com.yupaits.docs.common.result.Result;
 import com.yupaits.docs.common.result.ResultCode;
 import com.yupaits.docs.common.utils.EncryptUtils;
 import com.yupaits.docs.config.JwtHelper;
-import com.yupaits.docs.dto.LoginForm;
 import com.yupaits.docs.dto.RegisterForm;
 import com.yupaits.docs.entity.Role;
 import com.yupaits.docs.entity.User;
@@ -34,7 +33,6 @@ public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final UserRoleRepository userRoleRepository;
-    private final JwtHelper jwtHelper;
 
     @Autowired
     public AuthServiceImpl(UserRepository userRepository, RoleRepository roleRepository,
@@ -42,19 +40,6 @@ public class AuthServiceImpl implements AuthService {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.userRoleRepository = userRoleRepository;
-        this.jwtHelper = jwtHelper;
-    }
-
-    @Override
-    public Result login(LoginForm loginForm) {
-        if (loginForm == null || StringUtils.isBlank(loginForm.getUsername()) || StringUtils.isBlank(loginForm.getPassword())) {
-            return Result.fail(ResultCode.PARAMS_ERROR);
-        }
-        User user = userRepository.findByUsername(loginForm.getUsername());
-        if (user == null || !StringUtils.equals(EncryptUtils.encryptPassword(loginForm.getPassword(), user.getCredential()), user.getPassword())) {
-            return Result.fail(ResultCode.LOGIN_FAIL);
-        }
-        return Result.ok(jwtHelper.generateToken(loginForm.getUsername()));
     }
 
     @Override

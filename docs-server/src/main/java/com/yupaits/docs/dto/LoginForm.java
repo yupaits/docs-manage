@@ -1,6 +1,8 @@
 package com.yupaits.docs.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
@@ -10,6 +12,8 @@ import java.io.Serializable;
  * @date 2017/9/9
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class LoginForm implements Serializable {
     private static final long serialVersionUID = 1L;
 

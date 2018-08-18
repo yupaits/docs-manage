@@ -1,4 +1,4 @@
-# DocsManage 之 Shior-jwt 实现认证授权
+# DocsManage 之 spring-security-jwt 实现认证授权
 
 ## 启动步骤
 
@@ -8,7 +8,7 @@
     git clone https://github.com/YupaiTS/docs-manage.git
     ```
 
-1. 切换到 `shiro-jwt` 分支
+1. 切换到 `spring-security-jwt` 分支
 
 1. 创建数据库
 
