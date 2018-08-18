@@ -52,6 +52,6 @@ logging:
 # jwt配置
 jwt:
   auth-header: Authorization
-  expiredIn: 1
-  refreshIn: 5
+  expiredIn: 120
+  refreshIn: 10080
   secret: yupaits
