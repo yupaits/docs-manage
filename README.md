@@ -21,7 +21,7 @@
     create database  `docs-oauth2` default charset utf8 collate utf8_general_ci;
     ```
 
-1. 执行 `auth-server` 和 `docs-server` 的 `test` 包下的测试用例，向数据库插入测试用例
+1. 执行 `auth-server` 和 `docs-server` 的 `test` 包下的测试用例，向数据库插入测试数据
 
 1. 依次运行 `discovery-server`、`auth-server`、`docs-server`、`docs-client` 中 `Application` 类的 `main` 方法启动服务
 
