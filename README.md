@@ -1,65 +1,26 @@
-# DocsManage
-文档管理系统
+# DocsManage 之 spring-security-jwt 实现认证授权
 
+## 启动步骤
 
-### 版本说明
+1. 下载代码
 
-- v1.1.0
-    
-    - docs-commons: 后台通用代码
-    - docs-service: 文档管理后台服务，使用无状态的jwt做认证授权
-    - docs-web: 文档管理前台web界面，采用vue-cli构建，基于Vue生态开发的SPA（单页面应用）
-    - sso: 统一鉴权中心，用于token的生成和刷新等
+    ```bash
+    git clone https://github.com/YupaiTS/docs-manage.git
+    ```
 
+1. 切换到 `spring-security-jwt` 分支
 
-- v1.0.0
-    
-    合并后台服务和前台web，后台使用 shiro + jwt 完成认证授权功能。
+1. 创建数据库
 
-- v0.0.1-SNAPSHOT
+    ```sql
+    create database  `docs` default charset utf8 collate utf8_general_ci;
+    ```
 
-    - docs-service: 文档管理后台服务，使用 spring security + jwt 做认证授权
-    - docs-web: 文档管理前台web界面（大部分页面编写完成，部分功能以完成）
+1. 执行 `test` 包下的测试用例，向数据库插入测试数据
 
-### 启动部署
+1. 执行 `docs-server` 下 `DocsApplication.java` 类的 `main` 方法，运行服务端程序
 
-- v1.1.0
+1. 使用命令行进入 `docs-ui` 目录，分别执行 `npm install` 和 `npm run dev` 命令安装依赖包和运行前端程序
 
-    - docs-commons
-         `mvn clean package` 打包生成 jar 文件，为 docs-service 和 sso 提供一些基础封装类
-        
-    - docs-service 和 sso
-        使用 `mvn clean package` 打包生成 jar 文件，执行 `java -jar target/*.jar` 命令运行后台服务。
-    
-    - docs-web  
-        依次使用 `npm install` 和 `npm run build` 生成 index.html 及 css、js 等文件，将生成的静态文件部署至 Nginx。  
-        修改 Nginx 配置文件 nginx.conf:  
-        ```
-        server {
-            listen       3000;
-            server_name  localhost;
-            root         [pathToProject]/docs-manage/docs-web/dist/;
-            index        index.html;
-        }
-        ```  
-        启动 Nginx，浏览器打开 http://localhost:3000/ 。
-- v1.0.0
-    
-    使用 `mvn clean` + `mvn package` 命令生成 **war** 包，将 **war** 包部署至 **tomcat** 等 web 容器中。在浏览器访问 https://localhost:9000/。
+1. 在浏览器中打开 [http://localhost:8080](http://localhost:8080) 进入文档管理系统
 
-- v0.0.1-SNAPSHOT
-
-    - docs-service  
-        使用 `mvn clean package` 打包生成 jar 文件，执行 `java -jar target/*.jar` 命令运行文档管理后台服务。
-    
-    - docs-web  
-        修改 Nginx 配置文件 nginx.conf:  
-        ```
-        server {
-            listen       3000;
-            server_name  localhost;
-            root         [pathToProject]/docs-manage/docs-web/;
-            index        index.html;
-        }
-        ```  
-        启动 Nginx，浏览器打开 http://localhost:3000/ 。

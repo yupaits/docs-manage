@@ -1,15 +1,7 @@
-target/
+**target/
 *mvn*
 logs/
 !.mvn/wrapper/maven-wrapper.jar
-
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
 
 ### IntelliJ IDEA ###
 .idea
@@ -17,9 +9,6 @@ logs/
 *.iml
 *.ipr
 
-### NetBeans ###
-nbproject/private/
-nbbuild/
-dist/
-nbdist/
-.nb-gradle/
+**/node_modules/
+**/dist/
+package-lock.json
