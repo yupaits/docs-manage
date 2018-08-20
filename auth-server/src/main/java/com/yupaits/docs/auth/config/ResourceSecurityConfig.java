@@ -35,8 +35,7 @@ public class ResourceSecurityConfig extends ResourceServerConfigurerAdapter {
                 }))
                 .and()
                 .authorizeRequests()
-                .antMatchers("/doc.html", "/v2/api-docs", "/swagger-resources/**", "/webjars/**", "/",
-                        "/login", "/js/*.js", "/css/*.css", "*.png").permitAll()
+                .antMatchers("/doc.html", "/v2/api-docs", "/swagger-resources/**", "/webjars/**").permitAll()
                 .anyRequest().authenticated()
                 .and().httpBasic();
     }

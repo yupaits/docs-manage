@@ -52,7 +52,8 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
         clients.inMemory()
                 .withClient("docs-manage")
                 .secret("yupaits")
-                .scopes("all")
-                .authorizedGrantTypes("password", "authorization_code", "refresh_token");
+                .scopes("all", "post", "post_cate")
+                .autoApprove(false)
+                .authorizedGrantTypes("authorization_code");
     }
 }

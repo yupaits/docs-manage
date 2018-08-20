@@ -12,7 +12,7 @@
 
     <parent>
         <groupId>com.yupaits.docs</groupId>
-        <artifactId>docs-manage</artifactId>
+        <artifactId>docs-client</artifactId>
         <version>1.2.0</version>
     </parent>
 

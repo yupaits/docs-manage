@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8"/>
+    <title>统一登录</title>
+    <link rel="icon" href="https://blog.yupaits.com/avatar.jpg"/>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css"/>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-4"></div>
+            <div class="col-4" style="margin-top: 6rem;">
+                <div class="card" style="width: 24rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">登录</h5>
+                        <div class="alert alert-danger" th:if="${error != null}">
+                            <span th:text="${error}"></span>
+                        </div>
+                        <form class="form-group" method="post" th:action="@{/login}">
+                            <div class="mb-3">
+                                <span class="label label-important">用户名：</span>
+                                <input type="text" class="form-control form-control-sm" name="username" placeholder="请输入用户名"/>
+                            </div>
+                            <div class="mb-3">
+                                <span class="label label-important">密码：</span>
+                                <input type="password" class="form-control form-control-sm" name="password" placeholder="请输入密码"/>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-sm">登 录</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4"></div>
+        </div>
+    </div>
+</body>
+</html>

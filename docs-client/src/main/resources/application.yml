@@ -1,14 +1,22 @@
 server:
   port: 11030
+  context-path: /ui
+  session:
+    cookie:
+      name: uisession
 
 security:
+  basic:
+    enabled: false
   oauth2:
     client:
       client-id: docs-manage
       client-secret: yupaits
       access-token-uri: http://localhost:11010/oauth/token
       user-authorization-uri: http://localhost:11010/oauth/authorize
-      pre-established-redirect-uri: http://localhost:11030/auth
     resource:
       user-info-uri: http://localhost:11010/user
-      prefer-token-info: false
+
+spring:
+  thymeleaf:
+    cache: false

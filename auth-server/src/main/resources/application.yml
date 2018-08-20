@@ -1,5 +1,8 @@
 server:
   port: 11010
+  session:
+    cookie:
+      name: authsession
 
 eureka:
   client:
@@ -31,6 +34,8 @@ spring:
       max-idle: 8
       min-idle: 0
     timeout: 0
+  thymeleaf:
+    cache: false
 
 # log配置
 logging:

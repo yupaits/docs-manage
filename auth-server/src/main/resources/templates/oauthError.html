@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8"/>
+    <title>错误</title>
+    <link rel="icon" href="https://blog.yupaits.com/avatar.jpg"/>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css"/>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-3"></div>
+            <div class="col-6" style="margin-top: 3rem;">
+                <h4>错误</h4>
+                <h5 class="text-danger">出错了！无法继续授权操作！</h5>
+                <p th:utext="'错误信息：' + ${errorInfo}">错误信息：</p>
+            </div>
+            <div class="col-3"></div>
+        </div>
+    </div>
+</body>
+</html>
