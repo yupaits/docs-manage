@@ -2,10 +2,29 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8"/>
-    <title>Secured Page</title>
+    <title>授权</title>
+    <link rel="icon" href="https://blog.yupaits.com/avatar.jpg"/>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css"/>
 </head>
 <body>
-    <h2>Secured Page</h2>
-    Welcome, <span th:text="${authentication.name}">a name.</span>
+<div class="container">
+    <div class="row">
+        <div class="col-3"></div>
+        <div class="col-6" style="margin-top: 6rem;">
+            <div class="card" style="width: 32rem;">
+                <div class="card-body">
+                    <h5 class="card-title">安全页</h5>
+                    <p>
+                        欢迎您, <span th:text="${#authentication.name}">无名氏</span>
+                        <a th:href="@{'http://localhost:11010/auth/oauth/token/revoke?accessToken=' + ${#authentication.details.tokenValue}}">注销</a>
+                        <br/>
+                        Token：<span th:text="${#authentication.details.tokenValue}">token value.</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-3"></div>
+    </div>
+</div>
 </body>
 </html>

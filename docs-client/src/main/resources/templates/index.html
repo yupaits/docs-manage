@@ -1,11 +1,31 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8"/>
-    <title>Index</title>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <link rel="icon" href="/ui/favicon.ico"/>
+    <title>文档管理</title>
+    <link href="/ui/css/app.c2f525e7.css" rel="preload" as="style"/>
+    <link href="/ui/css/chunk-vendors.d9e37ae4.css" rel="preload" as="style"/>
+    <link href="/ui/js/app.0aa8a776.js" rel="preload" as="script"/>
+    <link href="/ui/js/chunk-vendors.08edcc0e.js" rel="preload" as="script"/>
+    <link href="/ui/css/chunk-vendors.d9e37ae4.css" rel="stylesheet"/>
+    <link href="/ui/css/app.c2f525e7.css" rel="stylesheet"/>
 </head>
 <body>
-    <h2>Spring Security SSO</h2>
-    <a th:href="@{/secured}">Secured Page</a>
+<noscript><strong>We're sorry but docs-ui doesn't work properly without JavaScript enabled. Please enable it to
+    continue.</strong></noscript>
+<div id="app"></div>
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/vue-cookies@1.5.5/vue-cookies.js"></script>
+<script src="/ui/js/chunk-vendors.08edcc0e.js"></script>
+<script src="/ui/js/app.0aa8a776.js"></script>
+<script th:inline="javascript">
+    setTimeout(function () {
+        var token = [[${#authentication.details.tokenValue}]];
+        window.$cookies.set("accessToken", token, '120min', '/ui')
+    }, 0);
+</script>
 </body>
 </html>

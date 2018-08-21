@@ -12,10 +12,10 @@ security:
     client:
       client-id: docs-manage
       client-secret: yupaits
-      access-token-uri: http://localhost:11010/oauth/token
-      user-authorization-uri: http://localhost:11010/oauth/authorize
+      access-token-uri: http://localhost:11010/auth/oauth/token
+      user-authorization-uri: http://localhost:11010/auth/oauth/authorize
     resource:
-      user-info-uri: http://localhost:11010/user
+      user-info-uri: http://localhost:11010/auth/user
 
 spring:
   thymeleaf:

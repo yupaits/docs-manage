@@ -1,11 +1,7 @@
 package com.yupaits.docs.client.controller;
 
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * @author yupaits
@@ -15,18 +11,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class PageController {
 
     @GetMapping("/")
+    public String home() {
+        return "home";
+    }
+
+    @GetMapping("/index")
     public String index() {
         return "index";
     }
 
-    @RequestMapping("/login")
-    public String authorize(@RequestParam String code, @RequestParam String state) {
-        return code;
-    }
-
     @GetMapping("/secured")
-    public String securedPage(Model model) {
-        model.addAttribute("authentication", SecurityContextHolder.getContext().getAuthentication());
+    public String securedPage() {
         return "securedPage";
     }
 }

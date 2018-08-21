@@ -7,30 +7,33 @@
     <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css"/>
 </head>
 <body>
-    <div class="container">
-        <div class="row">
-            <div class="col-3"></div>
-            <div class="col-6" style="margin-top: 6rem;">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">确认授权</h5>
-                        <p class="card-text">您想授权 <b th:text="${session.authorizationRequest.clientId}">clientId</b> 获取您受保护的资源吗?</p>
-                        <form id="confirmationForm" name="confirmationForm" method="post" th:action="@{/oauth/authorize}">
-                            <input type="hidden" name="user_oauth_approval" value="true"/>
-                            <ul class="list-group list-group-flush" th:each="scope : ${scopeList}">
-                                <li class="list-group-item">
-                                    <b th:text="${scope} + '：'">scope.all：</b>
-                                    <label class="mr-3 pull-right"><input type="radio" th:name="${scope}" name="scope.all" value="true"/> 同意</label>
-                                    <label class="pull-right"><input type="radio" th:name="${scope}" name="scope.all" value="false" checked="checked"/> 拒绝</label>
-                                </li>
-                            </ul>
-                            <button type="submit" name="authorize" class="btn btn-success btn-sm mt-3">授 权</button>
-                        </form>
-                    </div>
+<div class="container">
+    <div class="row">
+        <div class="col-3"></div>
+        <div class="col-6" style="margin-top: 6rem;">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">确认授权</h5>
+                    <p class="card-text">您想授权 <b th:text="${session.authorizationRequest.clientId}">clientId</b>
+                        获取您受保护的资源吗?</p>
+                    <form id="confirmationForm" name="confirmationForm" method="post" th:action="@{/oauth/authorize}">
+                        <input type="hidden" name="user_oauth_approval" value="true"/>
+                        <ul class="list-group list-group-flush" th:each="scope : ${scopeList}">
+                            <li class="list-group-item">
+                                <b th:text="${scope} + '：'">scope.all：</b>
+                                <label class="mr-3 pull-right"><input type="radio" th:name="${scope}" name="scope.all"
+                                                                      value="true"/> 同意</label>
+                                <label class="pull-right"><input type="radio" th:name="${scope}" name="scope.all"
+                                                                 value="false" checked="checked"/> 拒绝</label>
+                            </li>
+                        </ul>
+                        <button type="submit" name="authorize" class="btn btn-success btn-sm mt-3">授 权</button>
+                    </form>
                 </div>
             </div>
-            <div class="col-3"></div>
         </div>
+        <div class="col-3"></div>
     </div>
+</div>
 </body>
 </html>

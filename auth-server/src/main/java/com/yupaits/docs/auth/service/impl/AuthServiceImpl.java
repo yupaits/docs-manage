@@ -63,16 +63,6 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public Result getCurrentUser() {
-        UserVO userVO = null;
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        if (StringUtils.isNotBlank(username)) {
-            userVO = getUserByName(username);
-        }
-        return Result.ok(userVO);
-    }
-
-    @Override
     public Result getUserByUsername(String username) {
         if (StringUtils.isBlank(username)) {
             return Result.fail(ResultCode.PARAMS_ERROR);

@@ -33,6 +33,10 @@ public class ResourceSecurityConfig extends ResourceServerConfigurerAdapter {
                     response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
                     objectMapper.writeValue(response.getWriter(), Result.fail(ResultCode.UNAUTHORIZED));
                 }))
+                .accessDeniedHandler(((request, response, accessDeniedException) -> {
+                    response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
+                    objectMapper.writeValue(response.getWriter(), Result.fail(ResultCode.FORBIDDEN));
+                }))
                 .and()
                 .authorizeRequests()
                 .antMatchers("/doc.html", "/v2/api-docs", "/swagger-resources/**", "/webjars/**").permitAll()

@@ -27,13 +27,43 @@
 </template>
 
 <script>
+  import axios from 'axios'
+
   export default {
     name: "Index",
     methods: {
       logout() {
-        this.$store.dispatch('removeUserInfo');
-        this.$cookies.remove(this.consts.tokenCookie);
-        this.$router.push('/login');
+        let logoutUrl = this.consts.logoutUrl + this.$cookies.get(this.consts.tokenCookie);
+        axios.delete(logoutUrl).then(res => {
+          if (res.data.code === 200) {
+            this.$store.dispatch('removeUserInfo');
+            this.$cookies.remove(this.consts.tokenCookie, '/ui');
+            this.$router.push('/login');
+            window.location.href = this.consts.redirectUri;
+          } else {
+            this.$notification.error({
+              message: '注销失败',
+              description: res.data.msg,
+              duration: 3
+            });
+          }
+        }).catch(error => {
+          if (error.response) {
+            //带状态码的错误信息
+            this.$notification.error({
+              message: '注销出错',
+              description: error.response.status + ' - ' + error.response.statusText + ': ' + error.response.data.message,
+              duration: 3
+            });
+          } else {
+            //无状态码的错误信息
+            this.$notification.error({
+              message: '注销出错',
+              description: error.toString(),
+              duration: 3
+            });
+          }
+        });
       }
     }
   }

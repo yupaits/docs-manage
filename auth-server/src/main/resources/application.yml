@@ -1,5 +1,6 @@
 server:
   port: 11010
+  context-path: /auth
   session:
     cookie:
       name: authsession
