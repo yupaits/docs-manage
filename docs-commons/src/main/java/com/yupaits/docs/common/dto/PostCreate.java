@@ -1,4 +1,4 @@
-package com.yupaits.docs.dto;
+package com.yupaits.docs.common.dto;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.common.collect.Lists;

@@ -2,6 +2,7 @@ package com.yupaits.docs.client.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * @author yupaits
@@ -16,7 +17,10 @@ public class PageController {
     }
 
     @GetMapping("/index")
-    public String index() {
+    public String index(@RequestParam(required = false) String code) {
+        if (code != null) {
+            return "redirect:/index";
+        }
         return "index";
     }
 

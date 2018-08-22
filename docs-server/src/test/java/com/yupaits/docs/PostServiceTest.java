@@ -1,10 +1,10 @@
 package com.yupaits.docs;
 
 import com.google.common.collect.Lists;
+import com.yupaits.docs.common.dto.PostCateCreate;
+import com.yupaits.docs.common.dto.PostCreate;
+import com.yupaits.docs.common.dto.PostUpdate;
 import com.yupaits.docs.common.result.ResultCode;
-import com.yupaits.docs.dto.PostCateCreate;
-import com.yupaits.docs.dto.PostCreate;
-import com.yupaits.docs.dto.PostUpdate;
 import com.yupaits.docs.entity.Post;
 import com.yupaits.docs.repository.PostCateRepository;
 import com.yupaits.docs.repository.PostRepository;

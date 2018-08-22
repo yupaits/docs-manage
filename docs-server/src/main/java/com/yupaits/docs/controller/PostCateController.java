@@ -1,8 +1,8 @@
 package com.yupaits.docs.controller;
 
+import com.yupaits.docs.common.dto.PostCateCreate;
+import com.yupaits.docs.common.dto.PostCateUpdate;
 import com.yupaits.docs.common.result.Result;
-import com.yupaits.docs.dto.PostCateCreate;
-import com.yupaits.docs.dto.PostCateUpdate;
 import com.yupaits.docs.service.PostCateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

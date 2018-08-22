@@ -32,6 +32,12 @@ spring:
       min-idle: 0
     timeout: 0
 
+security:
+  oauth2:
+    resource:
+      id: docs-server
+      user-info-uri: http://localhost:11010/auth/user
+      prefer-token-info: false
 
 # log配置
 logging:

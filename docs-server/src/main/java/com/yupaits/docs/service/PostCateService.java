@@ -1,8 +1,8 @@
 package com.yupaits.docs.service;
 
+import com.yupaits.docs.common.dto.PostCateCreate;
+import com.yupaits.docs.common.dto.PostCateUpdate;
 import com.yupaits.docs.common.result.Result;
-import com.yupaits.docs.dto.PostCateCreate;
-import com.yupaits.docs.dto.PostCateUpdate;
 
 /**
  * @author yupaits

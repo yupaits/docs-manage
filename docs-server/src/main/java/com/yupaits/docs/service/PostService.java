@@ -1,9 +1,9 @@
 package com.yupaits.docs.service;
 
+import com.yupaits.docs.common.dto.PostCreate;
+import com.yupaits.docs.common.dto.PostQuery;
+import com.yupaits.docs.common.dto.PostUpdate;
 import com.yupaits.docs.common.result.Result;
-import com.yupaits.docs.dto.PostCreate;
-import com.yupaits.docs.dto.PostQuery;
-import com.yupaits.docs.dto.PostUpdate;
 import org.springframework.data.domain.Pageable;
 
 /**

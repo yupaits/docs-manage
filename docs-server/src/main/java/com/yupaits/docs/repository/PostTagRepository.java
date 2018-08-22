@@ -1,8 +1,8 @@
 package com.yupaits.docs.repository;
 
+import com.yupaits.docs.common.vo.PostTagCount;
 import com.yupaits.docs.entity.PostTag;
 import com.yupaits.docs.entity.keys.PostTagKey;
-import com.yupaits.docs.vo.PostTagCount;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

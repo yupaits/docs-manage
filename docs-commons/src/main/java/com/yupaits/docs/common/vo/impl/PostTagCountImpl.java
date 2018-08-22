@@ -1,6 +1,6 @@
-package com.yupaits.docs.vo.impl;
+package com.yupaits.docs.common.vo.impl;
 
-import com.yupaits.docs.vo.PostTagCount;
+import com.yupaits.docs.common.vo.PostTagCount;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

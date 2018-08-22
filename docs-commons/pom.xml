@@ -80,6 +80,12 @@
             <artifactId>guava</artifactId>
             <version>25.0-jre</version>
         </dependency>
+
+        <dependency>
+            <groupId>io.swagger</groupId>
+            <artifactId>swagger-annotations</artifactId>
+            <version>1.5.14</version>
+        </dependency>
     </dependencies>
 
     <build>

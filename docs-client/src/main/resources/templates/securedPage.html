@@ -16,7 +16,6 @@
                     <h5 class="card-title">安全页</h5>
                     <p>
                         欢迎您, <span th:text="${#authentication.name}">无名氏</span>
-                        <a th:href="@{'http://localhost:11010/auth/oauth/token/revoke?accessToken=' + ${#authentication.details.tokenValue}}">注销</a>
                         <br/>
                         Token：<span th:text="${#authentication.details.tokenValue}">token value.</span>
                     </p>

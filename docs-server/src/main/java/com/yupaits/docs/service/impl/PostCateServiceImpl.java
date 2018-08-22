@@ -1,16 +1,16 @@
 package com.yupaits.docs.service.impl;
 
 import com.yupaits.docs.common.constants.DocsConsts;
+import com.yupaits.docs.common.dto.PostCateCreate;
+import com.yupaits.docs.common.dto.PostCateUpdate;
 import com.yupaits.docs.common.result.Result;
 import com.yupaits.docs.common.result.ResultCode;
 import com.yupaits.docs.common.utils.ValidateUtils;
-import com.yupaits.docs.dto.PostCateCreate;
-import com.yupaits.docs.dto.PostCateUpdate;
+import com.yupaits.docs.common.vo.PostCateVO;
 import com.yupaits.docs.entity.PostCate;
 import com.yupaits.docs.repository.PostCateRepository;
 import com.yupaits.docs.repository.PostRepository;
 import com.yupaits.docs.service.PostCateService;
-import com.yupaits.docs.vo.PostCateVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;

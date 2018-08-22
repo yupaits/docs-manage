@@ -1,4 +1,4 @@
-package com.yupaits.docs.vo;
+package com.yupaits.docs.common.vo;
 
 import java.io.Serializable;
 

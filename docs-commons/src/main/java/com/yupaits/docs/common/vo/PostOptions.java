@@ -1,4 +1,4 @@
-package com.yupaits.docs.vo;
+package com.yupaits.docs.common.vo;
 
 import com.google.common.collect.Lists;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package com.yupaits.docs.vo;
+package com.yupaits.docs.common.vo;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.yupaits.docs.common.utils.serializer.LongJsonSerializer;
