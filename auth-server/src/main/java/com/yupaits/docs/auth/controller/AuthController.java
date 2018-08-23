@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.security.Principal;
 import java.util.stream.Collectors;
 
 /**
@@ -47,13 +46,13 @@ public class AuthController {
     }*/
 
     @GetMapping("/user")
-    public Result getCurrentUser() {
+    public UserVO getCurrentUser() {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserVO userVO = new UserVO();
         BeanUtils.copyProperties(user, userVO);
         userVO.setId(user.getId());
         userVO.setRoles(user.getRoles().stream().map(Role::getRoleName).collect(Collectors.toList()));
-        return Result.ok(userVO);
+        return userVO;
     }
 
     @GetMapping("/oauth/logout")

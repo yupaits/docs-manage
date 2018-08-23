@@ -15,16 +15,20 @@ api.interceptors.request.use(config => {
 
 api.interceptors.response.use(res => {
   if (res.status === 200) {
-    //自定义的错误信息
-    if (res.data.code !== 200) {
+    if (res.data.code === 200) {
+      //返回自定义成功Result，示例：{code:200, msg: '成功', data: []}
+      return Promise.resolve(res.data);
+    } else if (res.data.code === undefined) {
+      //返回默认response
+      return Promise.resolve(res);
+    } else {
+      //返回自定义失败Result
       notification.error({
         message: '错误',
         description: res.data.msg,
         duration: 3
       });
       return Promise.reject(res);
-    } else {
-      return Promise.resolve(res.data);
     }
   } else {
     return Promise.reject(res);
