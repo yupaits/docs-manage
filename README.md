@@ -25,4 +25,4 @@
 
 1. 依次运行 `discovery-server`、`auth-server`、`docs-server`、`docs-client` 中 `Application` 类的 `main` 方法启动服务
 
-1. 在浏览器中 `http://localhost:11030/` 进入客户端页面
+1. 在浏览器中 `http://localhost:11030/ui` 进入客户端页面
