@@ -1,4 +1,4 @@
-# DocsManage 之 Shior-jwt 实现认证授权
+# DocsManage 之 shiro-jwt 实现认证授权
 
 ## 启动步骤
 
