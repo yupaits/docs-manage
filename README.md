@@ -1,7 +1,5 @@
 # DocsManage 之 实现基于OAuth2的认证授权和单点登录
 
-[![Build Status](https://travis-ci.com/YupaiTS/docs-manage.svg?branch=master)](https://travis-ci.com/YupaiTS/docs-manage)
-
 ## 分支
 
 - [shiro-jwt](https://github.com/YupaiTS/docs-manage/tree/shiro-jwt): DocsManage 之 Shiro-jwt 实现认证授权
